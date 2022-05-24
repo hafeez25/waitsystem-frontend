@@ -41,4 +41,4 @@ Email Us: support@minimals.cc
 
 Collaborators:
 - Mayank
- -vivek
+- vivek
