@@ -18,12 +18,14 @@ export default function EnterOTPForm() {
   const EnterOTPSchema = Yup.object().shape({
     otp: Yup.string().required('OTP is required'),
     password: Yup.string().required('Password is required'),
+    confirmPassword: Yup.string().required('Password is required'),
   });
 
   const formik = useFormik({
     initialValues: {
       otp: '',
       password: '',
+      confirmPassword: '',
     },
     validationSchema: EnterOTPSchema,
     onSubmit: () => {
@@ -67,6 +69,24 @@ export default function EnterOTPForm() {
             }}
             error={Boolean(touched.password && errors.password)}
             helperText={touched.password && errors.password}
+          />
+
+          <TextField
+            fullWidth
+            type={showPassword ? 'text' : 'password'}
+            label="Confirm Password"
+            {...getFieldProps('confirmPassword')}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleShowPassword} edge="end">
+                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            error={Boolean(touched.confirmPassword && errors.confirmPassword)}
+            helperText={touched.confirmPassword && errors.confirmPassword}
           />
 
           <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
