@@ -38,6 +38,3 @@ Distributed under the MIT License. See [LICENSE](https://github.com/minimal-ui-k
 ## Contact us
 
 Email Us: support@minimals.cc
-
-Collaborators:
-- Mayank
