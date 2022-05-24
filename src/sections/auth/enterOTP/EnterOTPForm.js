@@ -3,36 +3,35 @@ import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
-  const navigate = useNavigate();
+export default function EnterOTPForm() {
+  // const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+  const EnterOTPSchema = Yup.object().shape({
+    otp: Yup.string().required('OTP is required'),
     password: Yup.string().required('Password is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      otp: '',
       password: '',
-      remember: true,
     },
-    validationSchema: LoginSchema,
+    validationSchema: EnterOTPSchema,
     onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+      // navigate('/dashboard', { replace: true });
     },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -45,16 +44,15 @@ export default function LoginForm() {
           <TextField
             fullWidth
             autoComplete="username"
-            type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            type="text"
+            label="OTP"
+            {...getFieldProps('otp')}
+            error={Boolean(touched.otp && errors.otp)}
+            helperText={touched.otp && errors.otp}
           />
 
           <TextField
             fullWidth
-            autoComplete="current-password"
             type={showPassword ? 'text' : 'password'}
             label="Password"
             {...getFieldProps('password')}
@@ -70,22 +68,11 @@ export default function LoginForm() {
             error={Boolean(touched.password && errors.password)}
             helperText={touched.password && errors.password}
           />
+
+          <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+            Login
+          </LoadingButton>
         </Stack>
-
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-          <FormControlLabel
-            control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
-            label="Remember me"
-          />
-
-          <Link component={RouterLink} variant="subtitle2" to="/forgotpassword" underline="hover">
-            Forgot password?
-          </Link>
-        </Stack>
-
-        <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-          Login
-        </LoadingButton>
       </Form>
     </FormikProvider>
   );
