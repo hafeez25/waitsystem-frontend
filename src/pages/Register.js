@@ -9,7 +9,6 @@ import Page from '../components/Page';
 import Logo from '../components/Logo';
 // sections
 import { RegisterForm } from '../sections/auth/register';
-import AuthSocial from '../sections/auth/AuthSocial';
 
 // ----------------------------------------------------------------------
 
@@ -94,8 +93,6 @@ export default function Register() {
             </Typography>
 
             <Typography sx={{ color: 'text.secondary', mb: 5 }}>Without Hassle.</Typography>
-
-            <AuthSocial />
 
             <RegisterForm />
 
