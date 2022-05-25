@@ -64,9 +64,12 @@ export default function Login() {
     <Page title="Login">
       <RootStyle>
         <HeaderStyle>
-          <Box sx={{ marginLeft: 16 }}>
+        {smUp && (
+            <Box sx={{ marginLeft: 16 }}>
             <Logo />
           </Box>
+          )}
+          
 
           {smUp && (
             <Typography variant="body2" sx={{ mt: { md: -2 } }}>
