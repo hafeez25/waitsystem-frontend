@@ -13,13 +13,11 @@ import Iconify from '../../../components/Iconify';
 // reducers
 import { Login } from '../../../redux/AuthReducer';
 
-
-
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   // const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -34,24 +32,25 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: (values,actions) => {
+    onSubmit: (values, actions) => {
       // console.log(values,actions)
-      dispatch(Login({
-        payload:values,
-        callback:(msg,data,recall)=>{
-          if(msg==='error'||data.error){
-            setSubmitting(false);
-            console.log(data.error||"Something went wrong")
-            // show error message data.error or Something went wrong
-          }
-          recall()
-        }
-      }))
-      
+      dispatch(
+        Login({
+          payload: values,
+          callback: (msg, data, recall) => {
+            if (msg === 'error' || data.error) {
+              setSubmitting(false);
+              console.log(data.error || 'Something went wrong');
+              // show error message data.error or Something went wrong
+            }
+            recall();
+          },
+        })
+      );
     },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps,setSubmitting } = formik;
+  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);

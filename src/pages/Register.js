@@ -64,10 +64,12 @@ export default function Register() {
     <Page title="Register">
       <RootStyle>
         <HeaderStyle>
-          <Box sx={{ marginLeft: 16 }}>
-            <Logo />
-          </Box>
-          {smUp && (
+          {smUp && mdUp && (
+            <Box sx={{ marginLeft: 16 }}>
+              <Logo />
+            </Box>
+          )}
+          {smUp && mdUp && (
             <Typography variant="body2" sx={{ mt: { md: -2 } }}>
               Already have an account? {''}
               <Link variant="subtitle2" component={RouterLink} to="/login">
@@ -88,7 +90,7 @@ export default function Register() {
 
         <Container>
           <ContentStyle>
-            <Typography variant="h4" gutterBottom>
+            <Typography sx={{ mt: 5 }} variant="h4" gutterBottom>
               Get Yourself Registered.
             </Typography>
 
