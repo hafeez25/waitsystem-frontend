@@ -4,12 +4,14 @@ import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { useDispatch } from 'react-redux';
+import { ForgotPassword } from '../../../redux/AuthReducer';
 
 // ----------------------------------------------------------------------
 
 export default function ForgotPasswordForm() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch()
   const ForgotPasswordSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
   });
@@ -19,13 +21,26 @@ export default function ForgotPasswordForm() {
       email: '',
     },
     validationSchema: ForgotPasswordSchema,
-    onSubmit: () => {
+    onSubmit: (values,_) => {
       //
-      navigate('/enterotp', { replace: true });
+      dispatch(ForgotPassword({
+        payload:values,
+        callback:(msg,data,recall)=>{
+          if(msg==='error'||data.error){
+            setSubmitting(false);
+            console.log(data.error||"Something went wrong")
+            // show error message data.error or Something went wrong
+          }
+          else{
+            navigate('/enterotp', { replace: false,state:{email:values.email} });
+          }
+        }
+      }))
+      
     },
   });
 
-  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
   return (
     <FormikProvider value={formik}>

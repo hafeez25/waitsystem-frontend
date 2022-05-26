@@ -1,18 +1,21 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 // material
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
+import { useDispatch } from 'react-redux';
 import Iconify from '../../../components/Iconify';
 
+
+import { Signup } from '../../../redux/AuthReducer';
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
-
+  // const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
@@ -30,12 +33,24 @@ export default function RegisterForm() {
       password: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: (values,_) => {
+      const {firstName,lastName} = values
+      values.name = `${firstName} ${lastName}`;
+      dispatch(Signup({
+        payload:values,
+        callback:(msg,data,recall)=>{
+          if(msg==='error'||data.error){
+            setSubmitting(false);
+            console.log(data.error||"Something went wrong")
+            // show error message data.error or Something went wrong using toast
+          }
+          recall()
+        }
+      }))
     },
   });
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, isSubmitting, getFieldProps, setSubmitting } = formik;
 
   return (
     <FormikProvider value={formik}>
