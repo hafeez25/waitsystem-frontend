@@ -1,18 +1,25 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+
 import { useFormik, Form, FormikProvider } from 'formik';
+
 // material
 import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
+import { useDispatch } from 'react-redux';
 import Iconify from '../../../components/Iconify';
+// reducers
+import { Login } from '../../../redux/AuthReducer';
+
+
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const navigate = useNavigate();
-
+  // const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -27,12 +34,24 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: (values,actions) => {
+      // console.log(values,actions)
+      dispatch(Login({
+        payload:values,
+        callback:(msg,data,recall)=>{
+          if(msg==='error'||data.error){
+            setSubmitting(false);
+            console.log(data.error||"Something went wrong")
+            // show error message data.error or Something went wrong
+          }
+          recall()
+        }
+      }))
+      
     },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps,setSubmitting } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);

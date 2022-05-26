@@ -1,20 +1,29 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
+import { useDispatch } from 'react-redux';
 import Iconify from '../../../components/Iconify';
+
+import { ChangePassword } from '../../../redux/AuthReducer';
 
 // ----------------------------------------------------------------------
 
 export default function EnterOTPForm() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-
+  const dispatch = useDispatch()
+  const location = useLocation()
+  useEffect(()=>{
+    if(!location.state || !location.state.email){
+      navigate('/forgotpassword', { replace: true })
+    }
+  },[location])
   const EnterOTPSchema = Yup.object().shape({
     otp: Yup.string().required('OTP is required'),
     password: Yup.string().required('Password is required'),
@@ -28,12 +37,24 @@ export default function EnterOTPForm() {
       confirmPassword: '',
     },
     validationSchema: EnterOTPSchema,
-    onSubmit: () => {
-      // navigate('/dashboard', { replace: true });
-    },
-  });
+    onSubmit: (values,actions) => {
+      // console.log(values,actions)
+      values.email = location.state?.email;
+      values.OTP = values.otp;
+      dispatch(ChangePassword({
+        payload:values,
+        callback:(msg,data,recall)=>{
+          if(msg==='error'||data.error){
+            setSubmitting(false);
+            console.log(data.error||"Something went wrong")
+            // show error message data.error or Something went wrong
+          }
+          recall()
+        }
+      }))
+  }});
 
-  const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps,setSubmitting } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
