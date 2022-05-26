@@ -62,10 +62,10 @@ export default function EnterOTP() {
     <Page title="Login">
       <RootStyle>
         <HeaderStyle>
-        {smUp && (
+          {smUp && mdUp && (
             <Box sx={{ marginLeft: 16 }}>
-            <Logo />
-          </Box>
+              <Logo />
+            </Box>
           )}
         </HeaderStyle>
 
