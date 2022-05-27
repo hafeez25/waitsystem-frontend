@@ -9,6 +9,7 @@ import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormContr
 import { LoadingButton } from '@mui/lab';
 // component
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
 // reducers
 import { Login } from '../../../redux/AuthReducer';
@@ -40,7 +41,15 @@ export default function LoginForm() {
           callback: (msg, data, recall) => {
             if (msg === 'error' || data.error) {
               setSubmitting(false);
-              console.log(data.error || 'Something went wrong');
+              toast.error(data.error || 'Something went wrong', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
               // show error message data.error or Something went wrong
             }
             recall();

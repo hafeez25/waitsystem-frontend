@@ -7,6 +7,7 @@ import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
 
 import { ChangePassword } from '../../../redux/AuthReducer';
@@ -17,13 +18,13 @@ export default function EnterOTPForm() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-  const dispatch = useDispatch()
-  const location = useLocation()
-  useEffect(()=>{
-    if(!location.state || !location.state.email){
-      navigate('/forgotpassword', { replace: true })
+  const dispatch = useDispatch();
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.state || !location.state.email) {
+      navigate('/forgotpassword', { replace: true });
     }
-  },[location])
+  }, [location]);
   const EnterOTPSchema = Yup.object().shape({
     otp: Yup.string().required('OTP is required'),
     password: Yup.string().required('Password is required'),
@@ -37,24 +38,35 @@ export default function EnterOTPForm() {
       confirmPassword: '',
     },
     validationSchema: EnterOTPSchema,
-    onSubmit: (values,actions) => {
+    onSubmit: (values, actions) => {
       // console.log(values,actions)
       values.email = location.state?.email;
       values.OTP = values.otp;
-      dispatch(ChangePassword({
-        payload:values,
-        callback:(msg,data,recall)=>{
-          if(msg==='error'||data.error){
-            setSubmitting(false);
-            console.log(data.error||"Something went wrong")
-            // show error message data.error or Something went wrong
-          }
-          recall()
-        }
-      }))
-  }});
+      dispatch(
+        ChangePassword({
+          payload: values,
+          callback: (msg, data, recall) => {
+            if (msg === 'error' || data.error) {
+              setSubmitting(false);
+              toast.error(data.error || 'Something went wrong', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+              // show error message data.error or Something went wrong
+            }
+            recall();
+          },
+        })
+      );
+    },
+  });
 
-  const { errors, touched, isSubmitting, handleSubmit, getFieldProps,setSubmitting } = formik;
+  const { errors, touched, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);

@@ -7,15 +7,15 @@ import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
-
 
 import { Signup } from '../../../redux/AuthReducer';
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
   // const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
@@ -33,20 +33,30 @@ export default function RegisterForm() {
       password: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: (values,_) => {
-      const {firstName,lastName} = values
+    onSubmit: (values, _) => {
+      const { firstName, lastName } = values;
       values.name = `${firstName} ${lastName}`;
-      dispatch(Signup({
-        payload:values,
-        callback:(msg,data,recall)=>{
-          if(msg==='error'||data.error){
-            setSubmitting(false);
-            console.log(data.error||"Something went wrong")
-            // show error message data.error or Something went wrong using toast
-          }
-          recall()
-        }
-      }))
+      dispatch(
+        Signup({
+          payload: values,
+          callback: (msg, data, recall) => {
+            if (msg === 'error' || data.error) {
+              setSubmitting(false);
+              toast.error(data.error || 'Something went wrong', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+              // show error message data.error or Something went wrong using toast
+            }
+            recall();
+          },
+        })
+      );
     },
   });
 

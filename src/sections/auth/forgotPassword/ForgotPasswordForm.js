@@ -5,13 +5,14 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { ForgotPassword } from '../../../redux/AuthReducer';
 
 // ----------------------------------------------------------------------
 
 export default function ForgotPasswordForm() {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const ForgotPasswordSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
   });
@@ -21,22 +22,30 @@ export default function ForgotPasswordForm() {
       email: '',
     },
     validationSchema: ForgotPasswordSchema,
-    onSubmit: (values,_) => {
+    onSubmit: (values, _) => {
       //
-      dispatch(ForgotPassword({
-        payload:values,
-        callback:(msg,data,recall)=>{
-          if(msg==='error'||data.error){
-            setSubmitting(false);
-            console.log(data.error||"Something went wrong")
-            // show error message data.error or Something went wrong
-          }
-          else{
-            navigate('/enterotp', { replace: false,state:{email:values.email} });
-          }
-        }
-      }))
-      
+      dispatch(
+        ForgotPassword({
+          payload: values,
+          callback: (msg, data, recall) => {
+            if (msg === 'error' || data.error) {
+              setSubmitting(false);
+              toast.error(data.error || 'Something went wrong', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+              // show error message data.error or Something went wrong
+            } else {
+              navigate('/enterotp', { replace: false, state: { email: values.email } });
+            }
+          },
+        })
+      );
     },
   });
 
