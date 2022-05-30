@@ -65,7 +65,7 @@ export default function Register() {
       <RootStyle>
         <HeaderStyle>
           {smUp && mdUp && (
-            <Box sx={{ marginLeft: 16 }}>
+            <Box sx={{ mt: -1, ml: 16 }}>
               <Logo />
             </Box>
           )}
@@ -81,7 +81,7 @@ export default function Register() {
 
         {mdUp && (
           <SectionStyle>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
+            <Typography variant="h3" sx={{ px: 5, mt: 15, mb: 5 }}>
               Get started with <br /> Linear Amp-Tech
             </Typography>
             <img alt="register" src="/static/illustrations/illustration_register.png" />

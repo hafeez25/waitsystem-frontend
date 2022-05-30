@@ -64,7 +64,7 @@ export default function Login() {
       <RootStyle>
         <HeaderStyle>
           {smUp && mdUp && (
-            <Box sx={{ marginLeft: 16 }}>
+            <Box sx={{ ml: 16, mt: -1 }}>
               <Logo />
             </Box>
           )}
@@ -72,7 +72,7 @@ export default function Login() {
 
         {mdUp && (
           <SectionStyle>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
+            <Typography variant="h3" sx={{ px: 5, mt: 15, mb: 5 }}>
               Hi, Welcome Back
             </Typography>
             <img src="/static/illustrations/illustration_login.png" alt="login" />
