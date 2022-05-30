@@ -4,6 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
 // components
+import { useSelector } from 'react-redux';
 import MenuPopover from '../../components/MenuPopover';
 // mocks_
 import account from '../../_mock/account';
@@ -35,6 +36,13 @@ export default function AccountPopover() {
 
   const [open, setOpen] = useState(null);
 
+  const authData = useSelector(({ auth }) => auth);
+
+  const logoutFunc = () => {
+    localStorage.clear();
+    setTimeout(() => window.location.replace('/'), 500);
+  };
+
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -63,7 +71,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={authData.user.photo || account.photoURL} alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -101,7 +109,13 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            logoutFunc();
+          }}
+          sx={{ m: 1 }}
+        >
           Logout
         </MenuItem>
       </MenuPopover>
