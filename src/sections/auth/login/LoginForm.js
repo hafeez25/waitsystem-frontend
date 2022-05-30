@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
 
 import { useFormik, Form, FormikProvider } from 'formik';
 
@@ -17,7 +17,7 @@ import { Login } from '../../../redux/AuthReducer';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -50,7 +50,17 @@ export default function LoginForm() {
                 draggable: true,
                 progress: undefined,
               });
-              // show error message data.error or Something went wrong
+            } else if (data.twofactorEnabled) {
+              // toast.success('OTP has been sent to your email', {
+              //   position: 'top-right',
+              //   autoClose: 5000,
+              //   hideProgressBar: false,
+              //   closeOnClick: true,
+              //   pauseOnHover: true,
+              //   draggable: true,
+              //   progress: undefined,
+              // });
+              navigate('/twofactorotp', { replace: false, state: { email: values.email, password: values.password } });
             }
             recall();
           },

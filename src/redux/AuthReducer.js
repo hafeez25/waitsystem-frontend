@@ -12,6 +12,16 @@ export const Login = createAsyncThunk('auth/login', async ({ payload, callback }
   return { remember: payload.remember, ...data.resp };
 });
 
+export const TwoFactor = createAsyncThunk('auth/twofactorverify', async ({ payload, callback }) => {
+  const data = await MakeRequest(Api.POST, { url: AuthRoutes.twofactor, body: payload });
+  if (data.err) {
+    callback('error', data.err, () => {});
+    return null;
+  }
+  callback('success', data.resp, () => {});
+  return { remember: payload.remember, ...data.resp };
+});
+
 export const Signup = createAsyncThunk('auth/signup', async ({ payload, callback }) => {
   const data = await MakeRequest(Api.POST, { url: AuthRoutes.signup, body: payload });
   if (data.err) {
@@ -62,7 +72,7 @@ const AuthSlice = createSlice({
     },
   },
   extraReducers: {
-    [Login.fulfilled]: (state, action) => {
+    [TwoFactor.fulfilled]: (state, action) => {
       const { remember, data } = action.payload;
 
       if (data && data.user) {

@@ -8,42 +8,38 @@ import { LoadingButton } from '@mui/lab';
 // component
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import Iconify from '../../../components/Iconify';
+// import Iconify from '../../../components/Iconify';
 
-import { ChangePassword } from '../../../redux/AuthReducer';
+import { TwoFactor } from '../../../redux/AuthReducer';
 
 // ----------------------------------------------------------------------
 
-export default function EnterOTPForm() {
+export default function TwofactorOTPForm() {
   const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
   useEffect(() => {
     if (!location.state || !location.state.email) {
-      navigate('/forgotpassword', { replace: true });
+      navigate('/login', { replace: true });
     }
   }, [location]);
-  const EnterOTPSchema = Yup.object().shape({
+  const TwofactorOTPSchema = Yup.object().shape({
     otp: Yup.string().required('OTP is required'),
-    password: Yup.string().required('Password is required'),
-    confirmPassword: Yup.string().required('Password is required'),
   });
 
   const formik = useFormik({
     initialValues: {
       otp: '',
-      password: '',
-      confirmPassword: '',
     },
-    validationSchema: EnterOTPSchema,
+    validationSchema: TwofactorOTPSchema,
     onSubmit: (values, actions) => {
       // console.log(values,actions)
       values.email = location.state?.email;
+      values.password = location.state?.password;
       values.OTP = values.otp;
       dispatch(
-        ChangePassword({
+        TwoFactor({
           payload: values,
           callback: (msg, data, recall) => {
             if (msg === 'error' || data.error) {
@@ -57,6 +53,7 @@ export default function EnterOTPForm() {
                 draggable: true,
                 progress: undefined,
               });
+              // show error message data.error or Something went wrong
             }
             recall();
           },
@@ -66,10 +63,6 @@ export default function EnterOTPForm() {
   });
 
   const { errors, touched, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
-
-  const handleShowPassword = () => {
-    setShowPassword((show) => !show);
-  };
 
   return (
     <FormikProvider value={formik}>
@@ -85,44 +78,8 @@ export default function EnterOTPForm() {
             helperText={touched.otp && errors.otp}
           />
 
-          <TextField
-            fullWidth
-            type={showPassword ? 'text' : 'password'}
-            label="Password"
-            {...getFieldProps('password')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleShowPassword} edge="end">
-                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            error={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
-          />
-
-          <TextField
-            fullWidth
-            type={showPassword ? 'text' : 'password'}
-            label="Confirm Password"
-            {...getFieldProps('confirmPassword')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleShowPassword} edge="end">
-                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            error={Boolean(touched.confirmPassword && errors.confirmPassword)}
-            helperText={touched.confirmPassword && errors.confirmPassword}
-          />
-
           <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-            Login
+            Continue {'>'}
           </LoadingButton>
         </Stack>
       </Form>
