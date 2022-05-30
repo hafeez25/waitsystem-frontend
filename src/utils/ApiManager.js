@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Constants } from './Constants';
 
 
-const API_ENDPOINT = process.env.API_ENDPOINT || 'https://amptechapi.herokuapp.com'
+const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT || 'http://localhost:5000' || 'https://amptechapi.herokuapp.com'
 
 
 export const MakeRequest = async (method, data, callback) => {

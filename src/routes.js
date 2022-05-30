@@ -39,8 +39,8 @@ export default function Router() {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '/', element: <Navigate to="/login" /> },
-        { path: 'twofactorotp', element: <TwofactorOTP /> },
+        { path: '/', element: notAuthenticated ? <Navigate to="/login" /> : <Navigate to="/dashboard/app" /> },
+        { path: 'twofactorotp', element: notAuthenticated ? <TwofactorOTP /> : <Navigate to="/dashboard/app" /> },
         { path: 'login', element: notAuthenticated ? <Login /> : <Navigate to="/dashboard/app" /> },
         { path: 'register', element: notAuthenticated ? <Register /> : <Navigate to="/dashboard/app" /> },
         { path: 'forgotpassword', element: notAuthenticated ? <ForgotPassword /> : <Navigate to="/dashboard/app" /> },

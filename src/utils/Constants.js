@@ -13,7 +13,7 @@ const Api = {
 
 const AuthRoutes = {
   login: '/auth/login',
-  twofactor: 'auth/twofactorverify',
+  twofactor: '/auth/twofactorverify',
   signup: '/auth/signup',
   forgotpassword: '/auth/forgotpassword',
   submitpassword: '/auth/changepassword',
