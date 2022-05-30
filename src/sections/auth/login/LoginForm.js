@@ -39,6 +39,7 @@ export default function LoginForm() {
         Login({
           payload: values,
           callback: (msg, data, recall) => {
+            console.log(data)
             if (msg === 'error' || data.error) {
               setSubmitting(false);
               toast.error(data.error || 'Something went wrong', {
@@ -50,16 +51,16 @@ export default function LoginForm() {
                 draggable: true,
                 progress: undefined,
               });
-            } else if (data.twofactorEnabled) {
-              // toast.success('OTP has been sent to your email', {
-              //   position: 'top-right',
-              //   autoClose: 5000,
-              //   hideProgressBar: false,
-              //   closeOnClick: true,
-              //   pauseOnHover: true,
-              //   draggable: true,
-              //   progress: undefined,
-              // });
+            } else if (data && data.data && data.data.twofactorEnabled) {
+              toast.success('OTP has been sent to your email', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
               navigate('/twofactorotp', { replace: false, state: { email: values.email, password: values.password } });
             }
             recall();

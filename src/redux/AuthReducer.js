@@ -4,6 +4,7 @@ import { MakeRequest } from '../utils/ApiManager';
 
 export const Login = createAsyncThunk('auth/login', async ({ payload, callback }) => {
   const data = await MakeRequest(Api.POST, { url: AuthRoutes.login, body: payload });
+ 
   if (data.err) {
     callback('error', data.err, () => {});
     return null;
@@ -13,7 +14,9 @@ export const Login = createAsyncThunk('auth/login', async ({ payload, callback }
 });
 
 export const TwoFactor = createAsyncThunk('auth/twofactorverify', async ({ payload, callback }) => {
+  console.log(payload)
   const data = await MakeRequest(Api.POST, { url: AuthRoutes.twofactor, body: payload });
+  console.log(data)
   if (data.err) {
     callback('error', data.err, () => {});
     return null;
@@ -72,8 +75,9 @@ const AuthSlice = createSlice({
     },
   },
   extraReducers: {
-    [TwoFactor.fulfilled]: (state, action) => {
-      const { remember, data } = action.payload;
+    [Login.fulfilled]: (state, action) => {
+      if(action.payload){
+        const { remember, data } = action.payload;
 
       if (data && data.user) {
         // state.user = data.user;
@@ -83,14 +87,35 @@ const AuthSlice = createSlice({
         // state.token = token;
         localStorage.setItem(Constants.AuthToken, data.token);
       }
-      if (data.token && data.user) {
+      if (data && data.token && data.user) {
         setTimeout(() => {
           window.location.reload();
         }, 1000);
+      }
+      }
+    },
+    [TwoFactor.fulfilled]: (state, action) => {
+      if(action.payload){
+        const { remember, data } = action.payload;
+
+      if (data && data.user) {
+        // state.user = data.user;
+        localStorage.setItem(Constants.UserProfile, JSON.stringify(data.user));
+      }
+      if (data && data.token) {
+        // state.token = token;
+        localStorage.setItem(Constants.AuthToken, data.token);
+      }
+      if (data && data.token && data.user) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
       }
     },
     [Signup.fulfilled]: (state, action) => {
-      const { data } = action.payload;
+      if(action.payload){
+        const { data } = action.payload;
 
       if (data && data.user) {
         // state.user = data.user;
@@ -100,15 +125,17 @@ const AuthSlice = createSlice({
         // state.token = token;
         localStorage.setItem(Constants.AuthToken, data.token);
       }
-      if (data.token && data.user) {
+      if (data && data.token && data.user) {
         setTimeout(() => {
           window.location.reload();
         }, 1000);
+      }
       }
     },
 
     [ChangePassword.fulfilled]: (state, action) => {
-      const { data } = action.payload;
+      if(action.payload){
+        const { data } = action.payload;
 
       if (data && data.user) {
         // state.user = data.user;
@@ -118,10 +145,11 @@ const AuthSlice = createSlice({
         // state.token = token;
         localStorage.setItem(Constants.AuthToken, data.token);
       }
-      if (data.token && data.user) {
+      if (data && data.token && data.user) {
         setTimeout(() => {
           window.location.reload();
         }, 1000);
+      }
       }
     },
   },

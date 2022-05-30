@@ -20,7 +20,7 @@ export default function TwofactorOTPForm() {
   const dispatch = useDispatch();
   const location = useLocation();
   useEffect(() => {
-    if (!location.state || !location.state.email) {
+    if (!location.state || !location.state.email || !location.state.password) {
       navigate('/login', { replace: true });
     }
   }, [location]);
