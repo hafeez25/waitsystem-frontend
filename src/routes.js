@@ -4,7 +4,7 @@ import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import Blog from './pages/Blog';
-import User from './pages/User';
+import ManageDevices from './pages/ManageDevices';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
@@ -30,7 +30,7 @@ export default function Router() {
           element: !notAuthenticated ? <Navigate to="/dashboard/app" /> : <Navigate to="/login" />,
         },
         { path: 'app', element: !notAuthenticated ? <DashboardApp /> : <Navigate to="/login" /> },
-        { path: 'user', element: !notAuthenticated ? <User /> : <Navigate to="/login" /> },
+        { path: 'manage-devices', element: !notAuthenticated ? <ManageDevices /> : <Navigate to="/login" /> },
         { path: 'products', element: !notAuthenticated ? <Products /> : <Navigate to="/login" /> },
         { path: 'blog', element: !notAuthenticated ? <Blog /> : <Navigate to="/login" /> },
       ],

@@ -48,6 +48,12 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
 
   const authData = useSelector(({ auth }) => auth);
 
+  const account = {
+    displayName: authData.user.name,
+    email: authData.user.email,
+    photoURL: '../../static/mock-images/avatars/avatar_default.jpg',
+  };
+
   useEffect(() => {
     if (isOpenSidebar) {
       onCloseSidebar();
@@ -69,13 +75,13 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={authData.user.photo} alt="photoURL" />
+            <Avatar src={authData.user.photo || account.photoURL} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {authData.user.name}
+                {account.displayName}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {authData.user.role}
+                {account.role}
               </Typography>
             </Box>
           </AccountStyle>
