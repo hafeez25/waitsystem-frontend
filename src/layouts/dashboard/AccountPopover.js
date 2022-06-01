@@ -6,8 +6,6 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@
 // components
 import { useSelector } from 'react-redux';
 import MenuPopover from '../../components/MenuPopover';
-// mocks_
-import account from '../../_mock/account';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +39,12 @@ export default function AccountPopover() {
   const logoutFunc = () => {
     localStorage.clear();
     setTimeout(() => window.location.replace('/'), 500);
+  };
+
+  const account = {
+    displayName: authData.user.name,
+    email: authData.user.email,
+    photoURL: '../../static/mock-images/avatars/avatar_default.jpg',
   };
 
   const handleOpen = (event) => {
