@@ -3,6 +3,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
+import RealTimeMap from './pages/RealTimeMap';
 import Blog from './pages/Blog';
 import ManageDevices from './pages/ManageDevices';
 import Login from './pages/Login';
@@ -33,6 +34,7 @@ export default function Router() {
         { path: 'manage-devices', element: !notAuthenticated ? <ManageDevices /> : <Navigate to="/login" /> },
         { path: 'products', element: !notAuthenticated ? <Products /> : <Navigate to="/login" /> },
         { path: 'blog', element: !notAuthenticated ? <Blog /> : <Navigate to="/login" /> },
+        { path: 'realtimemap', element: <RealTimeMap /> },
       ],
     },
     {
