@@ -1,18 +1,24 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
+
 import { useFormik, Form, FormikProvider } from 'formik';
+
 // material
 import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
+// reducers
+import { Login } from '../../../redux/AuthReducer';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -27,12 +33,44 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+    onSubmit: (values, actions) => {
+      // console.log(values,actions)
+      dispatch(
+        Login({
+          payload: values,
+          callback: (msg, data, recall) => {
+            console.log(data)
+            if (msg === 'error' || data.error) {
+              setSubmitting(false);
+              toast.error(data.error || 'Something went wrong', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            } else if (data && data.data && data.data.twofactorEnabled) {
+              toast.success('OTP has been sent to your email', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+              navigate('/twofactorotp', { replace: false, state: { email: values.email, password: values.password } });
+            }
+            recall();
+          },
+        })
+      );
     },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);

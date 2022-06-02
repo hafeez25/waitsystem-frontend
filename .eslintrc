@@ -67,7 +67,7 @@
       1,
       {
         "object": true,
-        "array": false
+        "array": true
       }
     ]
   }

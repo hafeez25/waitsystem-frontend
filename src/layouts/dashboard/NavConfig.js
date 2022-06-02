@@ -13,7 +13,7 @@ const navConfig = [
   },
   {
     title: 'Analytics',
-    path: '/dashboard/user',
+    path: '/404',
     icon: getIcon('eva:people-fill'),
   },
   {
@@ -28,7 +28,7 @@ const navConfig = [
   },
   {
     title: 'Manage Devices',
-    path: '/404',
+    path: '/dashboard/manage-devices',
     icon: getIcon('clarity:settings-outline-badged'),
   },
   // {

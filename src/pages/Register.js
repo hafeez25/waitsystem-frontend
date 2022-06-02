@@ -64,10 +64,12 @@ export default function Register() {
     <Page title="Register">
       <RootStyle>
         <HeaderStyle>
-          <Box sx={{ marginLeft: 16 }}>
-            <Logo />
-          </Box>
-          {smUp && (
+          {smUp && mdUp && (
+            <Box sx={{ mt: -1, ml: 16 }}>
+              <Logo />
+            </Box>
+          )}
+          {smUp && mdUp && (
             <Typography variant="body2" sx={{ mt: { md: -2 } }}>
               Already have an account? {''}
               <Link variant="subtitle2" component={RouterLink} to="/login">
@@ -79,7 +81,7 @@ export default function Register() {
 
         {mdUp && (
           <SectionStyle>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
+            <Typography variant="h3" sx={{ px: 5, mt: 15, mb: 5 }}>
               Get started with <br /> Linear Amp-Tech
             </Typography>
             <img alt="register" src="/static/illustrations/illustration_register.png" />
@@ -88,7 +90,7 @@ export default function Register() {
 
         <Container>
           <ContentStyle>
-            <Typography variant="h4" gutterBottom>
+            <Typography sx={{ mt: 5 }} variant="h4" gutterBottom>
               Get Yourself Registered.
             </Typography>
 

@@ -55,20 +55,24 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Login() {
+  const smUp = useResponsive('up', 'sm');
+
   const mdUp = useResponsive('up', 'md');
 
   return (
     <Page title="Login">
       <RootStyle>
         <HeaderStyle>
-          <Box sx={{ marginLeft: 16 }}>
-            <Logo />
-          </Box>
+          {smUp && mdUp && (
+            <Box sx={{ ml: 16, mt: -1 }}>
+              <Logo />
+            </Box>
+          )}
         </HeaderStyle>
 
         {mdUp && (
           <SectionStyle>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
+            <Typography variant="h3" sx={{ px: 5, mt: 15, mb: 5 }}>
               Hi, Welcome Back
             </Typography>
             <img src="/static/illustrations/illustration_login.png" alt="login" />

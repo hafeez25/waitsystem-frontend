@@ -1,31 +1,45 @@
 import * as Yup from 'yup';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Stack, TextField } from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+// component
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { ForgotPassword } from '../../../redux/AuthReducer';
+// import Iconify from '../../../components/Iconify';
+
+import { TwoFactor } from '../../../redux/AuthReducer';
 
 // ----------------------------------------------------------------------
 
-export default function ForgotPasswordForm() {
+export default function TwofactorOTPForm() {
   const navigate = useNavigate();
+
   const dispatch = useDispatch();
-  const ForgotPasswordSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.state || !location.state.email || !location.state.password) {
+      navigate('/login', { replace: true });
+    }
+  }, [location]);
+  const TwofactorOTPSchema = Yup.object().shape({
+    otp: Yup.string().required('OTP is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      otp: '',
     },
-    validationSchema: ForgotPasswordSchema,
-    onSubmit: (values, _) => {
-      //
+    validationSchema: TwofactorOTPSchema,
+    onSubmit: (values, actions) => {
+      // console.log(values,actions)
+      values.email = location.state?.email;
+      values.password = location.state?.password;
+      values.OTP = values.otp;
       dispatch(
-        ForgotPassword({
+        TwoFactor({
           payload: values,
           callback: (msg, data, recall) => {
             if (msg === 'error' || data.error) {
@@ -40,18 +54,8 @@ export default function ForgotPasswordForm() {
                 progress: undefined,
               });
               // show error message data.error or Something went wrong
-            } else {
-              toast.success('OTP has been sent to your email', {
-                position: 'top-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-              navigate('/enterotp', { replace: false, state: { email: values.email } });
             }
+            recall();
           },
         })
       );
@@ -67,15 +71,15 @@ export default function ForgotPasswordForm() {
           <TextField
             fullWidth
             autoComplete="username"
-            type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            type="text"
+            label="OTP"
+            {...getFieldProps('otp')}
+            error={Boolean(touched.otp && errors.otp)}
+            helperText={touched.otp && errors.otp}
           />
 
           <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
-            Next {'>'}
+            Continue {'>'}
           </LoadingButton>
         </Stack>
       </Form>

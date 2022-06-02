@@ -5,7 +5,7 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import RealTimeMap from './pages/RealTimeMap';
 import Blog from './pages/Blog';
-import User from './pages/User';
+import ManageDevices from './pages/ManageDevices';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import Register from './pages/Register';
@@ -13,20 +13,27 @@ import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import ForgotPassword from './pages/ForgotPassword';
 import EnterOTP from './pages/EnterOTP';
+import TwofactorOTP from './pages/TwofactorOTP';
+import { Constants } from './utils/Constants';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const notAuthenticated = !(localStorage.getItem(Constants.AuthToken) || sessionStorage.getItem(Constants.AuthToken));
+
   return useRoutes([
     {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { path: '/dashboard', element: <Navigate to="/dashboard/app" /> },
-        { path: 'app', element: <DashboardApp /> },
-        { path: 'user', element: <User /> },
-        { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> },
+        {
+          path: '/dashboard',
+          element: !notAuthenticated ? <Navigate to="/dashboard/app" /> : <Navigate to="/login" />,
+        },
+        { path: 'app', element: !notAuthenticated ? <DashboardApp /> : <Navigate to="/login" /> },
+        { path: 'manage-devices', element: !notAuthenticated ? <ManageDevices /> : <Navigate to="/login" /> },
+        { path: 'products', element: !notAuthenticated ? <Products /> : <Navigate to="/login" /> },
+        { path: 'blog', element: !notAuthenticated ? <Blog /> : <Navigate to="/login" /> },
         { path: 'realtimemap', element: <RealTimeMap /> },
       ],
     },
@@ -34,11 +41,12 @@ export default function Router() {
       path: '/',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '/', element: <Navigate to="/login" /> },
-        { path: 'login', element: <Login /> },
-        { path: 'register', element: <Register /> },
-        { path: 'forgotpassword', element: <ForgotPassword /> },
-        { path: 'enterotp', element: <EnterOTP /> },
+        { path: '/', element: notAuthenticated ? <Navigate to="/login" /> : <Navigate to="/dashboard/app" /> },
+        { path: 'twofactorotp', element: notAuthenticated ? <TwofactorOTP /> : <Navigate to="/dashboard/app" /> },
+        { path: 'login', element: notAuthenticated ? <Login /> : <Navigate to="/dashboard/app" /> },
+        { path: 'register', element: notAuthenticated ? <Register /> : <Navigate to="/dashboard/app" /> },
+        { path: 'forgotpassword', element: notAuthenticated ? <ForgotPassword /> : <Navigate to="/dashboard/app" /> },
+        { path: 'enterotp', element: notAuthenticated ? <EnterOTP /> : <Navigate to="/dashboard/app" /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],

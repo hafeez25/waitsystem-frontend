@@ -7,7 +7,7 @@ import useResponsive from '../hooks/useResponsive';
 import Page from '../components/Page';
 import Logo from '../components/Logo';
 // sections
-import { EnterOTPForm } from '../sections/auth/enterOTP';
+import { TwofactorOTPForm } from '../sections/auth/twofactorOTP';
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function EnterOTP() {
+export default function TwofactorOTP() {
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
 
@@ -81,12 +81,12 @@ export default function EnterOTP() {
         <Container maxWidth="sm">
           <ContentStyle>
             <Typography variant="h4" gutterBottom>
-              Forgot Password?
+              Sign in to Linear Amp-Tech
             </Typography>
 
-            <Typography sx={{ color: 'text.secondary', mb: 5 }}>Enter OTP and new password below.</Typography>
+            <Typography sx={{ color: 'text.secondary', mb: 5 }}>Enter the OTP sent to your mail below.</Typography>
 
-            <EnterOTPForm />
+            <TwofactorOTPForm />
           </ContentStyle>
         </Container>
       </RootStyle>

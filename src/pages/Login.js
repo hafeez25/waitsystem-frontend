@@ -64,11 +64,13 @@ export default function Login() {
     <Page title="Login">
       <RootStyle>
         <HeaderStyle>
-          <Box sx={{ marginLeft: 16 }}>
-            <Logo />
-          </Box>
+          {smUp && mdUp && (
+            <Box sx={{ ml: 16, mt: -1 }}>
+              <Logo />
+            </Box>
+          )}
 
-          {smUp && (
+          {smUp && mdUp && (
             <Typography variant="body2" sx={{ mt: { md: -2 } }}>
               Don’t have an account? {''}
               <Link variant="subtitle2" component={RouterLink} to="/register">
@@ -80,7 +82,7 @@ export default function Login() {
 
         {mdUp && (
           <SectionStyle>
-            <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
+            <Typography variant="h3" sx={{ px: 5, mt: 15, mb: 5 }}>
               Hi, Welcome Back
             </Typography>
             <img src="/static/illustrations/illustration_login.png" alt="login" />
@@ -97,7 +99,7 @@ export default function Login() {
 
             <LoginForm />
 
-            {!smUp && (
+            {!mdUp && (
               <Typography variant="body2" align="center" sx={{ mt: 3 }}>
                 Don’t have an account?{' '}
                 <Link variant="subtitle2" component={RouterLink} to="/register">
