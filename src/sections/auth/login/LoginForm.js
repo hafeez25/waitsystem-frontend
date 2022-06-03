@@ -39,7 +39,7 @@ export default function LoginForm() {
         Login({
           payload: values,
           callback: (msg, data, recall) => {
-            console.log(data)
+            console.log(data);
             if (msg === 'error' || data.error) {
               setSubmitting(false);
               toast.error(data.error || 'Something went wrong', {
