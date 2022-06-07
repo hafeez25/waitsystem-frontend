@@ -1,11 +1,12 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
 
 import { useFormik, Form, FormikProvider } from 'formik';
 
 // material
 import {
+  Box,
   Link,
   Stack,
   Checkbox,
@@ -16,14 +17,15 @@ import {
   Autocomplete,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+
 // component
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
-import AddStates from './AddStates';
-import AddDistricts from './AddDistricts';
+import statesJSON from './states.json';
+import districtsJSON from './districts.json';
 // reducers
-import { Login } from '../../../redux/AuthReducer';
+import { AddLocation } from '../../../redux/Pole/PoleReducer';
 // import data from './statesAndDistricts';
 
 // ----------------------------------------------------------------------
@@ -52,7 +54,7 @@ export default function AddNewLocationForm() {
     onSubmit: (values, actions) => {
       // console.log(values,actions)
       // dispatch(
-      //   Login({
+      //   AddLocation({
       //     payload: values,
       //     callback: (msg, data, recall) => {
       //       console.log(data);
@@ -86,6 +88,25 @@ export default function AddNewLocationForm() {
     },
   });
 
+  const [state, setState] = useState('');
+  const [input, setInput] = useState('');
+  const [input1, setInput1] = useState('');
+
+  const [jsonResults, setJsonResults] = useState([]);
+  const [jsonResults1, setJsonResults1] = useState([]);
+
+  useEffect(() => {
+    setJsonResults(
+      statesJSON.filter((x) => x.country_code === 'IN' && x.name.toLowerCase().includes(input.toLowerCase()))
+    );
+  }, [input]);
+
+  useEffect(() => {
+    setJsonResults1(
+      districtsJSON.filter((x) => x.country_code === 'IN' && x.name.toLowerCase().includes(input1.toLowerCase()))
+    );
+  }, [input1]);
+
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
   return (
@@ -105,8 +126,70 @@ export default function AddNewLocationForm() {
               error={Boolean(touched.locationName && errors.locationName)}
               helperText={touched.locationName && errors.locationName}
             />
-            <AddStates />
-            <AddDistricts />
+            <Autocomplete
+              disablePortal
+              // value={input}
+              options={jsonResults}
+              onChange={(e, n) => setState(n)}
+              id="states-autocomplete"
+              getOptionLabel={(jsonResults) => `${jsonResults.name}`}
+              isOptionEqualToValue={(option, value) => option.name === value.name}
+              noOptionsText={'No options'}
+              onInputChange={(event, newInputValue) => {
+                setInput(newInputValue);
+              }}
+              renderOption={(props, jsonResults) => (
+                <Box component="li" {...props} key={jsonResults.id}>
+                  {jsonResults.name}
+                </Box>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  fullWidth
+                  {...params}
+                  margin="dense"
+                  id="states"
+                  label="State"
+                  type="text"
+                  variant="standard"
+                  {...getFieldProps('state')}
+                  error={Boolean(touched.state && errors.state)}
+                  helperText={touched.state && errors.state}
+                />
+              )}
+            />
+            <Autocomplete
+              disablePortal
+              // value={input}
+              options={jsonResults1}
+              onChange={(e, n) => setState(n)}
+              id="districts-autocomplete"
+              getOptionLabel={(jsonResults1) => `${jsonResults1.name}`}
+              isOptionEqualToValue={(option, value) => option.name === value.name}
+              noOptionsText={'No options'}
+              onInputChange={(event, newInputValue) => {
+                setInput1(newInputValue);
+              }}
+              renderOption={(props, jsonResults1) => (
+                <Box component="li" {...props} key={jsonResults1.id}>
+                  {jsonResults1.name}
+                </Box>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  fullWidth
+                  {...params}
+                  margin="dense"
+                  id="districts"
+                  label="District"
+                  type="text"
+                  variant="standard"
+                  {...getFieldProps('district')}
+                  error={Boolean(touched.district && errors.district)}
+                  helperText={touched.district && errors.district}
+                />
+              )}
+            />
 
             <TextField
               fullWidth

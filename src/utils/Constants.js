@@ -19,4 +19,8 @@ const AuthRoutes = {
   submitpassword: '/auth/changepassword',
 };
 
-export { Constants, Api, AuthRoutes };
+const PoleRoutes = {
+  addplace: '/service/place',
+};
+
+export { Constants, Api, AuthRoutes, PoleRoutes };
