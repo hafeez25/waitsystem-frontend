@@ -128,7 +128,6 @@ export default function AddNewLocationForm() {
             />
             <Autocomplete
               disablePortal
-              // value={input}
               options={jsonResults}
               onChange={(e, n) => setState(n)}
               id="states-autocomplete"
@@ -160,7 +159,6 @@ export default function AddNewLocationForm() {
             />
             <Autocomplete
               disablePortal
-              // value={input}
               options={jsonResults1}
               onChange={(e, n) => setState(n)}
               id="districts-autocomplete"

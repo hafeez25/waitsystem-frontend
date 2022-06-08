@@ -1,12 +1,15 @@
 import * as Yup from 'yup';
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
 
 import { useFormik, Form, FormikProvider } from 'formik';
 
 // material
 import {
+  Box,
+  Autocomplete,
+  Button,
   Link,
   Stack,
   Divider,
@@ -21,6 +24,7 @@ import {
   InputAdornment,
   FormControlLabel,
 } from '@mui/material';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 import { LoadingButton } from '@mui/lab';
 // component
 import { useDispatch } from 'react-redux';
@@ -32,23 +36,37 @@ import { Login } from '../../../redux/AuthReducer';
 
 // ----------------------------------------------------------------------
 
+const defaultFilterOptions = createFilterOptions();
+const buttonOption = (
+  <Button
+    onClick={(e) => {
+      console.log('CLICK SUCCESSFUL');
+      e.stopPropagation();
+    }}
+  >
+    No results! Click me
+  </Button>
+);
+
 export default function AddNewPoleForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [showPassword, setShowPassword] = useState(false);
 
-  const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+  const AddNewLocationSchema = Yup.object().shape({
+    serialNo: Yup.string().required('Serial No. is required'),
+    latitude: Yup.string().required('Latitude is required'),
+    longitude: Yup.string().required('Longitude is required'),
+    location: Yup.string().required('Location is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
-      remember: true,
+      serialNo: '',
+      latitude: '',
+      longitude: '',
+      location: '',
     },
-    validationSchema: LoginSchema,
+    validationSchema: AddNewLocationSchema,
     onSubmit: (values, actions) => {
       // console.log(values,actions)
       // dispatch(
@@ -88,15 +106,15 @@ export default function AddNewPoleForm() {
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
-  // const handleShowPassword = () => {
-  //   setShowPassword((show) => !show);
-  // };
+  const [state, setState] = useState('');
+  const [input, setInput] = useState('');
 
-  const [age, setAge] = React.useState('');
+  const [jsonResults, setJsonResults] = useState([]);
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  // useEffect(() => {
+  //   const arr = [];
+  //   setJsonResults();
+  // }, [input]);
 
   return (
     <FormikProvider value={formik}>
@@ -111,72 +129,73 @@ export default function AddNewPoleForm() {
               type="text"
               fullWidth
               variant="standard"
+              {...getFieldProps('serialNo')}
+              error={Boolean(touched.serialNo && errors.serialNo)}
+              helperText={touched.serialNo && errors.serialNo}
             />
-            <TextField margin="dense" id="standard-basic" label="Latitude" type="text" fullWidth variant="standard" />
-            <TextField margin="dense" id="standard-basic" label="Longitude" type="text" fullWidth variant="standard" />
+            <TextField
+              margin="dense"
+              id="standard-basic"
+              label="Latitude"
+              type="text"
+              fullWidth
+              variant="standard"
+              {...getFieldProps('latitude')}
+              error={Boolean(touched.latitude && errors.latitude)}
+              helperText={touched.latitude && errors.latitude}
+            />
+            <TextField
+              margin="dense"
+              id="standard-basic"
+              label="Longitude"
+              type="text"
+              fullWidth
+              variant="standard"
+              {...getFieldProps('longitude')}
+              error={Boolean(touched.longitude && errors.longitude)}
+              helperText={touched.longitude && errors.longitude}
+            />
+            <Autocomplete
+              disablePortal
+              options={jsonResults}
+              onChange={(e, n) => setState(n)}
+              id="location-autocomplete"
+              getOptionLabel={(jsonResults) => `${jsonResults.name}`}
+              isOptionEqualToValue={(option, value) => option.name === value.name}
+              noOptionsText={<AddNewLocationDialogBox />}
+              onInputChange={(event, newInputValue) => {
+                setInput(newInputValue);
+              }}
+              renderOption={(props, jsonResults) => (
+                <Box component="li" {...props} key={jsonResults.id}>
+                  {jsonResults.name}
+                </Box>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  fullWidth
+                  {...params}
+                  margin="dense"
+                  id="location"
+                  label="Location"
+                  type="text"
+                  variant="standard"
+                  {...getFieldProps('location')}
+                  error={Boolean(touched.location && errors.location)}
+                  helperText={touched.location && errors.location}
+                />
+              )}
+              // filterOptions={(options, state) => {
+              //   const results = defaultFilterOptions(options, state);
 
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel id="demo-simple-select-standard-label">Location</InputLabel>
-              <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                value={age}
-                onChange={handleChange}
-                label="Age"
-              >
-                {/* <Stack
-                  sx={{ ml: 3 }}
-                  spacing={1}
-                  direction="column"
-                  justifyContent="flex-start"
-                  alignItems="flex-start"
-                > */}
-                <Stack
-                  sx={{ ml: 3, mb: 1, mt: 1 }}
-                  spacing={5}
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-                  <AddNewLocationDialogBox />
-                </Stack>
-                {/* <MenuItem value="">
-                  <em>None</em>
-                </MenuItem> */}
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-                {/* </Stack> */}
-              </Select>
-            </FormControl>
-            {/* <TextField
-            fullWidth
-            autoComplete="username"
-            type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
-          />
+              //   if (results.length === 0) {
+              //     return [buttonOption];
+              //   }
 
-          <TextField
-            fullWidth
-            autoComplete="current-password"
-            type={showPassword ? 'text' : 'password'}
-            label="Password"
-            {...getFieldProps('password')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleShowPassword} edge="end">
-                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            error={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
-          /> */}
+              //   return results;
+              // }}
+            />
+            <AddNewLocationDialogBox />
           </Stack>
           <Stack spacing={3}>
             <LoadingButton size="large" type="submit" variant="contained" loading={isSubmitting}>

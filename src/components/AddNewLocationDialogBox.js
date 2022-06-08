@@ -29,7 +29,12 @@ export default function FormDialog() {
       <Button
         component={RouterLink}
         to="#"
-        onClick={handleClickOpen}
+        onMouseDown={(e) => {
+          console.log('CLICK SUCCESSFUL');
+          // e.stopPropagation();
+          handleClickOpen();
+        }}
+        // onClick={handleClickOpen}
         variant="contained"
         startIcon={<Iconify icon="bx:current-location" />}
       >
