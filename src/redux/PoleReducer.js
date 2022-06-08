@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Api, AuthRoutes, Constants, PoleRoutes } from '../../utils/Constants';
-import { MakeRequest } from '../../utils/ApiManager';
+import { Api, AuthRoutes, Constants, PoleRoutes } from '../utils/Constants';
+import { MakeRequest } from '../utils/ApiManager';
 
 export const AddLocation = createAsyncThunk('service/place', async ({ payload, callback }) => {
   const data = await MakeRequest(Api.POST, { url: PoleRoutes.addplace, body: payload });
@@ -10,7 +10,7 @@ export const AddLocation = createAsyncThunk('service/place', async ({ payload, c
     return null;
   }
   callback('success', data.resp, () => {});
-  return { remember: payload.remember, ...data.resp };
+  return { ...data.resp };
 });
 
 // export const Login = createAsyncThunk('auth/login', async ({ payload, callback }) => {
@@ -66,11 +66,10 @@ export const AddLocation = createAsyncThunk('service/place', async ({ payload, c
 //   return data.resp;
 // });
 
-// const AuthSlice = createSlice({
-//   name: 'auth',
+// const PoleSlice = createSlice({
+//   name: 'pole',
 //   initialState: {
-//     user: localStorage.getItem(Constants.UserProfile) ? JSON.parse(localStorage.getItem(Constants.UserProfile)) : {},
-//     token: localStorage.getItem(Constants.AuthToken),
+
 //   },
 //   reducers: {
 //     setData(state, action) {

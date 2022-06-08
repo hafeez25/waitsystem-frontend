@@ -24,29 +24,17 @@ import {
   InputAdornment,
   FormControlLabel,
 } from '@mui/material';
-import { createFilterOptions } from '@mui/material/Autocomplete';
 import { LoadingButton } from '@mui/lab';
 // component
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import AddNewLocationDialogBox from '../../../components/AddNewLocationDialogBox';
 import Iconify from '../../../components/Iconify';
+import statesJSON from '../addNewLocation/states.json';
 // reducers
 import { Login } from '../../../redux/AuthReducer';
 
 // ----------------------------------------------------------------------
-
-const defaultFilterOptions = createFilterOptions();
-const buttonOption = (
-  <Button
-    onClick={(e) => {
-      console.log('CLICK SUCCESSFUL');
-      e.stopPropagation();
-    }}
-  >
-    No results! Click me
-  </Button>
-);
 
 export default function AddNewPoleForm() {
   const navigate = useNavigate();
@@ -111,10 +99,11 @@ export default function AddNewPoleForm() {
 
   const [jsonResults, setJsonResults] = useState([]);
 
-  // useEffect(() => {
-  //   const arr = [];
-  //   setJsonResults();
-  // }, [input]);
+  useEffect(() => {
+    setJsonResults(
+      statesJSON.filter((x) => x.country_code === 'IN' && x.name.toLowerCase().includes(input.toLowerCase()))
+    );
+  }, [input]);
 
   return (
     <FormikProvider value={formik}>
@@ -155,47 +144,41 @@ export default function AddNewPoleForm() {
               error={Boolean(touched.longitude && errors.longitude)}
               helperText={touched.longitude && errors.longitude}
             />
-            <Autocomplete
-              disablePortal
-              options={jsonResults}
-              onChange={(e, n) => setState(n)}
-              id="location-autocomplete"
-              getOptionLabel={(jsonResults) => `${jsonResults.name}`}
-              isOptionEqualToValue={(option, value) => option.name === value.name}
-              noOptionsText={<AddNewLocationDialogBox />}
-              onInputChange={(event, newInputValue) => {
-                setInput(newInputValue);
-              }}
-              renderOption={(props, jsonResults) => (
-                <Box component="li" {...props} key={jsonResults.id}>
-                  {jsonResults.name}
-                </Box>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  fullWidth
-                  {...params}
-                  margin="dense"
-                  id="location"
-                  label="Location"
-                  type="text"
-                  variant="standard"
-                  {...getFieldProps('location')}
-                  error={Boolean(touched.location && errors.location)}
-                  helperText={touched.location && errors.location}
-                />
-              )}
-              // filterOptions={(options, state) => {
-              //   const results = defaultFilterOptions(options, state);
-
-              //   if (results.length === 0) {
-              //     return [buttonOption];
-              //   }
-
-              //   return results;
-              // }}
-            />
-            <AddNewLocationDialogBox />
+            <Stack spacing={2} direction="row" justifyContent="space-between" alignItems="center">
+              <Autocomplete
+                fullWidth
+                disablePortal
+                options={jsonResults}
+                onChange={(e, n) => setState(n)}
+                id="location-autocomplete"
+                getOptionLabel={(jsonResults) => `${jsonResults.name}`}
+                isOptionEqualToValue={(option, value) => option.name === value.name}
+                noOptionsText={'No options'}
+                onInputChange={(event, newInputValue) => {
+                  setInput(newInputValue);
+                }}
+                renderOption={(props, jsonResults) => (
+                  <Box component="li" {...props} key={jsonResults.id}>
+                    {jsonResults.name}
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    fullWidth
+                    {...params}
+                    margin="dense"
+                    id="location"
+                    label="Location"
+                    type="text"
+                    variant="standard"
+                    {...getFieldProps('location')}
+                    error={Boolean(touched.location && errors.location)}
+                    helperText={touched.location && errors.location}
+                  />
+                )}
+              />
+              <AddNewLocationDialogBox />
+            </Stack>
           </Stack>
           <Stack spacing={3}>
             <LoadingButton size="large" type="submit" variant="contained" loading={isSubmitting}>

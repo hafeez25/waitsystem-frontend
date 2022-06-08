@@ -26,7 +26,6 @@ import statesJSON from './states.json';
 import districtsJSON from './districts.json';
 // reducers
 import { AddLocation } from '../../../redux/Pole/PoleReducer';
-// import data from './statesAndDistricts';
 
 // ----------------------------------------------------------------------
 

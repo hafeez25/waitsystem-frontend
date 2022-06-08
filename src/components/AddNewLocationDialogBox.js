@@ -27,16 +27,18 @@ export default function FormDialog() {
   return (
     <div>
       <Button
+        sx={{ mb: -0.3 }}
         component={RouterLink}
         to="#"
-        onMouseDown={(e) => {
-          console.log('CLICK SUCCESSFUL');
-          // e.stopPropagation();
-          handleClickOpen();
-        }}
-        // onClick={handleClickOpen}
+        onClick={handleClickOpen}
         variant="contained"
         startIcon={<Iconify icon="bx:current-location" />}
+        style={{
+          maxWidth: '180px',
+          maxHeight: '50px',
+          minWidth: '180px',
+          minHeight: '40px',
+        }}
       >
         Add New Location
       </Button>
