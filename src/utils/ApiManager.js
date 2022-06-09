@@ -24,6 +24,15 @@ export const MakeRequest = async (method, data, callback) => {
                         ...headers
                     }
                 })
+                if(resp && resp.data && resp.data.error){
+                    if(resp.data.error.logout){
+                        localStorage.clear()
+                        window.location.replace('/')
+                    }
+                    else{
+                        return {err:resp.data.error,resp:null}
+                    }
+                }
                 return { err: null, resp: resp.data };
             }
             catch (e) {
@@ -39,6 +48,15 @@ export const MakeRequest = async (method, data, callback) => {
                         ...headers
                     }
                 })
+                if(resp && resp.data && resp.data.error){
+                    if(resp.data.error.logout){
+                        localStorage.clear()
+                        window.location.replace('/')
+                    }
+                    else{
+                        return {err:resp.data.error,resp:null}
+                    }
+                }
                 return { err: null, resp: resp.data };
             }
             catch (e) {
@@ -58,6 +76,15 @@ export const MakeRequest = async (method, data, callback) => {
                         ...headers
                     }
                 })
+                if(resp && resp.data && resp.data.error){
+                    if(resp.data.error.logout){
+                        localStorage.clear()
+                        window.location.replace('/')
+                    }
+                    else{
+                        return {err:resp.data.error,resp:null}
+                    }
+                }
                 return { err: null, resp: resp.data };
             }
             catch (e) {
