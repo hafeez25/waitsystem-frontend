@@ -42,7 +42,7 @@ export default function LoginForm() {
             console.log(data);
             if (msg === 'error' || data.error) {
               setSubmitting(false);
-              toast.error(data.error || 'Something went wrong', {
+              toast.error(typeof data === 'string' ? data : 'Something went wrong', {
                 position: 'top-right',
                 autoClose: 5000,
                 hideProgressBar: false,

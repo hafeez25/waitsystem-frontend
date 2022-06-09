@@ -53,7 +53,7 @@ export default function FormDialog() {
           <DialogContentText>
             Please enter the General Name of the location, State, District and Pincode here.
           </DialogContentText>
-          <AddNewLocationForm />
+          <AddNewLocationForm handleClose={handleClose} />
         </DialogContent>
       </Dialog>
     </div>

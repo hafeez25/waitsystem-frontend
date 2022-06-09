@@ -24,26 +24,27 @@ import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
 import statesJSON from './states.json';
 import districtsJSON from './districts.json';
+import { AddPlace } from '../../../redux/locationReducer';
 // reducers
-import { AddLocation } from '../../../redux/Pole/PoleReducer';
+// import { AddLocation } from '../../../redux/Pole/PoleReducer';
 
 // ----------------------------------------------------------------------
 
-export default function AddNewLocationForm() {
+export default function AddNewLocationForm({ handleClose }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // console.log(data);
 
   const AddNewLocationSchema = Yup.object().shape({
-    locationName: Yup.string().required('General Name is required'),
-    state: Yup.string().required('State is required'),
-    district: Yup.string().required('District is required'),
+    location: Yup.string().required('General Name is required'),
+    // state: Yup.string().required('State is required'),
+    // district: Yup.string().required('District is required'),
     pincode: Yup.string().required('Pincode is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      locationName: '',
+      location: '',
       state: '',
       district: '',
       pincode: '',
@@ -51,6 +52,47 @@ export default function AddNewLocationForm() {
     },
     validationSchema: AddNewLocationSchema,
     onSubmit: (values, actions) => {
+      console.log(values, state, district);
+      if (state.name && district.name && values.location && values.pincode) {
+        dispatch(
+          AddPlace({
+            payload: {
+              ...values,
+              name: values.location,
+              state: state.name,
+              district: district.name,
+            },
+            callback: (msg, data, recall) => {
+              if (msg === 'error') {
+                setSubmitting(false);
+                toast.error(typeof data === 'string' ? data : 'Something went wrong', {
+                  position: 'top-right',
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+              } else {
+                handleClose();
+                console.log(data);
+                recall();
+              }
+            },
+          })
+        );
+      } else {
+        toast.error('Please fill all fields', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
       // console.log(values,actions)
       // dispatch(
       //   AddLocation({
@@ -87,7 +129,8 @@ export default function AddNewLocationForm() {
     },
   });
 
-  const [state, setState] = useState('');
+  const [state, setState] = useState({ name: '' });
+  const [district, setDistrict] = useState({ name: '' });
   const [input, setInput] = useState('');
   const [input1, setInput1] = useState('');
 
@@ -121,13 +164,14 @@ export default function AddNewLocationForm() {
               label="General Name"
               type="text"
               variant="standard"
-              {...getFieldProps('locationName')}
-              error={Boolean(touched.locationName && errors.locationName)}
-              helperText={touched.locationName && errors.locationName}
+              {...getFieldProps('location')}
+              error={Boolean(touched.location && errors.location)}
+              helperText={touched.location && errors.location}
             />
             <Autocomplete
               disablePortal
               options={jsonResults}
+              // value={state}
               onChange={(e, n) => setState(n)}
               id="states-autocomplete"
               getOptionLabel={(jsonResults) => `${jsonResults.name}`}
@@ -150,7 +194,7 @@ export default function AddNewLocationForm() {
                   label="State"
                   type="text"
                   variant="standard"
-                  {...getFieldProps('state')}
+                  // {...getFieldProps('state')}
                   error={Boolean(touched.state && errors.state)}
                   helperText={touched.state && errors.state}
                 />
@@ -159,7 +203,8 @@ export default function AddNewLocationForm() {
             <Autocomplete
               disablePortal
               options={jsonResults1}
-              onChange={(e, n) => setState(n)}
+              // value={district}
+              onChange={(e, n) => setDistrict(n)}
               id="districts-autocomplete"
               getOptionLabel={(jsonResults1) => `${jsonResults1.name}`}
               isOptionEqualToValue={(option, value) => option.name === value.name}
@@ -181,7 +226,7 @@ export default function AddNewLocationForm() {
                   label="District"
                   type="text"
                   variant="standard"
-                  {...getFieldProps('district')}
+                  // {...getFieldProps('district')}
                   error={Boolean(touched.district && errors.district)}
                   helperText={touched.district && errors.district}
                 />

@@ -1,6 +1,6 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
@@ -18,6 +18,8 @@ import {
   TableContainer,
   TablePagination,
 } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -28,6 +30,9 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import USERLIST from '../_mock/user';
+
+import { FetchAllPlaces } from '../redux/locationReducer';
+import { DeletePole, FetchAllPoles, EditPole } from '../redux/PolesReducer';
 
 // ----------------------------------------------------------------------
 
@@ -66,7 +71,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.location.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -84,10 +89,117 @@ export default function User() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const dispatch = useDispatch();
+
+  const places = useSelector(({ location }) => location.Places);
+
+  useEffect(() => {
+    if (!places || !places.length) {
+      dispatch(
+        FetchAllPlaces({
+          callback: (msg, data, recall) => {
+            recall();
+          },
+        })
+      );
+    }
+  }, []);
+
+  const poles = useSelector(({ pole }) => pole.poles);
+
+  const [poleFetchingerror, setPoleFetchingError] = useState(false);
+
+  const FetchPoles = () => {
+    setPoleFetchingError(false);
+    dispatch(
+      FetchAllPoles({
+        callback: (msg, data, recall) => {
+          if (msg === 'error') {
+            toast.error(typeof data === 'string' ? data : 'Something went wrong', {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setPoleFetchingError(true);
+          }
+          recall();
+        },
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (!poles || !poles.length) {
+      FetchPoles();
+    }
+  }, []);
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+  };
+
+  const [editData, setEditData] = useState();
+
+  const poleActions = (type, data) => {
+    switch (type) {
+      case 'DELETE':
+        dispatch(
+          DeletePole({
+            payload: data,
+            callback: (msg, data, recall) => {
+              if (msg === 'error') {
+                toast.error('Could not delete pole', {
+                  position: 'top-right',
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+              } else {
+                recall();
+              }
+            },
+          })
+        );
+        break;
+      case 'EDIT':
+        // open edit modal
+        setEditData(data);
+        break;
+      case 'EDIT_DONE':
+        setEditData(null);
+        dispatch(
+          EditPole({
+            payload: data,
+            callback: (msg, data, recall) => {
+              if (msg === 'error') {
+                toast.error(typeof data === 'string' ? data : 'Error in editing pole details', {
+                  position: 'top-right',
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+              } else {
+                recall();
+              }
+            },
+          })
+        );
+        break;
+      default:
+        break;
+    }
   };
 
   const handleSelectAllClick = (event) => {
@@ -129,7 +241,7 @@ export default function User() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(poles, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -141,6 +253,7 @@ export default function User() {
             Manage Devices
           </Typography>
           <AddPoleDialogBox />
+          {editData && <AddPoleDialogBox data={editData} callback={poleActions} setEditData={setEditData} />}
         </Stack>
 
         <Card>
@@ -153,40 +266,41 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={poles.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                  {poles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                    const { _id, latitude, longitude, serialno, healthStatus, batteryStatus, location } = row;
+                    const status = healthStatus >= 50 ? 'good' : 'bad';
+                    // const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
                       <TableRow
                         hover
-                        key={id}
+                        key={index}
                         tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
+                        // role="checkbox"
+                        // selected={isItemSelected}
+                        // aria-checked={isItemSelected}
                       >
-                        <TableCell padding="checkbox">
+                        {/* <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            {/* <Avatar alt={name} src={avatarUrl} /> */}
                             <Typography variant="subtitle2" noWrap>
                               {'#'}
-                              {id}
+                              {serialno}
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
-                        <TableCell align="left">{isVerified}</TableCell>
+                        <TableCell align="left">{latitude}</TableCell>
+                        <TableCell align="left">{longitude}</TableCell>
+                        <TableCell align="left">{location.name}</TableCell>
                         <TableCell align="left">
                           <Label variant="ghost" color={(status === 'bad' && 'error') || 'success'}>
                             {sentenceCase(status)}
@@ -194,7 +308,7 @@ export default function User() {
                         </TableCell>
 
                         <TableCell align="right">
-                          <UserMoreMenu />
+                          <UserMoreMenu callback={poleActions} data={row} />
                         </TableCell>
                       </TableRow>
                     );
@@ -222,7 +336,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={poles.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

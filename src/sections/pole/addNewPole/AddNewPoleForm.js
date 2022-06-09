@@ -26,36 +26,87 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import AddNewLocationDialogBox from '../../../components/AddNewLocationDialogBox';
 import Iconify from '../../../components/Iconify';
 import statesJSON from '../addNewLocation/states.json';
+import { FetchAllPlaces } from '../../../redux/locationReducer';
+import { AddPole } from '../../../redux/PolesReducer';
 // reducers
-import { Login } from '../../../redux/AuthReducer';
 
 // ----------------------------------------------------------------------
 
-export default function AddNewPoleForm() {
+export default function AddNewPoleForm({ handleClose, editing, data, callback }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const places = useSelector(({ location }) => location.Places);
+
+  useEffect(() => {
+    if (!places || !places.length) {
+      dispatch(
+        FetchAllPlaces({
+          callback: (msg, data, recall) => {
+            recall();
+          },
+        })
+      );
+    }
+  }, [places]);
 
   const AddNewLocationSchema = Yup.object().shape({
-    serialNo: Yup.string().required('Serial No. is required'),
+    serialno: Yup.string().required('Serial No. is required'),
     latitude: Yup.string().required('Latitude is required'),
     longitude: Yup.string().required('Longitude is required'),
-    location: Yup.string().required('Location is required'),
+    // location: Yup.string().required('Location is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      serialNo: '',
-      latitude: '',
-      longitude: '',
-      location: '',
+      serialno: editing ? data.serialno : '',
+      latitude: editing ? data.latitude : '',
+      longitude: editing ? data.longitude : '',
+      location: editing ? data.location : '',
     },
     validationSchema: AddNewLocationSchema,
     onSubmit: (values, actions) => {
+      console.log(values, locationid);
+      if (locationid && values.serialno && !editing) {
+        dispatch(
+          AddPole({
+            payload: {
+              ...values,
+              location: locationid,
+              name: state.name,
+            },
+            callback: (msg, data, recall) => {
+              if (msg === 'error') {
+                setSubmitting(false);
+                toast.error(typeof data === 'string' ? data : 'Something went wrong', {
+                  position: 'top-right',
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+              } else {
+                handleClose();
+                recall();
+              }
+            },
+          })
+        );
+      } else {
+        setSubmitting(false);
+      }
+      if (editing) {
+        if (callback) {
+          callback('EDIT_DONE', { ...values, location: state._id, name: state.name, poleid: data._id });
+          handleClose();
+        }
+      }
       // console.log(values,actions)
       // dispatch(
       //   Login({
@@ -94,7 +145,8 @@ export default function AddNewPoleForm() {
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
-  const [state, setState] = useState('');
+  const [state, setState] = useState(editing ? data.location : { name: '', _id: '' });
+  const [locationid, setLocationid] = useState();
   const [input, setInput] = useState('');
 
   const [jsonResults, setJsonResults] = useState([]);
@@ -117,10 +169,11 @@ export default function AddNewPoleForm() {
               label="Serial No."
               type="text"
               fullWidth
+              disabled={editing}
               variant="standard"
-              {...getFieldProps('serialNo')}
-              error={Boolean(touched.serialNo && errors.serialNo)}
-              helperText={touched.serialNo && errors.serialNo}
+              {...getFieldProps('serialno')}
+              error={Boolean(touched.serialno && errors.serialno)}
+              helperText={touched.serialno && errors.serialno}
             />
             <TextField
               margin="dense"
@@ -148,8 +201,12 @@ export default function AddNewPoleForm() {
               <Autocomplete
                 fullWidth
                 disablePortal
-                options={jsonResults}
-                onChange={(e, n) => setState(n)}
+                value={state}
+                options={places}
+                onChange={(e, n) => {
+                  setState(n);
+                  setLocationid(n._id);
+                }}
                 id="location-autocomplete"
                 getOptionLabel={(jsonResults) => `${jsonResults.name}`}
                 isOptionEqualToValue={(option, value) => option.name === value.name}
@@ -171,7 +228,7 @@ export default function AddNewPoleForm() {
                     label="Location"
                     type="text"
                     variant="standard"
-                    {...getFieldProps('location')}
+                    // {...getFieldProps('location')}
                     error={Boolean(touched.location && errors.location)}
                     helperText={touched.location && errors.location}
                   />
@@ -182,7 +239,7 @@ export default function AddNewPoleForm() {
           </Stack>
           <Stack spacing={3}>
             <LoadingButton size="large" type="submit" variant="contained" loading={isSubmitting}>
-              Add Pole
+              {editing ? 'Update Pole' : 'Add Pole'}
             </LoadingButton>
           </Stack>
         </Stack>

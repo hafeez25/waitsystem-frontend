@@ -14,7 +14,7 @@ import { AddNewPoleForm } from '../sections/pole/addNewPole';
 
 import Iconify from './Iconify';
 
-export default function FormDialog() {
+export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -22,8 +22,36 @@ export default function FormDialog() {
   };
 
   const handleClose = () => {
+    if (props.setEditData) {
+      props.setEditData(null);
+    }
     setOpen(false);
   };
+
+  if (props.data) {
+    return (
+      <Dialog open={Boolean(true)} onClose={handleClose} maxWidth={'sm'}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <DialogTitle variant="h4">Add New Pole</DialogTitle>
+          <Fab onClick={handleClose} size="small" sx={{ mr: 3 }} color="inherit" aria-label="edit">
+            <Iconify icon="fa:close" />
+          </Fab>
+        </Stack>
+        <DialogContent>
+          <DialogContentText>Please enter Latitude, Longitude and Location here.</DialogContentText>
+          <AddNewPoleForm
+            editing={Boolean(true)}
+            data={props.data}
+            handleClose={handleClose}
+            callback={props.callback}
+          />
+        </DialogContent>
+        {/* <DialogActions>
+          <Button onClick={handleClose}>Add Pole</Button>
+        </DialogActions> */}
+      </Dialog>
+    );
+  }
 
   return (
     <div>
@@ -45,7 +73,7 @@ export default function FormDialog() {
         </Stack>
         <DialogContent>
           <DialogContentText>Please enter the Serial Number, Latitude, Longitude and Location here.</DialogContentText>
-          <AddNewPoleForm />
+          <AddNewPoleForm handleClose={handleClose} />
         </DialogContent>
         {/* <DialogActions>
           <Button onClick={handleClose}>Add Pole</Button>

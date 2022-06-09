@@ -19,8 +19,22 @@ const AuthRoutes = {
   submitpassword: '/auth/changepassword',
 };
 
-const PoleRoutes = {
+const PlaceRoutes = {
   addplace: '/service/place',
+  editPlace: '/service/place/:id',
+  deletePlace: '/service/place/:id',
+  getPlace: '/service/place/:id',
+  searchPlace: '/service/searchplace',
+  analytics: '/service/place/analytics',
+  PolesOfLocation: '/service/places/poles',
 };
 
-export { Constants, Api, AuthRoutes, PoleRoutes };
+const PoleRoutes = {
+  AddPole: '/service/pole',
+  EditPole: '/service/pole/:poleid',
+  DeletePole: '/service/pole/:poleid',
+  FetchPoles: '/service/poles',
+  analytics: '/service/pole/analyics',
+};
+
+export { Constants, Api, AuthRoutes, PoleRoutes, PlaceRoutes };
