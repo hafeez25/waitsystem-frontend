@@ -269,7 +269,6 @@ export default function User() {
                   rowCount={poles.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {poles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
@@ -287,12 +286,12 @@ export default function User() {
                         // aria-checked={isItemSelected}
                       >
                         {/* <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                          <Checkbox checked />
                         </TableCell> */}
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             {/* <Avatar alt={name} src={avatarUrl} /> */}
-                            <Typography variant="subtitle2" noWrap>
+                            <Typography sx={{ ml: 3 }} variant="subtitle2" noWrap>
                               {'#'}
                               {serialno}
                             </Typography>
