@@ -5,11 +5,13 @@ import { styled } from '@mui/material/styles';
 import { Button, Typography, Container, Box } from '@mui/material';
 // components
 import Page from '../components/Page';
+import Marker from './Marker';
+import places from '../utils/Places.json'
 
 // ----------------------------------------------------------------------
 
 const ContentStyle = styled('div')(({ theme }) => ({
-  maxWidth: 480,
+  maxWidth: "100%",
   margin: 'auto',
   minHeight: '100vh',
   display: 'flex',
@@ -24,7 +26,7 @@ const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 export default function Page404() {
   const defaultProps = {
-    center: [59.938043, 30.337157],
+    center: [29.8646495, 77.8938784],
     zoom: 9,
   };
 
@@ -44,7 +46,15 @@ export default function Page404() {
               yesIWantToUseGoogleMapApiInternals
               onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
             >
-              <AnyReactComponent lat={59.955413} lng={30.337844} text="My Marker" />
+              {/* <AnyReactComponent lat={59.955413} lng={30.337844} text="My Marker" /> */}
+              {places.results.map((place) => (
+                <Marker
+                  key={place.id}
+                  text={place.name}
+                  lat={place.geometry.location.lat}
+                  lng={place.geometry.location.lng}
+                />
+              ))}
             </GoogleMapReact>
           </div>
           {/* <Typography variant="h3" paragraph>
