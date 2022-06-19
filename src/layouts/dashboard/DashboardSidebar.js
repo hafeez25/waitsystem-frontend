@@ -51,7 +51,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const account = {
     displayName: authData.user.name,
     email: authData.user.email,
-    photoURL: '../../static/mock-images/avatars/avatar_default.jpg',
   };
 
   useEffect(() => {

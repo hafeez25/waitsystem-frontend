@@ -14,6 +14,8 @@ import DashboardApp from './pages/DashboardApp';
 import ForgotPassword from './pages/ForgotPassword';
 import EnterOTP from './pages/EnterOTP';
 import TwofactorOTP from './pages/TwofactorOTP';
+import ProfileSettings from './pages/ProfileSettings';
+import ViewProfile from './pages/ViewProfile';
 import { Constants } from './utils/Constants';
 
 // ----------------------------------------------------------------------
@@ -35,6 +37,16 @@ export default function Router() {
         { path: 'products', element: !notAuthenticated ? <Products /> : <Navigate to="/login" /> },
         { path: 'blog', element: !notAuthenticated ? <Blog /> : <Navigate to="/login" /> },
         { path: 'realtimemap', element: <RealTimeMap /> },
+        { path: 'profile-settings', element: <ProfileSettings /> },
+      ],
+    },
+    {
+      path: '/',
+      element: <DashboardLayout />,
+      children: [
+        { path: '/', element: notAuthenticated ? <Navigate to="/login" /> : <Navigate to="/dashboard/app" /> },
+        { path: 'view-profile', element: notAuthenticated ? <Navigate to="/login" /> : <ViewProfile /> },
+        { path: 'settings', element: notAuthenticated ? <Navigate to="/login" /> : <ProfileSettings /> },
       ],
     },
     {

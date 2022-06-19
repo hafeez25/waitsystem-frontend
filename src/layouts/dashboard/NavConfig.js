@@ -29,7 +29,17 @@ const navConfig = [
   {
     title: 'Manage Devices',
     path: '/dashboard/manage-devices',
-    icon: getIcon('clarity:settings-outline-badged'),
+    icon: getIcon('ic:round-manage-accounts'),
+  },
+  {
+    title: 'View Profile',
+    path: '/view-profile',
+    icon: getIcon('icomoon-free:profile'),
+  },
+  {
+    title: 'Settings',
+    path: '/settings',
+    icon: getIcon('clarity:settings-solid'),
   },
   // {
   //   title: 'add product',

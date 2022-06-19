@@ -17,6 +17,7 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  Skeleton,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -270,55 +271,54 @@ export default function User() {
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                 />
-                <TableBody>
-                  {poles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                    const { _id, latitude, longitude, serialno, healthStatus, batteryStatus, location } = row;
-                    const status = healthStatus >= 50 ? 'good' : 'bad';
-                    // const isItemSelected = selected.indexOf(name) !== -1;
+                {poles ? (
+                  <TableBody>
+                    {poles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                      const { _id, latitude, longitude, serialno, healthStatus, batteryStatus, location } = row;
+                      const status = healthStatus >= 50 ? 'good' : 'bad';
+                      // const isItemSelected = selected.indexOf(name) !== -1;
 
-                    return (
-                      <TableRow
-                        hover
-                        key={index}
-                        tabIndex={-1}
-                        // role="checkbox"
-                        // selected={isItemSelected}
-                        // aria-checked={isItemSelected}
-                      >
-                        {/* <TableCell padding="checkbox">
-                          <Checkbox checked />
-                        </TableCell> */}
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            {/* <Avatar alt={name} src={avatarUrl} /> */}
-                            <Typography sx={{ ml: 3 }} variant="subtitle2" noWrap>
-                              {'#'}
-                              {serialno}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
-                        <TableCell align="left">{latitude}</TableCell>
-                        <TableCell align="left">{longitude}</TableCell>
-                        <TableCell align="left">{location.name}</TableCell>
-                        <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'bad' && 'error') || 'success'}>
-                            {sentenceCase(status)}
-                          </Label>
-                        </TableCell>
+                      return (
+                        <TableRow
+                          hover
+                          key={index}
+                          tabIndex={-1}
+                          // role="checkbox"
+                          // selected={isItemSelected}
+                          // aria-checked={isItemSelected}
+                        >
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Typography sx={{ ml: 3 }} variant="subtitle2" noWrap>
+                                {'#'}
+                                {serialno}
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="left">{latitude}</TableCell>
+                          <TableCell align="left">{longitude}</TableCell>
+                          <TableCell align="left">{location.name}</TableCell>
+                          <TableCell align="left">
+                            <Label variant="ghost" color={(status === 'bad' && 'error') || 'success'}>
+                              {sentenceCase(status)}
+                            </Label>
+                          </TableCell>
 
-                        <TableCell align="right">
-                          <UserMoreMenu callback={poleActions} data={row} />
-                        </TableCell>
+                          <TableCell align="right">
+                            <UserMoreMenu callback={poleActions} data={row} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: 53 * emptyRows }}>
+                        <TableCell colSpan={6} />
                       </TableRow>
-                    );
-                  })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-
+                    )}
+                  </TableBody>
+                ) : (
+                  <Skeleton variant="rectangular" width={210} height={118} />
+                )}
                 {isUserNotFound && (
                   <TableBody>
                     <TableRow>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { NavLink as RouterLink, matchPath, useLocation } from 'react-router-dom';
 // material
 import { alpha, useTheme, styled } from '@mui/material/styles';
-import { Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton } from '@mui/material';
+import { Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton, Divider, Chip } from '@mui/material';
 //
 import Iconify from './Iconify';
 
@@ -144,10 +144,17 @@ export default function NavSection({ navConfig, ...other }) {
 
   const match = (path) => (path ? !!matchPath({ path, end: false }, pathname) : false);
 
+  const listNav1 = navConfig.slice(0, 5);
+  const listNav2 = navConfig.slice(5, 7);
+
   return (
     <Box {...other}>
       <List disablePadding sx={{ p: 1 }}>
-        {navConfig.map((item) => (
+        {listNav1.map((item) => (
+          <NavItem key={item.title} item={item} active={match} />
+        ))}
+        <Divider sx={{ m: 2 }} />
+        {listNav2.map((item) => (
           <NavItem key={item.title} item={item} active={match} />
         ))}
       </List>

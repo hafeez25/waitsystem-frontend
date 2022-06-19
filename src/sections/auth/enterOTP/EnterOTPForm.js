@@ -18,6 +18,7 @@ export default function EnterOTPForm() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword1, setShowPassword1] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
   useEffect(() => {
@@ -70,6 +71,9 @@ export default function EnterOTPForm() {
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
+  const handleShowPassword1 = () => {
+    setShowPassword1((show) => !show);
+  };
 
   return (
     <FormikProvider value={formik}>
@@ -105,14 +109,14 @@ export default function EnterOTPForm() {
 
           <TextField
             fullWidth
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword1 ? 'text' : 'password'}
             label="Confirm Password"
             {...getFieldProps('confirmPassword')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={handleShowPassword} edge="end">
-                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                  <IconButton onClick={handleShowPassword1} edge="end">
+                    <Iconify icon={showPassword1 ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
                   </IconButton>
                 </InputAdornment>
               ),
