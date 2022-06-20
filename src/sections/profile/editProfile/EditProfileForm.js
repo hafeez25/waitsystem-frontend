@@ -24,6 +24,8 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
+import { MakeRequest } from '../../../utils/ApiManager';
+import { profileRoutes } from '../../../utils/Constants';
 
 // reducers
 // import { Login } from '../../../redux/AuthReducer';
@@ -32,12 +34,13 @@ import Iconify from '../../../components/Iconify';
 
 export default function ProfileForm() {
   const authData = useSelector(({ auth }) => auth);
+  const [profile,setProfile] = useState(authData.user.photo);
 
   const account = {
     profilePhoto: authData.user.photo,
     displayName: authData.user.name,
     email: authData.user.email,
-    twofactor: true,
+    twofactor: authData.user.twofactorEnabled,
   };
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,6 +49,14 @@ export default function ProfileForm() {
     name: Yup.string().required('Name is required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
   });
+
+  const UploadFile = async(e) =>{
+    const resp = await MakeRequest('FILE',{
+      url: profileRoutes.image,
+      file:e.target.files[0]
+    },null)
+    console.log(resp);
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -113,9 +124,9 @@ export default function ProfileForm() {
               <Stack spacing={3} direction="column" justifyContent="center" alignItems="center" sx={{ my: 4 }}>
                 <Avatar src={account.profilePhoto} alt={account.displayName} sx={{ width: 150, height: 150 }} />
                 <label htmlFor="profile-pic">
-                  <input style={{ display: 'none' }} accept="image/*" id="profile-pic" multiple type="file" />
+                  <input style={{ display: 'none' }} accept="image/*" id="profile-pic" multiple type="file" onChange={UploadFile}/>
                   <Button variant="contained" component="span">
-                    Change Profile
+                    Change Photo
                   </Button>
                 </label>
               </Stack>

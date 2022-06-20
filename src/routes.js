@@ -1,4 +1,6 @@
 import { Navigate, useRoutes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
@@ -18,9 +20,18 @@ import ProfileSettings from './pages/ProfileSettings';
 import ViewProfile from './pages/ViewProfile';
 import { Constants } from './utils/Constants';
 
+import { FetchMyDetail } from './redux/AuthReducer';
+
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    const token = localStorage.getItem(Constants.AuthToken);
+    if(token){
+      dispatch(FetchMyDetail({}))
+    }
+  },[])
   const notAuthenticated = !(localStorage.getItem(Constants.AuthToken) || sessionStorage.getItem(Constants.AuthToken));
 
   return useRoutes([

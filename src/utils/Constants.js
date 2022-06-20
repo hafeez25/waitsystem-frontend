@@ -16,6 +16,7 @@ const AuthRoutes = {
   twofactor: '/auth/twofactorverify',
   signup: '/auth/signup',
   forgotpassword: '/auth/forgotpassword',
+  me : '/auth/me',
   submitpassword: '/auth/changepassword',
 };
 
@@ -37,4 +38,8 @@ const PoleRoutes = {
   analytics: '/service/pole/analyics',
 };
 
-export { Constants, Api, AuthRoutes, PoleRoutes, PlaceRoutes };
+const profileRoutes = {
+  image : '/profile/image'
+}
+
+export { Constants, Api, AuthRoutes, PoleRoutes, PlaceRoutes,profileRoutes };
