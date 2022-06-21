@@ -34,7 +34,7 @@ import { profileRoutes } from '../../../utils/Constants';
 
 export default function ProfileForm() {
   const authData = useSelector(({ auth }) => auth);
-  const [profile,setProfile] = useState(authData.user.photo);
+  const [profile, setProfile] = useState(authData.user.photo);
 
   const account = {
     profilePhoto: authData.user.photo,
@@ -49,14 +49,6 @@ export default function ProfileForm() {
     name: Yup.string().required('Name is required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
   });
-
-  const UploadFile = async(e) =>{
-    const resp = await MakeRequest('FILE',{
-      url: profileRoutes.image,
-      file:e.target.files[0]
-    },null)
-    console.log(resp);
-  }
 
   const formik = useFormik({
     initialValues: {
@@ -108,6 +100,20 @@ export default function ProfileForm() {
   //   setChecked(event.target.checked);
   // };
 
+  const [photoState, setPhotoState] = useState(null);
+  const UploadFile = async (e) => {
+    setPhotoState(e.target.files[0]);
+    const resp = await MakeRequest(
+      'FILE',
+      {
+        url: profileRoutes.image,
+        file: e.target.files[0],
+      },
+      null
+    );
+    console.log(resp);
+  };
+
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
   return (
@@ -122,9 +128,20 @@ export default function ProfileForm() {
               }}
             >
               <Stack spacing={3} direction="column" justifyContent="center" alignItems="center" sx={{ my: 4 }}>
-                <Avatar src={account.profilePhoto} alt={account.displayName} sx={{ width: 150, height: 150 }} />
+                <Avatar
+                  src={!photoState ? account.profilePhoto : URL.createObjectURL(photoState)}
+                  alt={account.displayName}
+                  sx={{ width: 150, height: 150 }}
+                />
                 <label htmlFor="profile-pic">
-                  <input style={{ display: 'none' }} accept="image/*" id="profile-pic" multiple type="file" onChange={UploadFile}/>
+                  <input
+                    style={{ display: 'none' }}
+                    accept="image/*"
+                    id="profile-pic"
+                    multiple
+                    type="file"
+                    onChange={UploadFile}
+                  />
                   <Button variant="contained" component="span">
                     Change Photo
                   </Button>
