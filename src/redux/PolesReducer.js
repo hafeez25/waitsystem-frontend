@@ -53,7 +53,7 @@ export const FetchAllPoles = createAsyncThunk('poles/fetchall', async ({ callbac
 });
 
 export const FetchPoleAnalytics = createAsyncThunk('poles/fetchanalytics', async ({ callback, payload }) => {
-  const data = await MakeRequest(Api.GET, { url: PoleRoutes.FetchPoles, query: payload });
+  const data = await MakeRequest(Api.GET, { url: PoleRoutes.analytics, query: payload });
 
   if (data.err) {
     callback('error', data.err, () => {});
