@@ -313,7 +313,7 @@ export default function User() {
                             </Label>
                           </TableCell>
 
-                          <TableCell align="right" onClick={()=>navigation(`/dashboard/pole/${_id}`, { replace: false })}>
+                          <TableCell align="right">
                             <UserMoreMenu callback={poleActions} data={row} />
                           </TableCell>
                         </TableRow>
