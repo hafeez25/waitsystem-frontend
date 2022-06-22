@@ -115,7 +115,11 @@ const PoleSlice = createSlice({
       }
     },
     [FetchPoleAnalytics.fulfilled]: (state, action) => {
-      console.log(action.payload);
+      console.log(action.payload)
+      if(action.payload && action.payload.data){
+        const data = action.payload.data;
+        state.analytics[data.pole._id] = data
+      }
     },
   },
 });

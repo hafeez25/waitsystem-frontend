@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
+import './base.css'
 // components
 import ScrollToTop from './components/ScrollToTop';
 import { BaseOptionChartStyle } from './components/chart/BaseOptionChart';

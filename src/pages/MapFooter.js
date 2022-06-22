@@ -1,14 +1,15 @@
 import GoogleMapReact from 'google-map-react';
 import {Box, Container, Grid, Typography,Card, CardContent, Stack } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-import { useDispatch } from 'react-redux';
+import { useState,useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import Page from '../components/Page';
 
 import { FetchPoleAnalytics } from '../redux/PolesReducer';
+
 
 
 
@@ -19,6 +20,7 @@ export default function MapFooter() {
   const theme = useTheme();
   const dispatch = useDispatch()
   const {poleid} = useParams()
+  const analytics = useSelector(({pole})=>pole.analytics)
 
   const defaultProps = {
     center: [59.938043, 30.337157],
@@ -29,12 +31,13 @@ export default function MapFooter() {
     // use map and maps objects
   };
 
+
   useEffect(()=>{
     if(poleid && poleid.length === 24){
       dispatch(FetchPoleAnalytics({
         payload: {poleid},
         callback: (msg, data, recall) => {
-          console.log(data)
+          console.log(msg,data)
           if (msg === 'error') {
             toast.error(typeof data === 'string' ? data : 'Error in fetching pole analytics', {
               position: 'top-right',
@@ -53,6 +56,18 @@ export default function MapFooter() {
     }
   },[poleid])
 
+  const FormatTime = (date) =>{
+    const diff = Math.floor((new Date() - new Date(date))/1000);
+    if(diff < 5) return 'Just now'
+    if(diff < 60) return `${diff}s ago`
+    if(diff < 60*60) return `${Math.floor(diff/60)}m ago`
+    if(diff < 3600*24) return `${Math.floor(diff/3600)}h ago`
+    if(diff < 3600*24*365) return `${Math.floor(diff/(3600*24))}d ago`
+    return `${Math.floor(diff/(3600*24*365))}y ago`
+  }
+
+  if(!analytics[poleid] || !analytics[poleid].pole) return null
+
   return (
     <Page title="Pole Analytics">
       <Container maxWidth="xl">
@@ -69,47 +84,47 @@ export default function MapFooter() {
           </Card>
           <Grid container spacing={3} >
             <Grid item xs={12} md={4} mt={3}>
-              <Card sx={{height:'50vh', backgroundColor:'#D1E9FC'
+              <Card sx={{height:'350px', backgroundColor:'#D1E9FC'
               }}>
                 <CardContent >
-                  <Typography variant='h4' component='div' textAlign="center"  gutterBottom>
+                  <Typography variant='h4' component='div' textAlign="center"  gutterBottom >
                     Pole Details
                   </Typography>
                   <Box mt={2}>
-                  <Typography component='div' variant="h6"  gutterBottom>
+                  <Typography component='div' variant="h6"  gutterBottom className='fixFont'>
                     Serial no. - 
-                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>33467</span>
+                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>{analytics[poleid].pole.serialno}</span>
                   </Typography>
-                  <Typography component='div' variant="h6" gutterBottom>
+                  <Typography component='div' variant="h6" gutterBottom className='fixFont'>
                     Cars passed in past 24 hours - 
-                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>21</span>
+                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>{analytics[poleid].data.length}</span>
                   </Typography>
-                  <Typography component='div' variant="h6" gutterBottom>
+                  <Typography component='div' variant="h6" gutterBottom className='fixFont'>
                     Pole added by - 
-                    <span style={{fontWeight:"normal", marginLeft:'1rem', overflow:'hidden',textOverflow:'ellipsis'}}>sagar</span>
+                    <span style={{fontWeight:"normal", marginLeft:'1rem', overflow:'hidden',textOverflow:'ellipsis'}}>{analytics[poleid].pole.addedBy.name}</span>
                   </Typography>
-                  <Typography component='div' variant="h6" gutterBottom>
+                  <Typography component='div' variant="h6" gutterBottom className='fixFont'>
                     Pole last updated - 
-                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>12 hours ago</span>
+                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>{FormatTime(analytics[poleid].pole.lastUpdatedAt)}</span>
                   </Typography>
-                  <Typography component='div' variant="h6" gutterBottom>
+                  <Typography component='div' variant="h6" gutterBottom className='fixFont'>
                     Pole Latitude - 
-                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>36.2</span>
+                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>{analytics[poleid].pole.latitude}</span>
                   </Typography>
-                  <Typography component='div' variant="h6" gutterBottom>
+                  <Typography component='div' variant="h6" gutterBottom className='fixFont'>
                     Pole longitude - 
-                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>21.2</span>
+                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>{analytics[poleid].pole.longitude}</span>
                   </Typography>
-                  <Typography component='div' variant="h6" gutterBottom>
+                  <Typography component='div' variant="h6" gutterBottom className='fixFont'>
                     Pole location - 
-                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>Rajeev Bhawan IIT Roorkee</span>
+                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>{analytics[poleid].pole.location?.name}</span>
                   </Typography>
                   </Box>
               </CardContent>
             </Card>
           </Grid>
           <Grid item xs={12} md={4} textAlign="center" mt={3}>
-          <Card sx={{height:'50vh' , backgroundColor:'#FFF7CD'
+          <Card sx={{height:'350px' , backgroundColor:'#FFF7CD'
         }}>
               <CardContent >
                 <Typography variant='h4' component='div' gutterBottom>
@@ -119,7 +134,7 @@ export default function MapFooter() {
             </Card>
           </Grid>
           <Grid item xs={12} md={4} textAlign="center" mt={3}>
-          <Card sx={{height:'50vh', backgroundColor:'#FFE7D9'}}>
+          <Card sx={{height:'350px', backgroundColor:'#FFE7D9'}}>
               <CardContent > 
                  <Typography variant='h4' component='div' gutterBottom>
                   Health Status
@@ -155,12 +170,12 @@ export default function MapFooter() {
       }}>
             <GoogleMapReact
               bootstrapURLKeys={{ key: 'AIzaSyAd1gCmyfr8mAbDmHj09b6bhe4lEB_qffw' }}
-              defaultCenter={defaultProps.center}
+              defaultCenter={[analytics[poleid].pole.latitude,analytics[poleid].pole.longitude]}
               defaultZoom={defaultProps.zoom}
               yesIWantToUseGoogleMapApiInternals
               onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
             >
-              <AnyReactComponent lat={59.955413} lng={30.337844} text="My Marker" />
+              <AnyReactComponent lat={analytics[poleid].pole.latitude} lng={analytics[poleid].pole.longitude} text="My Marker" />
       </GoogleMapReact>
       
       </Card>
