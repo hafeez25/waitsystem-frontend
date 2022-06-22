@@ -69,7 +69,7 @@ const PoleSlice = createSlice({
     poles: [],
     analytics: {},
   },
-  reducers: {
+  reducers: { 
     // setData(state, action) {
     //   const { user, token } = action.payload;
     //   if (user) {
