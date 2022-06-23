@@ -111,8 +111,26 @@ export default function ProfileForm() {
       },
       null
     );
-    console.log(resp);
+    if (resp && resp.resp && resp.resp.data) setPhotoState(resp.resp.data)
+    else {
+      toast.error(typeof resp.err === 'string' ? resp.err : 'Could not upload picture', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
   };
+
+  const getPhoto = () =>{
+    if(!photoState) return account.profilePhoto;
+    if(typeof(photoState) === 'string') return photoState
+    return URL.createObjectURL(photoState)
+    
+  }
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
@@ -129,7 +147,7 @@ export default function ProfileForm() {
             >
               <Stack spacing={3} direction="column" justifyContent="center" alignItems="center" sx={{ my: 4 }}>
                 <Avatar
-                  src={!photoState ? account.profilePhoto : URL.createObjectURL(photoState)}
+                  src={getPhoto()}
                   alt={account.displayName}
                   sx={{ width: 150, height: 150 }}
                 />
