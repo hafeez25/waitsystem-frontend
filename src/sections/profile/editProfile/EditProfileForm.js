@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link as RouterLink, Navigate, useNavigate } from 'react-router-dom';
 
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -26,6 +26,8 @@ import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
 import { MakeRequest } from '../../../utils/ApiManager';
 import { profileRoutes } from '../../../utils/Constants';
+import { EditProfile } from '../../../redux/AuthReducer';
+
 
 // reducers
 // import { Login } from '../../../redux/AuthReducer';
@@ -34,15 +36,16 @@ import { profileRoutes } from '../../../utils/Constants';
 
 export default function ProfileForm() {
   const authData = useSelector(({ auth }) => auth);
-  const [profile, setProfile] = useState(authData.user.photo);
+  const [profileuploading, setProfileuploading] = useState(false);
 
   const account = {
     profilePhoto: authData.user.photo,
     displayName: authData.user.name,
     email: authData.user.email,
-    twofactor: authData.user.twofactorEnabled,
+    twofactor: authData.user.twoFactorEnabled,
   };
   const navigate = useNavigate();
+  const [twofactor,setTwoFactor] = useState(Boolean(authData.user.twoFactorEnabled))
   const dispatch = useDispatch();
 
   const ProfileSchema = Yup.object().shape({
@@ -60,39 +63,57 @@ export default function ProfileForm() {
     },
     validationSchema: ProfileSchema,
     onSubmit: (values, actions) => {
-      // console.log(values,actions)
-      // dispatch(
-      //   Login({
-      //     payload: values,
-      //     callback: (msg, data, recall) => {
-      //       console.log(data);
-      //       if (msg === 'error' || data.error) {
-      //         setSubmitting(false);
-      //         toast.error(typeof data === 'string' ? data : 'Something went wrong', {
-      //           position: 'top-right',
-      //           autoClose: 5000,
-      //           hideProgressBar: false,
-      //           closeOnClick: true,
-      //           pauseOnHover: true,
-      //           draggable: true,
-      //           progress: undefined,
-      //         });
-      //       } else if (data && data.data && data.data.twofactorEnabled) {
-      //         toast.success('OTP has been sent to your email', {
-      //           position: 'top-right',
-      //           autoClose: 5000,
-      //           hideProgressBar: false,
-      //           closeOnClick: true,
-      //           pauseOnHover: true,
-      //           draggable: true,
-      //           progress: undefined,
-      //         });
-      //         navigate('/twofactorotp', { replace: false, state: { email: values.email, password: values.password } });
-      //       }
-      //       recall();
-      //     },
-      // })
-      // );
+
+      console.log(values)
+      if (profileuploading) {
+        toast.error('Photo upload is in progress.Please try in a while', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        return;
+      }
+      setSubmitting(true);
+      dispatch(
+        EditProfile({
+          payload: {
+            ...values,
+            photo: getPhoto(),
+            twoFactorEnabled: twofactor
+          },
+          callback: (msg, data, recall) => {
+            console.log(data);
+            setSubmitting(false);
+            if (msg === 'error') {
+              toast.error(typeof data === 'string' ? data : 'Something went wrong', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            }
+            else {
+              toast.success('Profile updated successfully', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+              recall();
+            }
+          },
+        })
+      );
     },
   });
   // const [checked, setChecked] = useState(account.twofactor);
@@ -101,8 +122,12 @@ export default function ProfileForm() {
   // };
 
   const [photoState, setPhotoState] = useState(null);
+  const pastPhoto = useRef()
   const UploadFile = async (e) => {
+    if (pastPhoto.current) return;
+    pastPhoto.current = getPhoto();
     setPhotoState(e.target.files[0]);
+    setProfileuploading(true)
     const resp = await MakeRequest(
       'FILE',
       {
@@ -111,8 +136,10 @@ export default function ProfileForm() {
       },
       null
     );
+
     if (resp && resp.resp && resp.resp.data) setPhotoState(resp.resp.data)
     else {
+      setPhotoState(pastPhoto.current)
       toast.error(typeof resp.err === 'string' ? resp.err : 'Could not upload picture', {
         position: 'top-right',
         autoClose: 5000,
@@ -123,13 +150,15 @@ export default function ProfileForm() {
         progress: undefined,
       });
     }
+    setProfileuploading(false)
+    pastPhoto.current = null;
   };
 
-  const getPhoto = () =>{
-    if(!photoState) return account.profilePhoto;
-    if(typeof(photoState) === 'string') return photoState
+  const getPhoto = () => {
+    if (!photoState) return account.profilePhoto;
+    if (typeof (photoState) === 'string') return photoState
     return URL.createObjectURL(photoState)
-    
+
   }
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
@@ -201,7 +230,8 @@ export default function ProfileForm() {
                   helperText={touched.location && errors.location}
                 />
                 <FormControlLabel
-                  control={<Switch {...getFieldProps('twofactor')} checked={values.twofactor} />}
+                  control={<Switch {...getFieldProps('twofactor')} checked={twofactor}
+                   onChange={(e)=>setTwoFactor(e.target.checked)} />}
                   label="Two-factor Authentication"
                   labelPlacement="start"
                 />
