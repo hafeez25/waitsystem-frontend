@@ -123,7 +123,7 @@ export default function ProfileForm() {
           <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
             <Box
               sx={{
-                minWidth: 300,
+                minWidth: 150,
                 maxWidth: 600,
               }}
             >
@@ -152,7 +152,7 @@ export default function ProfileForm() {
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
             <Box
               sx={{
-                minWidth: 300,
+                minWidth: 150,
                 maxWidth: 600,
               }}
             >
