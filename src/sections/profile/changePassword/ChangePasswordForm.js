@@ -8,6 +8,7 @@ import { Box, Container, Stack, TextField, IconButton, InputAdornment, Button } 
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
+import { UpdatePassword } from '../../../redux/AuthReducer';
 
 // import { ChangePassword } from '../../../redux/AuthReducer';
 
@@ -33,28 +34,45 @@ export default function ChangePasswordForm() {
     validationSchema: ChangePasswordSchema,
     onSubmit: (values, actions) => {
       // console.log(values,actions)
-      values.email = location.state?.email;
-      values.OTP = values.otp;
-      // dispatch(
-      //   ChangePassword({
-      //     payload: values,
-      //     callback: (msg, data, recall) => {
-      //       if (msg === 'error' || data.error) {
-      //         setSubmitting(false);
-      //         toast.error(typeof data === 'string' ? data : 'Something went wrong', {
-      //           position: 'top-right',
-      //           autoClose: 5000,
-      //           hideProgressBar: false,
-      //           closeOnClick: true,
-      //           pauseOnHover: true,
-      //           draggable: true,
-      //           progress: undefined,
-      //         });
-      //       }
-      //       recall();
-      //     },
-      //   })
-      // );
+      // values.email = location.state?.email;
+      // values.OTP = values.otp;
+      setSubmitting(true);
+      dispatch(
+        UpdatePassword({
+          payload: {
+            oldpwd: values.oldPassword,
+            password: values.newPassword,
+            cnfpwd: values.confirmPassword
+          },
+          callback: (msg, data, recall) => {
+            setSubmitting(false);
+            if (msg === 'error') {
+              toast.error(typeof data === 'string' ? data : 'Something went wrong', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            }
+            else {
+              formik.resetForm();
+              toast.success('Password changed successfully', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+              recall();
+            }
+          },
+        })
+      );
     },
   });
 

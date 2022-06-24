@@ -21,6 +21,7 @@ import ViewProfile from './pages/ViewProfile';
 import { Constants } from './utils/Constants';
 
 import { FetchMyDetail } from './redux/AuthReducer';
+import MapFooter from './pages/MapFooter';
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +49,11 @@ export default function Router() {
         { path: 'products', element: !notAuthenticated ? <Products /> : <Navigate to="/login" /> },
         { path: 'blog', element: !notAuthenticated ? <Blog /> : <Navigate to="/login" /> },
         { path: 'realtimemap', element: <RealTimeMap /> },
+        {
+          path : 'pole/:poleid',
+          element: <MapFooter key={window.location.pathname}/>
+    
+        },
         { path: 'profile-settings', element: <ProfileSettings /> },
       ],
     },

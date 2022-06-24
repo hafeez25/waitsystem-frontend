@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Api, AuthRoutes, Constants } from '../utils/Constants';
+import { Api, AuthRoutes, Constants, profileRoutes } from '../utils/Constants';
 import { MakeRequest } from '../utils/ApiManager';
 
 export const Login = createAsyncThunk('auth/login', async ({ payload, callback }) => {
@@ -65,6 +65,26 @@ export const ChangePassword = createAsyncThunk('auth/changepassword', async ({ p
   callback('success', data.resp, () => {});
   return data.resp;
 });
+
+export const EditProfile = createAsyncThunk('auth/updateprofile',async({payload,callback})=>{
+  const data = await MakeRequest(Api.PATCH, { url: profileRoutes.editProfile, body: payload });
+  if (data.err) {
+    callback('error', data.err, () => {});
+    return null;
+  }
+  callback('success', data.resp, () => {});
+  return payload;
+})
+
+export const UpdatePassword = createAsyncThunk('auth/updatepassword',async({payload,callback})=>{
+  const data = await MakeRequest(Api.POST, { url: profileRoutes.updatePwd, body: payload });
+  if (data.err) {
+    callback('error', data.err, () => {});
+    return null;
+  }
+  callback('success', data.resp, () => {});
+  return data.resp.data;
+})
 
 const AuthSlice = createSlice({
   name: 'auth',
@@ -173,6 +193,17 @@ const AuthSlice = createSlice({
       }
       }
     },
+    [EditProfile.fulfilled]:(state,action) =>{
+      if(action.payload && action.payload.name){
+        state.user = {...state.user,...action.payload}
+        localStorage.setItem(Constants.UserProfile,JSON.stringify(state.user))
+      }
+    },
+    [UpdatePassword.fulfilled]:(state,action) =>{
+      if(action.payload && action.payload.token){        
+        localStorage.setItem(Constants.AuthToken,action.payload.token)
+      }
+    }
   },
 });
 

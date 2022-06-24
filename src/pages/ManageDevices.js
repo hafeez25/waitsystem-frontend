@@ -1,7 +1,7 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // material
 import {
   Card,
@@ -29,6 +29,7 @@ import Iconify from '../components/Iconify';
 import AddPoleDialogBox from '../components/AddPoleDialogBox';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+import MapFooter from './MapFooter';
 // mock
 import USERLIST from '../_mock/user';
 
@@ -77,8 +78,15 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+const location = {
+  address: '1600 Amphitheatre Parkway, Mountain View, california.',
+  lat: 37.42216,
+  lng: -122.08427,
+}
+
 export default function User() {
   const [page, setPage] = useState(0);
+  const navigation = useNavigate()
 
   const [order, setOrder] = useState('asc');
 
@@ -283,11 +291,12 @@ export default function User() {
                           hover
                           key={index}
                           tabIndex={-1}
+                          style={{cursor:'pointer'}}
                           // role="checkbox"
                           // selected={isItemSelected}
                           // aria-checked={isItemSelected}
                         >
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="none" onClick={()=>navigation(`/dashboard/pole/${_id}`, { replace: false })}>
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography sx={{ ml: 3 }} variant="subtitle2" noWrap>
                                 {'#'}
@@ -295,10 +304,10 @@ export default function User() {
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{latitude}</TableCell>
-                          <TableCell align="left">{longitude}</TableCell>
-                          <TableCell align="left">{location.name}</TableCell>
-                          <TableCell align="left">
+                          <TableCell align="left" onClick={()=>navigation(`/dashboard/pole/${_id}`, { replace: false })}>{latitude}</TableCell>
+                          <TableCell align="left" onClick={()=>navigation(`/dashboard/pole/${_id}`, { replace: false })}>{longitude}</TableCell>
+                          <TableCell align="left" onClick={()=>navigation(`/dashboard/pole/${_id}`, { replace: false })}>{location.name}</TableCell>
+                          <TableCell align="left" onClick={()=>navigation(`/dashboard/pole/${_id}`, { replace: false })}>
                             <Label variant="ghost" color={(status === 'bad' && 'error') || 'success'}>
                               {sentenceCase(status)}
                             </Label>
@@ -342,7 +351,7 @@ export default function User() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
-      </Container>
+      </Container>      
     </Page>
   );
 }

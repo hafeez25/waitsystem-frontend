@@ -39,7 +39,9 @@ const PoleRoutes = {
 };
 
 const profileRoutes = {
-  image : '/profile/image'
+  image : '/profile/image',
+  editProfile : '/profile/edit',
+  updatePwd : '/profile/updatepassword'
 }
 
 export { Constants, Api, AuthRoutes, PoleRoutes, PlaceRoutes,profileRoutes };
