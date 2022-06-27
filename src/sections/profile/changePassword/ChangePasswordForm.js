@@ -10,8 +10,6 @@ import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
 import { UpdatePassword } from '../../../redux/AuthReducer';
 
-// import { ChangePassword } from '../../../redux/AuthReducer';
-
 // ----------------------------------------------------------------------
 
 export default function ChangePasswordForm() {
@@ -42,7 +40,7 @@ export default function ChangePasswordForm() {
           payload: {
             oldpwd: values.oldPassword,
             password: values.newPassword,
-            cnfpwd: values.confirmPassword
+            cnfpwd: values.confirmPassword,
           },
           callback: (msg, data, recall) => {
             setSubmitting(false);
@@ -56,8 +54,7 @@ export default function ChangePasswordForm() {
                 draggable: true,
                 progress: undefined,
               });
-            }
-            else {
+            } else {
               formik.resetForm();
               toast.success('Password changed successfully', {
                 position: 'top-right',
@@ -67,7 +64,7 @@ export default function ChangePasswordForm() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              })
+              });
               recall();
             }
           },

@@ -26,13 +26,13 @@ import MapFooter from './pages/MapFooter';
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const dispatch = useDispatch()
-  useEffect(()=>{
+  const dispatch = useDispatch();
+  useEffect(() => {
     const token = localStorage.getItem(Constants.AuthToken);
-    if(token){
-      dispatch(FetchMyDetail({}))
+    if (token) {
+      dispatch(FetchMyDetail({}));
     }
-  },[])
+  }, []);
   const notAuthenticated = !(localStorage.getItem(Constants.AuthToken) || sessionStorage.getItem(Constants.AuthToken));
 
   return useRoutes([
@@ -50,11 +50,9 @@ export default function Router() {
         { path: 'blog', element: !notAuthenticated ? <Blog /> : <Navigate to="/login" /> },
         { path: 'realtimemap', element: <RealTimeMap /> },
         {
-          path : 'pole/:poleid',
-          element: <MapFooter key={window.location.pathname}/>
-    
+          path: 'pole/:poleid',
+          element: <MapFooter key={window.location.pathname} />,
         },
-        { path: 'profile-settings', element: <ProfileSettings /> },
       ],
     },
     {
