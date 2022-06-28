@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { Box, Container, Stack, TextField, IconButton, InputAdornment, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // component
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -149,15 +150,16 @@ export default function ChangePasswordForm() {
           </Stack>
 
           <Stack direction="column" alignItems="flex-end" sx={{ my: 5 }}>
-            <Button
+            <LoadingButton
               sx={{ maxWidth: 200 }}
               startIcon={<Iconify icon="fa-solid:save" />}
               size="large"
               type="submit"
               variant="contained"
+              loading={isSubmitting}
             >
               Change Password
-            </Button>
+            </LoadingButton>
           </Stack>
         </Container>
       </Form>

@@ -75,8 +75,7 @@ export default function ViewProfile() {
                 width: '100%',
                 typography: 'body1',
                 mx: -4.5,
-                mt: -1,
-                mb: 0,
+                my: 0,
                 zIndex: -1,
               }}
             >
@@ -84,7 +83,7 @@ export default function ViewProfile() {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <TabList onChange={handleChange}>
                     <Tab
-                      sx={{ mb: -1.5 }}
+                      sx={{ mt: -1, mb: -1.5 }}
                       icon={<AccountCircleIcon />}
                       iconPosition="start"
                       label="Profile"
@@ -127,7 +126,7 @@ export default function ViewProfile() {
               sx={{
                 width: '100%',
                 typography: 'body1',
-                mt: -1,
+                mt: 0,
                 mb: 0,
                 zIndex: -1,
               }}
@@ -136,7 +135,7 @@ export default function ViewProfile() {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                   <TabList onChange={handleChange}>
                     <Tab
-                      sx={{ mb: -1.5 }}
+                      sx={{ mt: -1, mb: -1.5 }}
                       icon={<AccountCircleIcon />}
                       iconPosition="start"
                       label="Profile"
@@ -170,7 +169,6 @@ export default function ViewProfile() {
                 </Stack>
                 <Stack spacing={3} direction="row" alignItems="center" justifyContent="space-around">
                   <Iconify icon="clarity:email-solid" style={{ fontSize: '24' }} />
-
                   <Link
                     href={mailLink}
                     underline="hover"
