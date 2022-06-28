@@ -21,8 +21,9 @@ import ViewProfile from './pages/ViewProfile';
 import { Constants } from './utils/Constants';
 
 import { FetchMyDetail } from './redux/AuthReducer';
-import MapFooter from './pages/MapFooter';
+// import MapFooter from './pages/PoleAnalytics';
 import LocationAnalytics from './pages/LocationAnalytics';
+import PoleAnalytics from './pages/PoleAnalytics';
 
 // ----------------------------------------------------------------------
 
@@ -52,7 +53,7 @@ export default function Router() {
         { path: 'realtimemap', element: <RealTimeMap /> },
         {
           path: 'pole/:poleid',
-          element: <MapFooter key={window.location.pathname} />,
+          element: <PoleAnalytics key={window.location.pathname} />,
         },
         {
           path: 'location/:locationid',

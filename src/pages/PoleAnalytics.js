@@ -15,7 +15,7 @@ import { FetchPoleAnalytics } from '../redux/PolesReducer';
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
-export default function MapFooter() {
+export default function PoleAnalytics() {
 
   const theme = useTheme();
   const dispatch = useDispatch()
