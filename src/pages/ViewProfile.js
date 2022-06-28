@@ -14,7 +14,7 @@ import Page from '../components/Page';
 import Label from '../components/Label';
 import Iconify from '../components/Iconify';
 
-export default function ViewProfile() {
+const ViewProfile = () => {
   const [value, setValue] = useState('1');
 
   const handleChange = (event, newValue) => {
@@ -193,4 +193,6 @@ export default function ViewProfile() {
       </Container>
     </Page>
   );
-}
+};
+
+export default ViewProfile;
