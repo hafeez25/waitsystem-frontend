@@ -13,7 +13,7 @@ import { FetchPoleAnalytics } from '../redux/PolesReducer';
 
 
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+const AnyReactComponent = ({ text }) => <div style={{width:"20px",height:"20px",background:"red",borderRadius:"100%"}}/>;
 
 export default function PoleAnalytics() {
 
@@ -168,9 +168,10 @@ export default function PoleAnalytics() {
         marginTop:'3%',
         borderRadius:'10px',
       }}>
+        {console.log("analytics",[Number(Number(analytics[poleid].pole.latitude).toFixed(1)),Number(Number(analytics[poleid].pole.longitude).toFixed(1))])}
             <GoogleMapReact
               bootstrapURLKeys={{ key: 'AIzaSyAd1gCmyfr8mAbDmHj09b6bhe4lEB_qffw' }}
-              defaultCenter={[analytics[poleid].pole.latitude,analytics[poleid].pole.longitude]}
+              defaultCenter={[Number(Number(analytics[poleid].pole.latitude).toFixed(1)),Number(Number(analytics[poleid].pole.longitude).toFixed(1))]}
               defaultZoom={defaultProps.zoom}
               yesIWantToUseGoogleMapApiInternals
               onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
