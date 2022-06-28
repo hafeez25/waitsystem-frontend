@@ -3,7 +3,7 @@ import { sentenceCase } from 'change-case';
 import { useEffect, useState } from 'react';
 // material
 import { Card, Stack, Avatar, Button, Container, Typography, Tab, Box, Divider, Link } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+// import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -85,7 +85,7 @@ export default function ViewProfile() {
                   <TabList onChange={handleChange}>
                     <Tab
                       sx={{ mb: -1.5 }}
-                      icon={<AccountCircleIcon />}
+                      // icon={<AccountCircleIcon />}
                       iconPosition="start"
                       label="Profile"
                       value="1"
@@ -137,7 +137,7 @@ export default function ViewProfile() {
                   <TabList onChange={handleChange}>
                     <Tab
                       sx={{ mb: -1.5 }}
-                      icon={<AccountCircleIcon />}
+                      // icon={<AccountCircleIcon />}
                       iconPosition="start"
                       label="Profile"
                       value="1"

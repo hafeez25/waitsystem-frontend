@@ -22,6 +22,7 @@ import { Constants } from './utils/Constants';
 
 import { FetchMyDetail } from './redux/AuthReducer';
 import MapFooter from './pages/MapFooter';
+import LocationAnalytics from './pages/LocationAnalytics';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,10 @@ export default function Router() {
         {
           path: 'pole/:poleid',
           element: <MapFooter key={window.location.pathname} />,
+        },
+        {
+          path: 'location/:locationid',
+          element: <LocationAnalytics />,
         },
       ],
     },

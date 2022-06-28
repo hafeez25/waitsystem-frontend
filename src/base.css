@@ -1,3 +1,17 @@
-.fixFont{
-    font-size: 1em;
+.fixFont {
+  font-size: 1em;
+}
+@media screen and (max-width: 676px) {
+  .location_details_cardbox img {
+    width: calc(100% - 20px);
+    margin: 10px !important;
+    border-radius: 30px;
+  }
+  .location_details_card {
+    height: 100%;
+  }
+  .location_details_cardbox {
+    flex-direction: column-reverse;
+    width: 100%;
+  }
 }
