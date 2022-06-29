@@ -17,22 +17,25 @@ import ForgotPassword from './pages/ForgotPassword';
 import EnterOTP from './pages/EnterOTP';
 import TwofactorOTP from './pages/TwofactorOTP';
 import ProfileSettings from './pages/ProfileSettings';
-import ViewProfile from './pages/ViewProfile';
+
 import { Constants } from './utils/Constants';
 
 import { FetchMyDetail } from './redux/AuthReducer';
-import MapFooter from './pages/MapFooter';
+// import MapFooter from './pages/PoleAnalytics';
+import LocationAnalytics from './pages/LocationAnalytics';
+import PoleAnalytics from './pages/PoleAnalytics';
+import ViewProfile from './pages/ViewProfile';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const dispatch = useDispatch()
-  useEffect(()=>{
+  const dispatch = useDispatch();
+  useEffect(() => {
     const token = localStorage.getItem(Constants.AuthToken);
-    if(token){
-      dispatch(FetchMyDetail({}))
+    if (token) {
+      dispatch(FetchMyDetail({}));
     }
-  },[])
+  }, []);
   const notAuthenticated = !(localStorage.getItem(Constants.AuthToken) || sessionStorage.getItem(Constants.AuthToken));
 
   return useRoutes([
@@ -50,11 +53,13 @@ export default function Router() {
         { path: 'blog', element: !notAuthenticated ? <Blog /> : <Navigate to="/login" /> },
         { path: 'realtimemap', element: <RealTimeMap /> },
         {
-          path : 'pole/:poleid',
-          element: <MapFooter key={window.location.pathname}/>
-    
+          path: 'pole/:poleid',
+          element: <PoleAnalytics key={window.location.pathname} />,
         },
-        { path: 'profile-settings', element: <ProfileSettings /> },
+        {
+          path: 'location/:locationid',
+          element: <LocationAnalytics />,
+        },
       ],
     },
     {

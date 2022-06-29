@@ -29,7 +29,7 @@ import Iconify from '../components/Iconify';
 import AddPoleDialogBox from '../components/AddPoleDialogBox';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
-import MapFooter from './MapFooter';
+// import MapFooter from './PoleAnalytics';
 // mock
 import USERLIST from '../_mock/user';
 

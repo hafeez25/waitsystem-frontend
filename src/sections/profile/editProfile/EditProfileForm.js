@@ -20,6 +20,7 @@ import {
   Avatar,
   Input,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // component
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -27,7 +28,6 @@ import Iconify from '../../../components/Iconify';
 import { MakeRequest } from '../../../utils/ApiManager';
 import { profileRoutes } from '../../../utils/Constants';
 import { EditProfile } from '../../../redux/AuthReducer';
-
 
 // reducers
 // import { Login } from '../../../redux/AuthReducer';
@@ -46,7 +46,7 @@ export default function ProfileForm() {
     twofactor: authData.user.twoFactorEnabled,
   };
   const navigate = useNavigate();
-  const [twofactor,setTwoFactor] = useState(Boolean(authData.user.twoFactorEnabled))
+  const [twofactor, setTwoFactor] = useState(Boolean(authData.user.twoFactorEnabled));
   const dispatch = useDispatch();
 
   const ProfileSchema = Yup.object().shape({
@@ -64,8 +64,7 @@ export default function ProfileForm() {
     },
     validationSchema: ProfileSchema,
     onSubmit: (values, actions) => {
-
-      console.log(values)
+      console.log(values);
       if (profileuploading) {
         toast.error('Photo upload is in progress.Please try in a while', {
           position: 'top-right',
@@ -75,7 +74,7 @@ export default function ProfileForm() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        })
+        });
         return;
       }
       setSubmitting(true);
@@ -84,7 +83,7 @@ export default function ProfileForm() {
           payload: {
             ...values,
             photo: getPhoto(),
-            twoFactorEnabled: twofactor
+            twoFactorEnabled: twofactor,
           },
           callback: (msg, data, recall) => {
             console.log(data);
@@ -99,8 +98,7 @@ export default function ProfileForm() {
                 draggable: true,
                 progress: undefined,
               });
-            }
-            else {
+            } else {
               toast.success('Profile updated successfully', {
                 position: 'top-right',
                 autoClose: 5000,
@@ -109,7 +107,7 @@ export default function ProfileForm() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              })
+              });
               recall();
             }
           },
@@ -123,12 +121,12 @@ export default function ProfileForm() {
   // };
 
   const [photoState, setPhotoState] = useState(null);
-  const pastPhoto = useRef()
+  const pastPhoto = useRef();
   const UploadFile = async (e) => {
     if (pastPhoto.current) return;
     pastPhoto.current = getPhoto();
     setPhotoState(e.target.files[0]);
-    setProfileuploading(true)
+    setProfileuploading(true);
     const resp = await MakeRequest(
       'FILE',
       {
@@ -138,9 +136,9 @@ export default function ProfileForm() {
       null
     );
 
-    if (resp && resp.resp && resp.resp.data) setPhotoState(resp.resp.data)
+    if (resp && resp.resp && resp.resp.data) setPhotoState(resp.resp.data);
     else {
-      setPhotoState(pastPhoto.current)
+      setPhotoState(pastPhoto.current);
       toast.error(typeof resp.err === 'string' ? resp.err : 'Could not upload picture', {
         position: 'top-right',
         autoClose: 5000,
@@ -151,16 +149,15 @@ export default function ProfileForm() {
         progress: undefined,
       });
     }
-    setProfileuploading(false)
+    setProfileuploading(false);
     pastPhoto.current = null;
   };
 
   const getPhoto = () => {
     if (!photoState) return account.profilePhoto;
-    if (typeof (photoState) === 'string') return photoState
-    return URL.createObjectURL(photoState)
-
-  }
+    if (typeof photoState === 'string') return photoState;
+    return URL.createObjectURL(photoState);
+  };
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
@@ -171,16 +168,12 @@ export default function ProfileForm() {
           <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
             <Box
               sx={{
-                minWidth: 300,
+                minWidth: 150,
                 maxWidth: 600,
               }}
             >
               <Stack spacing={3} direction="column" justifyContent="center" alignItems="center" sx={{ my: 4 }}>
-                <Avatar
-                  src={getPhoto()}
-                  alt={account.displayName}
-                  sx={{ width: 150, height: 150 }}
-                />
+                <Avatar src={getPhoto()} alt={account.displayName} sx={{ width: 150, height: 150 }} />
                 <label htmlFor="profile-pic">
                   <input
                     style={{ display: 'none' }}
@@ -200,7 +193,7 @@ export default function ProfileForm() {
           <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
             <Box
               sx={{
-                minWidth: 300,
+                minWidth: 150,
                 maxWidth: 600,
               }}
             >
@@ -231,23 +224,29 @@ export default function ProfileForm() {
                   helperText={touched.location && errors.location}
                 />
                 <FormControlLabel
-                  control={<Switch {...getFieldProps('twofactor')} checked={twofactor}
-                   onChange={(e)=>setTwoFactor(e.target.checked)} />}
+                  control={
+                    <Switch
+                      {...getFieldProps('twofactor')}
+                      checked={twofactor}
+                      onChange={(e) => setTwoFactor(e.target.checked)}
+                    />
+                  }
                   label="Two-factor Authentication"
                   labelPlacement="start"
                 />
               </Stack>
 
               <Stack direction="column" alignItems="flex-end" sx={{ my: 4 }}>
-                <Button
+                <LoadingButton
                   sx={{ maxWidth: 170 }}
                   startIcon={<Iconify icon="fa-solid:save" />}
                   size="large"
                   type="submit"
                   variant="contained"
+                  loading={isSubmitting}
                 >
                   Save Changes
-                </Button>
+                </LoadingButton>
               </Stack>
             </Box>
           </Grid>

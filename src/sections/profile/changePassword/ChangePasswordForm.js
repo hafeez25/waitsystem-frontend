@@ -4,13 +4,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { Box, Container, Stack, TextField, IconButton, InputAdornment, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // component
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Iconify from '../../../components/Iconify';
 import { UpdatePassword } from '../../../redux/AuthReducer';
-
-// import { ChangePassword } from '../../../redux/AuthReducer';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +41,7 @@ export default function ChangePasswordForm() {
           payload: {
             oldpwd: values.oldPassword,
             password: values.newPassword,
-            cnfpwd: values.confirmPassword
+            cnfpwd: values.confirmPassword,
           },
           callback: (msg, data, recall) => {
             setSubmitting(false);
@@ -56,8 +55,7 @@ export default function ChangePasswordForm() {
                 draggable: true,
                 progress: undefined,
               });
-            }
-            else {
+            } else {
               formik.resetForm();
               toast.success('Password changed successfully', {
                 position: 'top-right',
@@ -67,7 +65,7 @@ export default function ChangePasswordForm() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              })
+              });
               recall();
             }
           },
@@ -152,15 +150,16 @@ export default function ChangePasswordForm() {
           </Stack>
 
           <Stack direction="column" alignItems="flex-end" sx={{ my: 5 }}>
-            <Button
+            <LoadingButton
               sx={{ maxWidth: 200 }}
               startIcon={<Iconify icon="fa-solid:save" />}
               size="large"
               type="submit"
               variant="contained"
+              loading={isSubmitting}
             >
               Change Password
-            </Button>
+            </LoadingButton>
           </Stack>
         </Container>
       </Form>
