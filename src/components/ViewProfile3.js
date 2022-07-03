@@ -16,6 +16,8 @@ import {
   Card,
   CardMedia,
   CardContent,
+  Avatar,
+  Skeleton,
 } from '@mui/material';
 
 import { useParams } from 'react-router-dom';
@@ -65,86 +67,69 @@ export default function ViewProfile3() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-        <Card sx={{ maxWidth: 500 }}>
-          <CardMedia
-            component="img"
-            width="100%"
-            height="auto"
-            image="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/133940571/900"
-            alt="green parrot"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all
-              continents except Antarctica
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-        <Card sx={{ maxWidth: 500 }}>
-          <CardMedia
-            component="img"
-            width="100%"
-            height="auto"
-            image="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/133940571/900"
-            alt="green parrot"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all
-              continents except Antarctica
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-        <Card sx={{ maxWidth: 500 }}>
-          <CardMedia
-            component="img"
-            width="100%"
-            height="auto"
-            image="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/133940571/900"
-            alt="green parrot"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all
-              continents except Antarctica
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={4} xl={4}>
-        <Card sx={{ maxWidth: 500 }}>
-          <CardMedia
-            component="img"
-            width="100%"
-            height="auto"
-            image="https://cdn.download.ams.birds.cornell.edu/api/v1/asset/133940571/900"
-            alt="green parrot"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all
-              continents except Antarctica
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
+      {locations.map((location, index) => (
+        <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
+          <Card sx={{ maxWidth: 500, backgroundColor: '#f2f2f2' }}>
+            {isLoading ? (
+              <>
+                <img width="100%" height="200" src={location.photo} alt={location.name} style={{ zIndex: -100 }} />
+                <CardContent
+                  sx={{
+                    backgroundColor: '#f2f2f2',
+                    zIndex: 0,
+                  }}
+                >
+                  <Card
+                    sx={{
+                      mt: -7,
+                      maxWidth: '100%',
+                      borderRadius: 0.5,
+                      py: 2,
+                      px: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Avatar
+                      src={location.addedBy.photo}
+                      alt={location.addedBy.name}
+                      sx={{
+                        width: 90,
+                        height: 90,
+                        mt: 0,
+                        border: 2.5,
+                        borderColor: '#0043ca',
+                        zIndex: 1,
+                      }}
+                    />
+                    <Typography sx={{ my: 2, textTransform: 'capitalize' }} variant="caption" component="div">
+                      <b>Added By: {location.addedBy.name}</b>
+                    </Typography>
+                    <Typography sx={{ textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
+                      {location.name}
+                    </Typography>
+                    <Typography sx={{ textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
+                      {location.district}
+                      {', '}
+                    </Typography>
+                    <Typography sx={{ textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
+                      {location.state}
+                    </Typography>
+                    <Typography sx={{ mb: 2, textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
+                      {'PinCode: '}
+                      {location.pincode}
+                    </Typography>
+                  </Card>
+                </CardContent>
+              </>
+            ) : (
+              <Skeleton variant="rectangular" width={400} height={400} />
+            )}
+          </Card>
+        </Grid>
+      ))}
     </Grid>
   );
 }
