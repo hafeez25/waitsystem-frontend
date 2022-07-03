@@ -16,7 +16,7 @@ const AuthRoutes = {
   twofactor: '/auth/twofactorverify',
   signup: '/auth/signup',
   forgotpassword: '/auth/forgotpassword',
-  me : '/auth/me',
+  me: '/auth/me',
   submitpassword: '/auth/changepassword',
 };
 
@@ -39,9 +39,15 @@ const PoleRoutes = {
 };
 
 const profileRoutes = {
-  image : '/profile/image',
-  editProfile : '/profile/edit',
-  updatePwd : '/profile/updatepassword'
-}
+  image: '/profile/image',
+  editProfile: '/profile/edit',
+  updatePwd: '/profile/updatepassword',
+};
 
-export { Constants, Api, AuthRoutes, PoleRoutes, PlaceRoutes,profileRoutes };
+const ViewProfileRoutes = {
+  generalDetails: '/profile/:userid',
+  polesAdded: '/profile/poles/:userid',
+  locationsAdded: '/profile/places/:userid',
+};
+
+export { Constants, Api, AuthRoutes, PoleRoutes, PlaceRoutes, profileRoutes, ViewProfileRoutes };
