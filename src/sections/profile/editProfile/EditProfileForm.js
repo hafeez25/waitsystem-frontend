@@ -42,6 +42,7 @@ export default function ProfileForm() {
     profilePhoto: authData.user.photo,
     displayName: authData.user.name,
     email: authData.user.email,
+    location:authData.user.location,
     twofactor: authData.user.twoFactorEnabled,
   };
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ export default function ProfileForm() {
       photo: account.profilePhoto,
       name: account.displayName,
       email: account.email,
-      location: '',
+      location: account.location,
       twofactor: account.twofactor,
     },
     validationSchema: ProfileSchema,
