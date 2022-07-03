@@ -37,7 +37,7 @@ export const FetchAllLocationsViewProfile = createAsyncThunk(
   'profile/fetchalllocations',
   async ({ payload, callback }) => {
     const data = await MakeRequest(Api.GET, {
-      url: ViewProfileRoutes.locationsAdded.replace(':userid', payload.id),
+      url: ViewProfileRoutes.polesAdded.replace(':userid', payload.id),
       body: payload,
     });
 

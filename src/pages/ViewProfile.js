@@ -265,13 +265,13 @@ export default function ViewProfile() {
             </TabPanel>
           </TabContext>
         </Card>
-        <Card sx={{ my: 2, minWidth: 200, px: 1 }}>
-          <TabContext value={value}>
-            <TabPanel value="3">
-              <ViewProfile3 />
-            </TabPanel>
-          </TabContext>
-        </Card>
+        {/* <Card sx={{ my: 2, minWidth: 200, px: 1 }}> */}
+        <TabContext value={value}>
+          <TabPanel value="3">
+            <ViewProfile3 />
+          </TabPanel>
+        </TabContext>
+        {/* </Card> */}
       </Container>
     </Page>
   );
