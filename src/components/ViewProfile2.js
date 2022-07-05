@@ -14,7 +14,7 @@ import {
   Paper,
   Skeleton,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -66,10 +66,11 @@ export default function ViewProfile2() {
 
   const { userid } = useParams();
 
-  const poles = useSelector(({ profile }) => profile.poles);
+  const poles = useSelector(({ profile }) => profile.poles[userid]);
 
   const [poleFetchingerror, setPoleFetchingError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const FetchPoles = (data) => {
     setPoleFetchingError(false);
@@ -97,7 +98,9 @@ export default function ViewProfile2() {
   };
 
   useEffect(() => {
-    FetchPoles(userid);
+    if (!poles || !poles.length) {
+      FetchPoles(userid);
+    }
   }, []);
 
   const [page, setPage] = useState(0);
@@ -114,6 +117,29 @@ export default function ViewProfile2() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - poles.length) : 0;
 
+  if (!poles || !poles.length) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <Paper sx={{ width: '100%', mb: 2 }}>
+          <Toolbar
+            sx={{
+              px: { sm: 2 },
+            }}
+          >
+            <Typography sx={{ flex: '1 1 100%' }} variant="h5" id="tableTitle" component="div">
+              Added Poles
+            </Typography>
+          </Toolbar>
+          <>
+            <Skeleton sx={{ my: -1 }} variant="text" height={80} />
+            <Skeleton sx={{ my: -1 }} variant="text" height={80} />
+            <Skeleton sx={{ my: -1 }} variant="text" height={80} />
+          </>
+        </Paper>
+      </Box>
+    )
+  }
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -126,56 +152,46 @@ export default function ViewProfile2() {
             Added Poles
           </Typography>
         </Toolbar>
-        {isLoading ? (
-          <>
-            <TableContainer sx={{ px: 2 }}>
-              <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={'medium'}>
-                <EnhancedTableHead />
-                <TableBody>
-                  {poles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pole, index) => {
-                    const labelId = `enhanced-table-checkbox-${index}`;
+        <TableContainer sx={{ px: 2 }}>
+          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={'medium'}>
+            <EnhancedTableHead />
+            <TableBody>
+              {poles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((pole, index) => {
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-                    return (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={pole.serialno}>
-                        <TableCell sx={{ pl: 1 }} component="th" id={labelId} scope="row" padding="none">
-                          {'#'}
-                          {pole.serialno}
-                        </TableCell>
-                        <TableCell align="left">{pole.latitude}</TableCell>
-                        <TableCell align="left">{pole.longitude}</TableCell>
-                        <TableCell align="left">{pole.location.name}</TableCell>
-                      </TableRow>
-                    );
-                  })}
-                  {emptyRows > 0 && (
-                    <TableRow
-                      style={{
-                        height: 53 * emptyRows,
-                      }}
-                    >
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={poles.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </>
-        ) : (
-          <>
-            <Skeleton sx={{ my: -1 }} variant="text" height={80} />
-            <Skeleton sx={{ my: -1 }} variant="text" height={80} />
-            <Skeleton sx={{ my: -1 }} variant="text" height={80} />
-          </>
-        )}
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={pole.serialno} style={{cursor:"pointer"}}>
+                    <TableCell sx={{ pl: 1 }} component="th" id={labelId} scope="row" padding="none" onClick={()=>navigate(`dashboard/pole/${pole._id}`)}>
+                      {'#'}
+                      {pole.serialno}
+                    </TableCell>
+                    <TableCell align="left" onClick={()=>navigate(`/dashboard/pole/${pole._id}`)}>{pole.latitude}</TableCell>
+                    <TableCell align="left" onClick={()=>navigate(`/dashboard/pole/${pole._id}`)}>{pole.longitude}</TableCell>
+                    <TableCell align="left" onClick={()=>navigate(`/dashboard/location/${pole.location._id}`)}>{pole.location.name}</TableCell>
+                  </TableRow>
+                );
+              })}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: 53 * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={poles.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
     </Box>
   );

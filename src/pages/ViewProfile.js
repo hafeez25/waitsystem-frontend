@@ -44,7 +44,7 @@ export default function ViewProfile() {
 
   const { userid } = useParams();
 
-  const profileInfo = useSelector(({ profile }) => profile.profileInfo);
+  const profileInfo = useSelector(({ profile }) => profile.profileInfo[userid]);
 
   const [profileFetchingerror, setProfileFetchingError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,7 +75,9 @@ export default function ViewProfile() {
   };
 
   useEffect(() => {
-    FetchProfile(userid);
+    if(!profileInfo || !profileInfo.name){
+      FetchProfile(userid);
+    }
   }, []);
 
   const smUp = useResponsive('up', 'sm');
@@ -98,7 +100,7 @@ export default function ViewProfile() {
               alt="Profile Cover"
               style={{ width: '100%', height: 200, zIndex: -100, opacity: 0.5 }}
             />
-            {isLoading ? (
+            {profileInfo ? (
               <Avatar
                 src={profileInfo.photo}
                 alt={profileInfo.name}
@@ -180,7 +182,7 @@ export default function ViewProfile() {
               alt="Profile Cover "
               style={{ width: '100%', height: 200, zIndex: -100, opacity: 0.5 }}
             />
-            {isLoading ? (
+            {profileInfo ? (
               <Avatar
                 src={profileInfo.photo}
                 alt={profileInfo.name}

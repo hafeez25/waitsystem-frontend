@@ -28,7 +28,7 @@ export default function ViewProfile1() {
   const dispatch = useDispatch();
   const { userid } = useParams();
 
-  const profileInfo = useSelector(({ profile }) => profile.profileInfo);
+  const profileInfo = useSelector(({ profile }) => profile.profileInfo[userid]);
 
   const [profileFetchingerror, setProfileFetchingError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -58,18 +58,18 @@ export default function ViewProfile1() {
     );
   };
 
-  useEffect(() => {
-    FetchProfile(userid);
-  }, []);
+  // useEffect(() => {
+  //   FetchProfile(userid);
+  // }, []);
 
-  const mailLink = `mailto:${profileInfo.email}`;
+  const mailLink = `mailto:${profileInfo?.email}`;
   return (
     <>
       <Typography sx={{ ml: -0.5, mb: 2 }} variant="h4">
         About
       </Typography>
       <Stack spacing={2} direction="column" alignItems="flex-start" justifyContent="flex-end" my={2}>
-        {isLoading ? (
+        {profileInfo ? (
           <Stack spacing={3} direction="row" alignItems="center" justifyContent="flex-start">
             <Iconify icon="carbon:user-avatar-filled" style={{ fontSize: '24' }} />
             <Typography variant="body1">
@@ -79,7 +79,7 @@ export default function ViewProfile1() {
         ) : (
           <Skeleton variant="text" width="80%" />
         )}
-        {isLoading ? (
+        {profileInfo ? (
           <Stack spacing={2.7} direction="row" alignItems="center" justifyContent="space-around">
             <Iconify sx={{ ml: 0.3 }} icon="eos-icons:role-binding" style={{ fontSize: '24' }} />
             <Typography variant="body1">
@@ -89,7 +89,7 @@ export default function ViewProfile1() {
         ) : (
           <Skeleton variant="text" width="80%" />
         )}
-        {isLoading ? (
+        {profileInfo ? (
           <Stack spacing={3} direction="row" alignItems="center" justifyContent="space-around">
             <Iconify icon="clarity:email-solid" style={{ fontSize: '24' }} />
             <Link href={mailLink} underline="hover" variant="body1" color="inherit" target="_blank" rel="noopener">
@@ -99,11 +99,11 @@ export default function ViewProfile1() {
         ) : (
           <Skeleton variant="text" width="80%" />
         )}
-        {isLoading ? (
+        {profileInfo ? (
           <Stack spacing={3} direction="row" alignItems="center" justifyContent="space-around">
             <Iconify icon="ci:location" style={{ fontSize: '24' }} />
             <Typography variant="body1">
-              Office at <b>Roorkee</b>
+              Office at <b>{profileInfo.location}</b>
             </Typography>
           </Stack>
         ) : (
