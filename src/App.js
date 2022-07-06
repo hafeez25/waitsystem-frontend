@@ -18,9 +18,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <ThemeProvider>
-        <ScrollToTop />
-        <BaseOptionChartStyle />
-        <ToastContainer
+      <ScrollToTop />
+      <BaseOptionChartStyle />
+      <ToastContainer
           position="top-right"
           autoClose={5000}
           hideProgressBar={false}

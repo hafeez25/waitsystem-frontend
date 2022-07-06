@@ -43,8 +43,10 @@ export default function ViewProfile() {
   };
 
   const { userid } = useParams();
+   
 
   const profileInfo = useSelector(({ profile }) => profile.profileInfo);
+  
 
   const [profileFetchingerror, setProfileFetchingError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,7 +86,7 @@ export default function ViewProfile() {
 
   return (
     <Page title="Profile">
-      <Container>
+      <Container>  
         {/* <Stack direction="row" alignItems="center" justifyContent="space-between" mb={4}>
           <Typography variant="h4" gutterBottom>
             Your Profile
@@ -135,7 +137,7 @@ export default function ViewProfile() {
               sx={{
                 width: '100%',
                 typography: 'body1',
-                mx: -4.5,
+                mx:  -4.5,
                 my: 0,
                 zIndex: -1,
               }}
@@ -272,7 +274,7 @@ export default function ViewProfile() {
           </TabPanel>
         </TabContext>
         {/* </Card> */}
-      </Container>
+        </Container>
     </Page>
   );
 }

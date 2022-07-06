@@ -32,6 +32,7 @@ export default function ViewProfile3() {
   const { userid } = useParams();
 
   const locations = useSelector(({ profile }) => profile.locations);
+ 
 
   const [locationFetchingerror, setLocationFetchingError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
