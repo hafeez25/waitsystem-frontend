@@ -25,6 +25,7 @@ import { FetchMyDetail } from './redux/AuthReducer';
 import LocationAnalytics from './pages/LocationAnalytics';
 import PoleAnalytics from './pages/PoleAnalytics';
 import ViewProfile from './pages/ViewProfile';
+import { UserCard } from './pages/UserCard';
 
 // ----------------------------------------------------------------------
 
@@ -59,6 +60,10 @@ export default function Router() {
         {
           path: 'location/:locationid',
           element: <LocationAnalytics />,
+        },
+        {
+          path: 'usercard',
+          element: <UserCard />,
         },
       ],
     },
