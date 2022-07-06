@@ -151,7 +151,6 @@ export default function NavSection({ navConfig, ...other }) {
   const authData = useSelector(({ auth }) => auth);
 
   useEffect(() => {
-    listNav1[1].path = `${listNav1[1].path}/1`;
     listNav2[0].path = `/view-profile/${authData.user._id}`;
   }, []);
 

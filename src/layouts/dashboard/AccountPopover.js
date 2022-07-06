@@ -9,24 +9,6 @@ import MenuPopover from '../../components/MenuPopover';
 
 // ----------------------------------------------------------------------
 
-const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: 'eva:home-fill',
-    linkTo: '/',
-  },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-    linkTo: '/view-profile',
-  },
-  {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
-    linkTo: '/settings',
-  },
-];
-
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
@@ -35,6 +17,23 @@ export default function AccountPopover() {
   const [open, setOpen] = useState(null);
 
   const authData = useSelector(({ auth }) => auth);
+  const MENU_OPTIONS = [
+    {
+      label: 'Home',
+      icon: 'eva:home-fill',
+      linkTo: '/',
+    },
+    {
+      label: 'Profile',
+      icon: 'eva:person-fill',
+      linkTo: `/view-profile/${authData.user._id}`,
+    },
+    {
+      label: 'Settings',
+      icon: 'eva:settings-2-fill',
+      linkTo: '/settings',
+    },
+  ];
 
   const logoutFunc = () => {
     localStorage.clear();

@@ -50,4 +50,8 @@ const ViewProfileRoutes = {
   locationsAdded: '/profile/places/:userid',
 };
 
-export { Constants, Api, AuthRoutes, PoleRoutes, PlaceRoutes, profileRoutes, ViewProfileRoutes };
+const UniversalSearchRoutes = {
+  universalSearch: '/service/search?text=:term',
+};
+
+export { Constants, Api, AuthRoutes, PoleRoutes, PlaceRoutes, profileRoutes, ViewProfileRoutes, UniversalSearchRoutes };

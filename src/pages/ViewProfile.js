@@ -1,21 +1,6 @@
-import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
 import { useEffect, useState } from 'react';
 // material
-import {
-  Card,
-  Stack,
-  Avatar,
-  Button,
-  Container,
-  Typography,
-  Tab,
-  Tabs,
-  Box,
-  Divider,
-  Link,
-  Skeleton,
-} from '@mui/material';
+import { Card, Stack, Avatar, Container, Tab, Box, Divider, Skeleton } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import AddToQueueIcon from '@mui/icons-material/AddToQueue';
@@ -28,8 +13,6 @@ import { FetchProfileInfoViewProfile } from '../redux/ProfileReducer';
 import useResponsive from '../hooks/useResponsive';
 // components
 import Page from '../components/Page';
-import Label from '../components/Label';
-import Iconify from '../components/Iconify';
 import ViewProfile1 from '../components/ViewProfile1';
 import ViewProfile2 from '../components/ViewProfile2';
 import ViewProfile3 from '../components/ViewProfile3';

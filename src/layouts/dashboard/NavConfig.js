@@ -13,7 +13,7 @@ const navConfig = [
   },
   {
     title: 'Analytics',
-    path: '/dashboard/location',
+    path: '/dashboard/location/1',
     icon: getIcon('eva:people-fill'),
   },
   {

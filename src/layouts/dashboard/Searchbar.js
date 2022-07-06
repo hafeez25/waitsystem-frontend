@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } from '@mui/material';
 // component
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { UniversalSearch } from '../../redux/UniversalSearchReducer';
 import Iconify from '../../components/Iconify';
 
 // ----------------------------------------------------------------------
@@ -33,6 +36,7 @@ const SearchbarStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Searchbar() {
+  const dispatch = useDispatch();
   const [isOpen, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -41,6 +45,39 @@ export default function Searchbar() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const [search, setSearch] = useState('');
+
+  const searchResults = useSelector(({ search }) => search.searchResults);
+
+  const [searchFetchingerror, setSearchFetchingError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const FetchSearchResults = (data) => {
+    setSearchFetchingError(false);
+    dispatch(
+      UniversalSearch({
+        payload: { term: data },
+        callback: (msg, data, recall) => {
+          if (msg === 'error') {
+            toast.error(typeof data === 'string' ? data : 'Something went wrong', {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setSearchFetchingError(true);
+          }
+          recall();
+          setIsLoading(true);
+          handleClose();
+        },
+      })
+    );
   };
 
   return (
@@ -55,6 +92,7 @@ export default function Searchbar() {
         <Slide direction="down" in={isOpen} mountOnEnter unmountOnExit>
           <SearchbarStyle>
             <Input
+              onChange={(e) => setSearch(e.target.value)}
               autoFocus
               fullWidth
               disableUnderline
@@ -66,7 +104,12 @@ export default function Searchbar() {
               }
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
             />
-            <Button variant="contained" onClick={handleClose}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                FetchSearchResults(search);
+              }}
+            >
               Search
             </Button>
           </SearchbarStyle>
