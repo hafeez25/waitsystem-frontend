@@ -7,7 +7,7 @@ export const FetchProfileInfoViewProfile = createAsyncThunk(
   async ({ payload, callback }) => {
     const data = await MakeRequest(Api.GET, {
       url: ViewProfileRoutes.generalDetails.replace(':userid', payload.id),
-      body: payload,
+      
     });
 
     if (data.err) {
@@ -15,14 +15,14 @@ export const FetchProfileInfoViewProfile = createAsyncThunk(
       return null;
     }
     callback('success', data.resp, () => {});
-    return data.resp;
+    return {...data.resp,id:payload.id};
   }
 );
 
 export const FetchAllPolesViewProfile = createAsyncThunk('profile/fetchallpoles', async ({ payload, callback }) => {
   const data = await MakeRequest(Api.GET, {
     url: ViewProfileRoutes.polesAdded.replace(':userid', payload.id),
-    body: payload,
+    
   });
 
   if (data.err) {
@@ -30,7 +30,7 @@ export const FetchAllPolesViewProfile = createAsyncThunk('profile/fetchallpoles'
     return null;
   }
   callback('success', data.resp, () => {});
-  return data.resp;
+  return {...data.resp,id:payload.id};
 });
 
 export const FetchAllLocationsViewProfile = createAsyncThunk(
@@ -38,7 +38,7 @@ export const FetchAllLocationsViewProfile = createAsyncThunk(
   async ({ payload, callback }) => {
     const data = await MakeRequest(Api.GET, {
       url: ViewProfileRoutes.locationsAdded.replace(':userid', payload.id),
-      body: payload,
+      
     });
 
     if (data.err) {
@@ -46,7 +46,7 @@ export const FetchAllLocationsViewProfile = createAsyncThunk(
       return null;
     }
     callback('success', data.resp, () => {});
-    return data.resp;
+    return {...data.resp,id:payload.id};
   }
 );
 
@@ -54,8 +54,8 @@ const ProfileSlice = createSlice({
   name: 'profile',
   initialState: {
     profileInfo: {},
-    poles: [],
-    locations: [],
+    poles: {},
+    locations: {},
   },
   reducers: {
     // setData(state, action) {
@@ -74,20 +74,20 @@ const ProfileSlice = createSlice({
     [FetchProfileInfoViewProfile.fulfilled]: (state, action) => {
       // console.log(action.payload);
       if (!action.payload) return;
-      state.profileInfo = action.payload.data;
+      state.profileInfo[action.payload.id] = action.payload.data;
     },
     [FetchAllPolesViewProfile.fulfilled]: (state, action) => {
       // console.log(action.payload);
       if (!action.payload) return;
       if (Array.isArray(action.payload.data)) {
-        state.poles = action.payload.data;
+        state.poles[action.payload.id] = action.payload.data;
       }
     },
     [FetchAllLocationsViewProfile.fulfilled]: (state, action) => {
       // console.log(action.payload);
       if (!action.payload) return;
       if (Array.isArray(action.payload.data)) {
-        state.locations = action.payload.data;
+        state.locations[action.payload.id] = action.payload.data;
       }
     },
   },
