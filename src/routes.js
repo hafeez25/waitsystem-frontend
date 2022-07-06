@@ -72,7 +72,7 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: '/', element: notAuthenticated ? <Navigate to="/login" /> : <Navigate to="/dashboard/app" /> },
-        { path: 'view-profile', element: notAuthenticated ? <Navigate to="/login" /> : <ViewProfile /> },
+        { path: 'view-profile/:userid', element: notAuthenticated ? <Navigate to="/login" /> : <ViewProfile /> },
         { path: 'settings', element: notAuthenticated ? <Navigate to="/login" /> : <ProfileSettings /> },
       ],
     },

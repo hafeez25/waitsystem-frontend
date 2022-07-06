@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink as RouterLink, matchPath, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 // material
 import { alpha, useTheme, styled } from '@mui/material/styles';
 import { Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton, Divider } from '@mui/material';
@@ -146,6 +147,13 @@ export default function NavSection({ navConfig, ...other }) {
 
   const listNav1 = navConfig.slice(0, 5);
   const listNav2 = navConfig.slice(5, 7);
+
+  const authData = useSelector(({ auth }) => auth);
+
+  useEffect(() => {
+    listNav1[1].path = `${listNav1[1].path}/1`;
+    listNav2[0].path = `/view-profile/${authData.user._id}`;
+  }, []);
 
   return (
     <Box {...other}>
