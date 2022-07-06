@@ -124,6 +124,18 @@ export default function ProfileForm() {
   const [photoState, setPhotoState] = useState(null);
   const pastPhoto = useRef();
   const UploadFile = async (e) => {
+    if (e.target.files[0] && e.target.files[0].size > 1024 * 1024 * 5) {
+      toast.error("Image size should not exceed 5Mb", {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+      return;
+    }
     if (pastPhoto.current) return;
     pastPhoto.current = getPhoto();
     setPhotoState(e.target.files[0]);
