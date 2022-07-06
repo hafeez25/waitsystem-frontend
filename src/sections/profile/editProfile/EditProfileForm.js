@@ -75,6 +75,7 @@ export default function ProfileForm() {
           draggable: true,
           progress: undefined,
         });
+        setSubmitting(false);
         return;
       }
       setSubmitting(true);
