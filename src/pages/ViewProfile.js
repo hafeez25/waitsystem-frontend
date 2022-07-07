@@ -1,6 +1,19 @@
 import { useEffect, useState } from 'react';
 // material
-import { Card, Stack, Avatar, Container, Tab, Box, Divider, Skeleton } from '@mui/material';
+import {
+  Card,
+  Stack,
+  Avatar,
+  Button,
+  Container,
+  Typography,
+  Tab,
+  Tabs,
+  Box,
+  Divider,
+  Link,
+  Skeleton,
+} from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import AddToQueueIcon from '@mui/icons-material/AddToQueue';
