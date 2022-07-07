@@ -25,7 +25,11 @@ import { FetchMyDetail } from './redux/AuthReducer';
 import LocationAnalytics from './pages/LocationAnalytics';
 import PoleAnalytics from './pages/PoleAnalytics';
 import ViewProfile from './pages/ViewProfile';
+<<<<<<< HEAD
 import { UserCard } from './pages/UserCard';
+=======
+import PoleComponent from './pages/PoleComponent';
+>>>>>>> edffcfc0089294d68e1d81c1577f7b0a5218d2fc
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +76,8 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: '/', element: notAuthenticated ? <Navigate to="/login" /> : <Navigate to="/dashboard/app" /> },
-        { path: 'view-profile/:userid', element: notAuthenticated ? <Navigate to="/login" /> : <ViewProfile /> },
+        { path: 'view-profile/:userid', element: notAuthenticated ? <Navigate to="/login" /> : <ViewProfile />},
+        { path: 'pole-component', element: notAuthenticated ? <Navigate to="/login" /> : <PoleComponent /> },
         { path: 'settings', element: notAuthenticated ? <Navigate to="/login" /> : <ProfileSettings /> },
       ],
     },
