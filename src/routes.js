@@ -25,11 +25,8 @@ import { FetchMyDetail } from './redux/AuthReducer';
 import LocationAnalytics from './pages/LocationAnalytics';
 import PoleAnalytics from './pages/PoleAnalytics';
 import ViewProfile from './pages/ViewProfile';
-<<<<<<< HEAD
 import { UserCard } from './pages/UserCard';
-=======
 import PoleComponent from './pages/PoleComponent';
->>>>>>> edffcfc0089294d68e1d81c1577f7b0a5218d2fc
 
 // ----------------------------------------------------------------------
 
