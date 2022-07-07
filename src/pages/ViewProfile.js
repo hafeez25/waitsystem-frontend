@@ -12,6 +12,7 @@ import { FetchProfileInfoViewProfile } from '../redux/ProfileReducer';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // components
+import Error from './Error';
 import Page from '../components/Page';
 import ViewProfile1 from '../components/ViewProfile1';
 import ViewProfile2 from '../components/ViewProfile2';
@@ -39,15 +40,6 @@ export default function ViewProfile() {
         payload: { id: data },
         callback: (msg, data, recall) => {
           if (msg === 'error') {
-            toast.error(typeof data === 'string' ? data : 'Something went wrong', {
-              position: 'top-right',
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
             setProfileFetchingError(true);
           }
           recall();
@@ -58,7 +50,8 @@ export default function ViewProfile() {
   };
 
   useEffect(() => {
-    if(!profileInfo || !profileInfo.name){
+    setProfileFetchingError(false);
+    if (!profileInfo || !profileInfo.name) {
       FetchProfile(userid);
     }
   }, []);
@@ -67,6 +60,9 @@ export default function ViewProfile() {
 
   const mdUp = useResponsive('up', 'md');
 
+  if (profileFetchingerror) {
+    return <Error />;
+  }
   return (
     <Page title="Profile">
       <Container>

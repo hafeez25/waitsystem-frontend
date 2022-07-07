@@ -100,6 +100,8 @@ export default function ViewProfile2() {
   useEffect(() => {
     if (!poles || !poles.length) {
       FetchPoles(userid);
+    } else {
+      setIsLoading(true);
     }
   }, []);
 
@@ -117,7 +119,7 @@ export default function ViewProfile2() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - poles.length) : 0;
 
-  if (!poles || !poles.length) {
+  if (!isLoading) {
     return (
       <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
@@ -137,7 +139,11 @@ export default function ViewProfile2() {
           </>
         </Paper>
       </Box>
-    )
+    );
+  }
+
+  if (!poles || !poles.length) {
+    return <Typography variant="h4">No Poles Added Yet.</Typography>;
   }
 
   return (
@@ -160,14 +166,27 @@ export default function ViewProfile2() {
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={pole.serialno} style={{cursor:"pointer"}}>
-                    <TableCell sx={{ pl: 1 }} component="th" id={labelId} scope="row" padding="none" onClick={()=>navigate(`dashboard/pole/${pole._id}`)}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={pole.serialno} style={{ cursor: 'pointer' }}>
+                    <TableCell
+                      sx={{ pl: 1 }}
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                      padding="none"
+                      onClick={() => navigate(`dashboard/pole/${pole._id}`)}
+                    >
                       {'#'}
                       {pole.serialno}
                     </TableCell>
-                    <TableCell align="left" onClick={()=>navigate(`/dashboard/pole/${pole._id}`)}>{pole.latitude}</TableCell>
-                    <TableCell align="left" onClick={()=>navigate(`/dashboard/pole/${pole._id}`)}>{pole.longitude}</TableCell>
-                    <TableCell align="left" onClick={()=>navigate(`/dashboard/location/${pole.location._id}`)}>{pole.location.name}</TableCell>
+                    <TableCell align="left" onClick={() => navigate(`/dashboard/pole/${pole._id}`)}>
+                      {pole.latitude}
+                    </TableCell>
+                    <TableCell align="left" onClick={() => navigate(`/dashboard/pole/${pole._id}`)}>
+                      {pole.longitude}
+                    </TableCell>
+                    <TableCell align="left" onClick={() => navigate(`/dashboard/location/${pole.location._id}`)}>
+                      {pole.location.name}
+                    </TableCell>
                   </TableRow>
                 );
               })}

@@ -66,44 +66,43 @@ export default function ViewProfile3() {
   useEffect(() => {
     if (!locations || !locations.length) {
       FetchLocations(userid);
-    }
-    else {
+    } else {
       setIsLoading(true);
     }
   }, []);
 
-  if (!locations || !locations.length) {
+  if (!isLoading) {
     return (
       <Grid container spacing={2}>
-        {[0, 1, 2, 3].map((_,index) => {
-          return (
-            <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-              <Card sx={{ maxWidth: 500, backgroundColor: '#f2f2f2' }}>
-                <Skeleton variant="rectangular" width={400} height={400} />
-              </Card>
-            </Grid>
-          )
-        })}
+        {[0, 1, 2, 3].map((_, index) => (
+          <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
+            <Card sx={{ maxWidth: 500, backgroundColor: '#f2f2f2' }}>
+              <Skeleton variant="rectangular" width={400} height={400} />
+            </Card>
+          </Grid>
+        ))}
       </Grid>
+    );
+  }
 
-    )
-
+  if (!locations || !locations.length) {
+    return <Typography variant="h4">No Locations Added Yet.</Typography>;
   }
 
   return (
     <Grid container spacing={2}>
       {locations.map((location, index) => (
         <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-          <Card sx={{ maxWidth: 500, backgroundColor: '#f2f2f2',cursor:"pointer" }}
-           onClick={()=>navigate(`/dashboard/location/${location._id}`)}>
-
+          <Card
+            sx={{ maxWidth: 500, backgroundColor: '#f2f2f2', cursor: 'pointer' }}
+            onClick={() => navigate(`/dashboard/location/${location._id}`)}
+          >
             <img width="100%" height="200" src={location.photo} alt={location.name} style={{ zIndex: -100 }} />
             <CardContent
               sx={{
                 backgroundColor: '#f2f2f2',
                 zIndex: 0,
               }}
-              
             >
               <Card
                 sx={{
@@ -120,7 +119,7 @@ export default function ViewProfile3() {
               >
                 <Avatar
                   src={location.addedBy.photo}
-                  alt={location.addedBy.name}                  
+                  alt={location.addedBy.name}
                   sx={{
                     width: 90,
                     height: 90,

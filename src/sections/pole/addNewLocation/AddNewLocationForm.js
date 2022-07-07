@@ -145,9 +145,14 @@ export default function AddNewLocationForm({ handleClose }) {
 
   useEffect(() => {
     setJsonResults1(
-      districtsJSON.filter((x) => x.country_code === 'IN' && x.name.toLowerCase().includes(input1.toLowerCase()))
+      districtsJSON.filter(
+        (x) =>
+          x.country_code === 'IN' &&
+          x.state_code === state?.state_code &&
+          x.name.toLowerCase().includes(input1.toLowerCase())
+      )
     );
-  }, [input1]);
+  }, [input1, state]);
 
   const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps, setSubmitting } = formik;
 
@@ -172,7 +177,10 @@ export default function AddNewLocationForm({ handleClose }) {
               disablePortal
               options={jsonResults}
               // value={state}
-              onChange={(e, n) => setState(n)}
+              onChange={(e, n) => {
+                setState(n);
+                setDistrict({ name: '' });
+              }}
               id="states-autocomplete"
               getOptionLabel={(jsonResults) => `${jsonResults.name}`}
               isOptionEqualToValue={(option, value) => option.name === value.name}

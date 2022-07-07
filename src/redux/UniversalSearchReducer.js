@@ -19,7 +19,9 @@ export const UniversalSearch = createAsyncThunk('search/universalsearch', async 
 const UniversalSearchSlice = createSlice({
   name: 'search',
   initialState: {
-    searchResults: [],
+    locations: [],
+    users: [],
+    poles: [],
   },
   reducers: {
     // setData(state, action) {
@@ -36,9 +38,14 @@ const UniversalSearchSlice = createSlice({
   },
   extraReducers: {
     [UniversalSearch.fulfilled]: (state, action) => {
-      console.log(action.payload);
+      console.log(action.payload.data.locations);
+      console.log(action.payload.data.users);
+      console.log(action.payload.data.poles);
+
       if (!action.payload) return;
-      state.searchResults = action.payload.data;
+      state.locations = action.payload.data.locations;
+      state.users = action.payload.data.users;
+      state.poles = action.payload.data.poles;
     },
   },
 });

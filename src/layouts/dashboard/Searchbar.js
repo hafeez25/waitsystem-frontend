@@ -5,6 +5,7 @@ import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } f
 // component
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import { UniversalSearch } from '../../redux/UniversalSearchReducer';
 import Iconify from '../../components/Iconify';
 
@@ -36,6 +37,7 @@ const SearchbarStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Searchbar() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isOpen, setOpen] = useState(false);
 
@@ -71,10 +73,12 @@ export default function Searchbar() {
               progress: undefined,
             });
             setSearchFetchingError(true);
+          } else {
+            navigate(`/search?text=${search}`, { replace: true, state: { search } });
+            setIsLoading(true);
+            handleClose();
+            recall();
           }
-          recall();
-          setIsLoading(true);
-          handleClose();
         },
       })
     );

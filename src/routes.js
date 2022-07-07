@@ -25,6 +25,7 @@ import { FetchMyDetail } from './redux/AuthReducer';
 import LocationAnalytics from './pages/LocationAnalytics';
 import PoleAnalytics from './pages/PoleAnalytics';
 import ViewProfile from './pages/ViewProfile';
+import SearchPage from './pages/SearchPage';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +59,7 @@ export default function Router() {
         },
         {
           path: 'location/:locationid',
-          element: <LocationAnalytics />,
+          element: <LocationAnalytics key={window.location.pathname} />,
         },
       ],
     },
@@ -67,8 +68,12 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { path: '/', element: notAuthenticated ? <Navigate to="/login" /> : <Navigate to="/dashboard/app" /> },
-        { path: 'view-profile/:userid', element: notAuthenticated ? <Navigate to="/login" /> : <ViewProfile /> },
+        {
+          path: 'view-profile/:userid',
+          element: notAuthenticated ? <Navigate to="/login" /> : <ViewProfile key={window.location.pathname} />,
+        },
         { path: 'settings', element: notAuthenticated ? <Navigate to="/login" /> : <ProfileSettings /> },
+        { path: 'search', element: notAuthenticated ? <Navigate to="/login" /> : <SearchPage /> },
       ],
     },
     {
