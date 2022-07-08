@@ -38,9 +38,9 @@ const UniversalSearchSlice = createSlice({
   },
   extraReducers: {
     [UniversalSearch.fulfilled]: (state, action) => {
-      console.log(action.payload.data.locations);
-      console.log(action.payload.data.users);
-      console.log(action.payload.data.poles);
+      // console.log(action.payload.data.locations);
+      // console.log(action.payload.data.users);
+      // console.log(action.payload.data.poles);
 
       if (!action.payload) return;
       state.locations = action.payload.data.locations;

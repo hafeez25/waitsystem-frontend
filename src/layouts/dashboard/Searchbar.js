@@ -74,7 +74,7 @@ export default function Searchbar() {
             });
             setSearchFetchingError(true);
           } else {
-            navigate(`/search?text=${search}`, { replace: true, state: { search } });
+            navigate(`/search?text=${search}`, { replace: false, state: { search } });
             setIsLoading(true);
             handleClose();
             recall();
