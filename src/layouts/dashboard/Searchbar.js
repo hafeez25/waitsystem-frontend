@@ -98,6 +98,7 @@ export default function Searchbar() {
             <Input
               onChange={(e) => setSearch(e.target.value)}
               autoFocus
+              onKeyUp={(e)=>e.keyCode === 13 && FetchSearchResults(e.target.value)}
               fullWidth
               disableUnderline
               placeholder="Search…"

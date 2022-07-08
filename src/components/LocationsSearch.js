@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { Chip, Box, Tabs, IconButton, Typography, Avatar, Card, CardContent } from '@mui/material';
+import { Chip, Box, Tabs, IconButton, Typography, Avatar, Card, CardContent, Stack } from '@mui/material';
 import styled from '@emotion/styled';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightIcon from '@mui/icons-material/ChevronRightRounded';
 
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const StyledChip = styled(Chip)`
   border-radius: 16px;
@@ -48,20 +49,21 @@ const StyledIconButton = styled(IconButton)`
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'nowrap',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
     listStyle: 'none',
     padding: theme.spacing(0.5),
-    margin: 0,
+    
     overflow: 'auto',
     maxWidth: '100%',
+    margin:"10px"
   },
   chip: {
     margin: theme.spacing(2),
   },
 }));
 
-export default function LocationsSearch({ locations }) {
+export default function LocationsSearch() {
   const classes = useStyles();
   const navigate = useNavigate();
   const [chipData, setChipData] = React.useState([
@@ -80,10 +82,20 @@ export default function LocationsSearch({ locations }) {
   ]);
 
   const [selectedIndustryFilter, setSelectedIndustryFilter] = React.useState('Angular');
+  const locations = useSelector(({ search }) => search.locations);
+  if(!locations.length){
+    return (
+      <Stack direction="row" alignItems="center" justifyContent="center" my={1}>
+        <Typography variant="body1" gutterBottom>
+          No Locations found.
+        </Typography>
+      </Stack>
+    );
+  }
 
   return (
     <Box className={classes.root}>
-      <Tabs
+      {/* <Tabs
         variant="scrollable"
         scrollButtons="auto"
         value={0}
@@ -104,8 +116,8 @@ export default function LocationsSearch({ locations }) {
             );
           }
         }}
-      >
-        {chipData.map((data) => (
+      > */}
+        {/* {chipData.map((data) => (
           <StyledChip
             label={data.label}
             onClick={() => {
@@ -116,14 +128,14 @@ export default function LocationsSearch({ locations }) {
             key={data.key}
             className={classes.chip}
           />
-        ))}
-        {/* {locations.map((location, index) => (
+        ))} */}
+        {locations.map((location, index) => (
           <Card
             sx={{ maxWidth: 500, backgroundColor: '#f2f2f2', cursor: 'pointer' }}
             onClick={() => navigate(`/dashboard/location/${location._id}`)}
             key={index}
           >
-            <img width="100%" height="200" src={location.photo} alt={location.name} style={{ zIndex: -100 }} />
+            <img width="100%" height="200" src={location.photo} alt={location.name} style={{ zIndex: 100 }} />
             <CardContent
               sx={{
                 backgroundColor: '#f2f2f2',
@@ -175,8 +187,8 @@ export default function LocationsSearch({ locations }) {
               </Card>
             </CardContent>
           </Card>
-        ))} */}
-      </Tabs>
+        ))}
+      {/* </Tabs> */}
     </Box>
   );
 }

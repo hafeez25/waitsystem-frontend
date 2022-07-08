@@ -8,9 +8,10 @@ import { toast } from 'react-toastify';
 import useResponsive from '../hooks/useResponsive';
 // components
 import Page from '../components/Page';
-import LocationsSearch from '../components/LocationsSearch';
+
 import UsersSearch from '../components/UsersSearch';
 import PolesSearch from '../components/PolesSearch';
+import LocationsSearch from '../components/LocationsSearch';
 
 export default function SearchPage() {
   const location = useLocation();
@@ -27,9 +28,9 @@ export default function SearchPage() {
     <Page title="Search Results">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mt={1} mb={2}>
-          <Typography variant="h4" gutterBottom>
-            {`Search Results for "${location.state.search}"`}
-          </Typography>
+          {location.state && location.state.search && <Typography variant="h4" gutterBottom>
+            {`Search Results for "${location.state?.search}"`}
+          </Typography>}
         </Stack>
         <Divider />
         <Stack direction="column" alignItems="flex-start" my={1}>
@@ -44,7 +45,7 @@ export default function SearchPage() {
             {`Locations (${locations.length})`}
           </Typography>
         </Stack>
-        {/* <LocationsSearch /> */}
+        <LocationsSearch />
         <Divider />
         <Stack direction="column" alignItems="flex-start" my={1}>
           <Typography sx={{ textDecoration: 'underline' }} variant="h6">
