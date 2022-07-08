@@ -66,7 +66,7 @@ export const FetchPoleAnalytics = createAsyncThunk('poles/fetchanalytics', async
 const PoleSlice = createSlice({
   name: 'poles',
   initialState: {
-    poles: [],
+    poles: null,
     analytics: {},
   },
   reducers: { 

@@ -136,7 +136,7 @@ export default function User() {
   };
 
   useEffect(() => {
-    if (!poles || !poles.length) {
+    if (!poles || !poles?.length) {
       FetchPoles();
     }
   }, []);
@@ -244,9 +244,21 @@ export default function User() {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(poles, getComparator(order, orderBy), filterName);
+  // const filteredUsers = applySortFilter(poles, getComparator(order, orderBy), filterName);
 
-  const isUserNotFound = filteredUsers.length === 0;
+  const filterPoles = (poles) =>{
+    if(!Array.isArray(poles)) return null;
+    return poles?.filter((pole)=>{
+      return pole.serialno.toLowerCase().includes(filterName.toLowerCase())
+       || pole.location.name.toLowerCase().includes(filterName.toLowerCase())
+    })
+  }
+
+  const filteredPoles = filterPoles(poles);
+
+  const isUserNotFound = (filteredPoles && filteredPoles.length === 0);
+
+  
 
   return (
     <Page title="Manage Devices">
@@ -269,13 +281,13 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={poles.length}
+                  rowCount={filteredPoles?.length || 0}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                 />
-                {poles ? (
+                {filteredPoles ? (
                   <TableBody>
-                    {poles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                    {filteredPoles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                       const { _id, latitude, longitude, serialno, healthStatus, batteryStatus, location } = row;
                       const status = healthStatus >= 50 ? 'good' : 'bad';
                       // const isItemSelected = selected.indexOf(name) !== -1;
@@ -353,7 +365,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={poles.length}
+            count={filteredPoles?.length || 0}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

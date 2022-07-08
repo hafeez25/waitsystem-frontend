@@ -33,6 +33,8 @@ import Iconify from '../../../components/Iconify';
 import statesJSON from '../addNewLocation/states.json';
 import { FetchAllPlaces } from '../../../redux/locationReducer';
 import { AddPole } from '../../../redux/PolesReducer';
+
+import { isValidSerialNo, isValidLatitude,isValidLongitude } from '../../../utils/validation';
 // reducers
 
 // ----------------------------------------------------------------------
@@ -71,7 +73,9 @@ export default function AddNewPoleForm({ handleClose, editing, data, callback })
     validationSchema: AddNewLocationSchema,
     onSubmit: (values, actions) => {
       console.log(values, locationid);
-      if (locationid && values.serialno && !editing) {
+      if (locationid && isValidSerialNo(values.serialno) &&
+       isValidLongitude(values.longitude) &&
+        isValidLatitude(values.latitude) && !editing) {
         dispatch(
           AddPole({
             payload: {
@@ -80,8 +84,8 @@ export default function AddNewPoleForm({ handleClose, editing, data, callback })
               name: state.name,
             },
             callback: (msg, data, recall) => {
-              if (msg === 'error') {
-                setSubmitting(false);
+              setSubmitting(false);
+              if (msg === 'error') {                
                 toast.error(typeof data === 'string' ? data : 'Something went wrong', {
                   position: 'top-right',
                   autoClose: 5000,
@@ -100,11 +104,33 @@ export default function AddNewPoleForm({ handleClose, editing, data, callback })
         );
       } else {
         setSubmitting(false);
+        toast.error("Invalid values in one or more field.Please fill only valid values", {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       }
       if (editing) {
-        if (callback) {
+        if (callback && state._id && isValidSerialNo(values.serialno) &&
+        isValidLongitude(values.longitude) &&
+         isValidLatitude(values.latitude)) {
           callback('EDIT_DONE', { ...values, location: state._id, name: state.name, poleid: data._id });
           handleClose();
+        }
+        else{
+          toast.error("Invalid values in one or more field.Please fill only valid values", {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
       }
       // console.log(values,actions)
@@ -172,7 +198,7 @@ export default function AddNewPoleForm({ handleClose, editing, data, callback })
               disabled={editing}
               variant="standard"
               {...getFieldProps('serialno')}
-              error={Boolean(touched.serialno && errors.serialno)}
+              error={Boolean((touched.serialno && errors.serialno)||touched.serialno && !isValidSerialNo(values.serialno))}
               helperText={touched.serialno && errors.serialno}
             />
             <TextField
@@ -183,7 +209,7 @@ export default function AddNewPoleForm({ handleClose, editing, data, callback })
               fullWidth
               variant="standard"
               {...getFieldProps('latitude')}
-              error={Boolean(touched.latitude && errors.latitude)}
+              error={Boolean((touched.latitude && errors.latitude)||touched.latitude && !isValidLatitude(values.latitude))}
               helperText={touched.latitude && errors.latitude}
             />
             <TextField
@@ -194,7 +220,7 @@ export default function AddNewPoleForm({ handleClose, editing, data, callback })
               fullWidth
               variant="standard"
               {...getFieldProps('longitude')}
-              error={Boolean(touched.longitude && errors.longitude)}
+              error={Boolean((touched.longitude && errors.longitude)||touched.longitude && !isValidLongitude(values.longitude))}
               helperText={touched.longitude && errors.longitude}
             />
             <Stack spacing={2} direction="row" justifyContent="space-between" alignItems="center">

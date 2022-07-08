@@ -25,6 +25,7 @@ import Iconify from '../../../components/Iconify';
 import statesJSON from './states.json';
 import districtsJSON from './districts.json';
 import { AddPlace } from '../../../redux/locationReducer';
+import { isValidPinCode } from '../../../utils/validation';
 // reducers
 // import { AddLocation } from '../../../redux/Pole/PoleReducer';
 
@@ -53,7 +54,7 @@ export default function AddNewLocationForm({ handleClose }) {
     validationSchema: AddNewLocationSchema,
     onSubmit: (values, actions) => {
       console.log(values, state, district);
-      if (state.name && district.name && values.location && values.pincode) {
+      if (state.name && district.name && values.location && isValidPinCode(values.pincode)) {
         dispatch(
           AddPlace({
             payload: {
@@ -63,8 +64,8 @@ export default function AddNewLocationForm({ handleClose }) {
               district: district.name,
             },
             callback: (msg, data, recall) => {
-              if (msg === 'error') {
-                setSubmitting(false);
+              setSubmitting(false);
+              if (msg === 'error') {                
                 toast.error(typeof data === 'string' ? data : 'Something went wrong', {
                   position: 'top-right',
                   autoClose: 5000,
@@ -83,6 +84,7 @@ export default function AddNewLocationForm({ handleClose }) {
           })
         );
       } else {
+        setSubmitting(false);
         toast.error('Please fill all fields', {
           position: 'top-right',
           autoClose: 5000,
@@ -179,6 +181,7 @@ export default function AddNewLocationForm({ handleClose }) {
               // value={state}
               onChange={(e, n) => {
                 setState(n);
+                setInput1('');
                 setDistrict({ name: '' });
               }}
               id="states-autocomplete"
@@ -249,7 +252,7 @@ export default function AddNewLocationForm({ handleClose }) {
               type="text"
               variant="standard"
               {...getFieldProps('pincode')}
-              error={Boolean(touched.pincode && errors.pincode)}
+              error={Boolean((touched.pincode && errors.pincode) ||touched.pincode &&  !isValidPinCode(values.pincode))}
               helperText={touched.pincode && errors.pincode}
             />
           </Stack>

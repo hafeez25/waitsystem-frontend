@@ -32,7 +32,7 @@ export default function FormDialog(props) {
     return (
       <Dialog open={Boolean(true)} onClose={handleClose} maxWidth={'sm'}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <DialogTitle variant="h4">Add New Pole</DialogTitle>
+          <DialogTitle variant="h4">Update Pole</DialogTitle>
           <Fab onClick={handleClose} size="small" sx={{ mr: 3 }} color="inherit" aria-label="edit">
             <Iconify icon="fa:close" />
           </Fab>
