@@ -347,7 +347,33 @@ export default function User() {
                     )}
                   </TableBody>
                 ) : (
-                  <Skeleton variant="rectangular" width={210} height={118} />
+                  <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={6} sx={{py:1}}>
+                        <Skeleton variant="rectangular" width="100%" height={53} />
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={6} sx={{py:1}}>
+                        <Skeleton variant="rectangular" width="100%" height={53} />
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={6} sx={{py:1}}>
+                        <Skeleton variant="rectangular" width="100%" height={53} />
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={6} sx={{py:1}} >
+                        <Skeleton variant="rectangular" width="100%" height={53} />
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={6} sx={{py:1}} >
+                        <Skeleton variant="rectangular" width="100%" height={53} />
+                        </TableCell>
+                      </TableRow>
+                  </TableBody>
                 )}
                 {isUserNotFound && (
                   <TableBody>
