@@ -27,7 +27,7 @@ const PlaceRoutes = {
   getPlace: '/service/place/:id',
   searchPlace: '/service/searchplace',
   analytics: '/service/place/analytics',
-  PolesOfLocation: '/service/places/poles',
+  PolesOfLocation: '/service/place/poles',
 };
 
 const PoleRoutes = {

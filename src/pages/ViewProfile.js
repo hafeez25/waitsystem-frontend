@@ -67,7 +67,7 @@ export default function ViewProfile() {
     if (!profileInfo || !profileInfo.name) {
       FetchProfile(userid);
     }
-  }, []);
+  }, [userid]);
 
   const smUp = useResponsive('up', 'sm');
 

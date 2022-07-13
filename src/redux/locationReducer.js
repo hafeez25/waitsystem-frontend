@@ -52,26 +52,26 @@ export const FetchAllPlaces = createAsyncThunk('Places/fetchall', async ({ callb
   return data.resp.data;
 });
 
-export const FetchLocationAnalytics = createAsyncThunk('Places/fetchanalytics', async ({ callback, payload }) => {
+export const FetchLocationAnalytics = createAsyncThunk('Places/fetchanalytics', async ({ payload }) => {
   const data = await MakeRequest(Api.GET, { url: PlaceRoutes.analytics, query: payload });
 
   if (data.err) {
-    callback('error', data.err, () => {});
+    // callback('error', data.err, () => {});
     return null;
   }
-  callback('success', data.resp, () => {});
-  return data.resp;
+  // callback('success', data.resp, () => {});
+  return {...data.resp,id:payload.id};
 });
 
-export const FetchPolesOfLocation = createAsyncThunk('Places/fetchpoles', async ({ callback, payload }) => {
+export const FetchPolesOfLocation = createAsyncThunk('Places/fetchpoles', async ({ payload }) => {
   const data = await MakeRequest(Api.GET, { url: PlaceRoutes.PolesOfLocation, query: payload });
 
   if (data.err) {
-    callback('error', data.err, () => {});
+    // callback('error', data.err, () => {});
     return null;
   }
-  callback('success', data.resp, () => {});
-  return data.resp;
+  // callback('success', data.resp, () => {});
+  return {...data.resp,id:payload.id};
 });
 
 export const FetchLocation = createAsyncThunk('Places/fetchlocation', async ({ callback, payload }) => {
@@ -148,12 +148,23 @@ const PlaceSlice = createSlice({
     },
     [FetchLocationAnalytics.fulfilled]: (state, action) => {
       console.log(action.payload);
+      // if(action.payload){
+
+      // }
+      if(action.payload && state.analytics[action.payload.id]){
+          state.analytics[action.payload.id].analytics = action.payload.data;
+      }
     },
     [FetchLocation.fulfilled]: (state, action) => {
-      console.log(action.payload);
+      if(action.payload){
+        const {data} = action.payload;
+        state.analytics[data._id] = data;
+      }
     },
     [FetchPolesOfLocation.fulfilled]: (state, action) => {
-      console.log(action.payload);
+      if(action.payload && state.analytics[action.payload.id]){
+        state.analytics[action.payload.id].poles = action.payload.data;
+    }
     },
   },
 });

@@ -103,7 +103,7 @@ export default function ViewProfile2() {
     } else {
       setIsLoading(true);
     }
-  }, []);
+  }, [userid]);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);

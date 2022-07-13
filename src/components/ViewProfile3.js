@@ -69,7 +69,7 @@ export default function ViewProfile3() {
     } else {
       setIsLoading(true);
     }
-  }, []);
+  }, [userid]);
 
   if (!isLoading) {
     return (
