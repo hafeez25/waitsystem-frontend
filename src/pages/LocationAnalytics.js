@@ -1,15 +1,16 @@
 import GoogleMapReact from 'google-map-react';
-import {Box, Container, Grid, Typography,Card, CardContent, Stack } from '@mui/material';
+import {Box, Container, Grid, Typography,Card, CardContent, Stack, CircularProgress } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { toast } from 'react-toastify';
 import { useDispatch,useSelector } from 'react-redux';
 
 import {AppCurrentVisits} from '../sections/@dashboard/app';
 import Page from '../components/Page';
 import { FetchLocation,FetchLocationAnalytics,FetchPolesOfLocation } from '../redux/locationReducer';
+import Error from './Error';
 
 
 
@@ -36,6 +37,8 @@ export default function LocationAnalytics() {
     // use map and maps objects
   };
 
+  const [Fetchingerror,setFetchingerror] = useState(false)
+
   useEffect(()=>{
     if(locationid && locationid.length === 24){
       dispatch(FetchLocation({
@@ -43,6 +46,7 @@ export default function LocationAnalytics() {
         callback: (msg, data, recall) => {
           console.log(msg,data)
           if (msg === 'error') {
+            setFetchingerror(true);
             toast.error(typeof data === 'string' ? data : 'Error in fetching location analytics', {
               position: 'top-right',
               autoClose: 5000,
@@ -60,9 +64,18 @@ export default function LocationAnalytics() {
         },
       }))
     }
+    else{
+      setFetchingerror(true)
+    }
   },[locationid])
 
-  if(!location) return null;
+  if (Fetchingerror) {
+    return <Error />;
+  }
+
+  if(!location) return <center style={{marginTop:"180px"}}><CircularProgress size={20} /></center>;
+
+  
 
 
   return (

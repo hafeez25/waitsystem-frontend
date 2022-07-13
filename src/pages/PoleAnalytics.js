@@ -1,5 +1,5 @@
 import GoogleMapReact from 'google-map-react';
-import {Box, Container, Grid, Typography,Card, CardContent, Stack } from '@mui/material';
+import {Box, Container, Grid, Typography,Card, CardContent, Stack, CircularProgress } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import { useTheme } from '@mui/material/styles';
 import Page from '../components/Page';
 
 import { FetchPoleAnalytics } from '../redux/PolesReducer';
+import Error from './Error';
 
 
 
@@ -26,6 +27,7 @@ export default function PoleAnalytics() {
     center: [59.938043, 30.337157],
     zoom: 9,
   };
+  const[Fetchingerror,setError] = useState(false)
 
   const handleApiLoaded = (map, maps) => {
     // use map and maps objects
@@ -39,6 +41,7 @@ export default function PoleAnalytics() {
         callback: (msg, data, recall) => {
           console.log(msg,data)
           if (msg === 'error') {
+            setError(true)
             toast.error(typeof data === 'string' ? data : 'Error in fetching pole analytics', {
               position: 'top-right',
               autoClose: 5000,
@@ -54,6 +57,9 @@ export default function PoleAnalytics() {
         },
       }))
     }
+    else{
+      setError(true)
+    }
   },[poleid])
 
   const FormatTime = (date) =>{
@@ -66,7 +72,11 @@ export default function PoleAnalytics() {
     return `${Math.floor(diff/(3600*24*365))}y ago`
   }
 
-  if(!analytics[poleid] || !analytics[poleid].pole) return null
+  if (Fetchingerror) {
+    return <Error />;
+  }
+
+  if(!analytics[poleid] || !analytics[poleid].pole) return <center style={{marginTop:"180px"}}><CircularProgress size={20} /></center>;
 
   return (
     <Page title="Pole Analytics">
@@ -96,7 +106,7 @@ export default function PoleAnalytics() {
                     <span style={{fontWeight:"normal", marginLeft:'1rem'}}>{analytics[poleid].pole.serialno}</span>
                   </Typography>
                   <Typography component='div' variant="h6" gutterBottom className='fixFont'>
-                    Cars passed in past 24 hours - 
+                    Vehicles in past 24 hours - 
                     <span style={{fontWeight:"normal", marginLeft:'1rem'}}>{analytics[poleid].data.length}</span>
                   </Typography>
                   <Typography component='div' variant="h6" gutterBottom className='fixFont'>
