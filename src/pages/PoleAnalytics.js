@@ -107,7 +107,7 @@ export default function PoleAnalytics() {
                   </Typography>
                   <Typography component='div' variant="h6" gutterBottom className='fixFont'>
                     Vehicles in past 24 hours - 
-                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>{analytics[poleid].data.length}</span>
+                    <span style={{fontWeight:"normal", marginLeft:'1rem'}}>{analytics[poleid].v1 ? analytics[poleid].pole.vehiclesPassed :analytics[poleid].data.length}</span>
                   </Typography>
                   <Typography component='div' variant="h6" gutterBottom className='fixFont'>
                     Pole added by - 
