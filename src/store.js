@@ -3,4 +3,5 @@ import rootReducer from "./redux";
 
 export default configureStore({
   reducer: rootReducer,
+  devTools:window.location.pathname.includes('localhost')
 });
