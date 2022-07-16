@@ -88,7 +88,7 @@ export default function LocationAnalytics() {
             </Typography>
           </Card>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} sx={12} md={8} lg={8} xl={8}>
               <Card sx={{ backgroundColor: '#D1E9FC' }} className="location_details_card">
                 <Box sx={{ display: 'flex', flexDirection: 'row' }} className="location_details_cardbox">
                   <CardContent>
@@ -170,7 +170,7 @@ export default function LocationAnalytics() {
                 </Box>
               </Card>
             </Grid>
-            <Grid item xs={12} md={4} textAlign="center">
+            <Grid item xs={12} sm={12} md={4} lg={4} xl={4} textAlign="center">
               <Card>
                 <CardContent>
                   {location.poles?.length > 0 ? (
@@ -190,13 +190,11 @@ export default function LocationAnalytics() {
                       ]}
                     />
                   ) : (
-                    <Stack direction="column" spacing={3} justifyContent="center" alignItems="center">
+                    <Stack direction="column" spacing={6} justifyContent="space-between" alignItems="center">
                       <Typography variant="h5" component="div">
                         Sorry, No Data to Show!
                       </Typography>
-                      <Container sx={{ width: '100%' }}>
-                        <img alt="nodata" src="/static/illustrations/illustration_nodata.jpg" />
-                      </Container>
+                      <img alt="nodata" src="/static/illustrations/illustration_nodata.jpg" />
                     </Stack>
                   )}
                 </CardContent>
