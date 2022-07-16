@@ -70,7 +70,6 @@ export default function Router() {
       children: [
         { path: '/', element: notAuthenticated ? <Navigate to="/login" /> : <Navigate to="/dashboard/app" /> },
         { path: 'view-profile/:userid', element: notAuthenticated ? <Navigate to="/login" /> : <ViewProfile /> },
-        // { path: 'pole-component', element: notAuthenticated ? <Navigate to="/login" /> : <PoleComponent /> },
         { path: 'settings', element: notAuthenticated ? <Navigate to="/login" /> : <ProfileSettings /> },
         { path: 'search', element: notAuthenticated ? <Navigate to="/login" /> : <SearchPage /> },
       ],
