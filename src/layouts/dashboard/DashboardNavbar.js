@@ -7,7 +7,6 @@ import Iconify from '../../components/Iconify';
 //
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-import NotificationsPopover from './NotificationsPopover';
 
 // ----------------------------------------------------------------------
 
@@ -50,8 +49,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
         <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
 
-        <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          <NotificationsPopover />
+        <Stack sx={{ mx: 2 }} direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <AccountPopover />
         </Stack>
       </ToolbarStyle>

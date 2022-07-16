@@ -246,19 +246,19 @@ export default function User() {
 
   // const filteredUsers = applySortFilter(poles, getComparator(order, orderBy), filterName);
 
-  const filterPoles = (poles) =>{
-    if(!Array.isArray(poles)) return null;
-    return poles?.filter((pole)=>{
-      return pole.serialno.toLowerCase().includes(filterName.toLowerCase())
-       || pole.location.name.toLowerCase().includes(filterName.toLowerCase())
-    })
-  }
+  const filterPoles = (poles) => {
+    if (!Array.isArray(poles)) return null;
+    return poles?.filter((pole) => {
+      return (
+        pole.serialno.toLowerCase().includes(filterName.toLowerCase()) ||
+        pole.location.name.toLowerCase().includes(filterName.toLowerCase())
+      );
+    });
+  };
 
   const filteredPoles = filterPoles(poles);
 
-  const isUserNotFound = (filteredPoles && filteredPoles.length === 0);
-
-  
+  const isUserNotFound = filteredPoles && filteredPoles.length === 0;
 
   return (
     <Page title="Manage Devices">
@@ -348,31 +348,31 @@ export default function User() {
                   </TableBody>
                 ) : (
                   <TableBody>
-                      <TableRow>
-                        <TableCell colSpan={6} sx={{py:1}}>
+                    <TableRow>
+                      <TableCell colSpan={6} sx={{ py: 1 }}>
                         <Skeleton variant="rectangular" width="100%" height={53} />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell colSpan={6} sx={{py:1}}>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={6} sx={{ py: 1 }}>
                         <Skeleton variant="rectangular" width="100%" height={53} />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell colSpan={6} sx={{py:1}}>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={6} sx={{ py: 1 }}>
                         <Skeleton variant="rectangular" width="100%" height={53} />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell colSpan={6} sx={{py:1}} >
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={6} sx={{ py: 1 }}>
                         <Skeleton variant="rectangular" width="100%" height={53} />
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell colSpan={6} sx={{py:1}} >
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={6} sx={{ py: 1 }}>
                         <Skeleton variant="rectangular" width="100%" height={53} />
-                        </TableCell>
-                      </TableRow>
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 )}
                 {isUserNotFound && (
