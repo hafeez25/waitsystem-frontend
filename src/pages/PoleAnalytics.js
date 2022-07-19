@@ -1,12 +1,26 @@
 import GoogleMapReact from 'google-map-react';
-import { Box, Container, Grid, Typography, Card, CardContent, Stack, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Card,
+  CardContent,
+  Stack,
+  CircularProgress,
+  Divider,
+  Paper,
+  Avatar,
+} from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import Page from '../components/Page';
+import Iconify from '../components/Iconify';
+import { fShortenNumber } from '../utils/formatNumber';
 
 import { FetchPoleAnalytics } from '../redux/PolesReducer';
 import Error from './Error';
@@ -17,6 +31,7 @@ const AnyReactComponent = ({ text }) => (
 
 export default function PoleAnalytics() {
   const theme = useTheme();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { poleid } = useParams();
   const analytics = useSelector(({ pole }) => pole.analytics);
@@ -63,11 +78,11 @@ export default function PoleAnalytics() {
   const FormatTime = (date) => {
     const diff = Math.floor((new Date() - new Date(date)) / 1000);
     if (diff < 5) return 'Just now';
-    if (diff < 60) return `${diff}s ago`;
-    if (diff < 60 * 60) return `${Math.floor(diff / 60)}m ago`;
-    if (diff < 3600 * 24) return `${Math.floor(diff / 3600)}h ago`;
-    if (diff < 3600 * 24 * 365) return `${Math.floor(diff / (3600 * 24))}d ago`;
-    return `${Math.floor(diff / (3600 * 24 * 365))}y ago`;
+    if (diff < 60) return `${diff}s`;
+    if (diff < 60 * 60) return `${Math.floor(diff / 60)}m`;
+    if (diff < 3600 * 24) return `${Math.floor(diff / 3600)}h`;
+    if (diff < 3600 * 24 * 365) return `${Math.floor(diff / (3600 * 24))}d`;
+    return `${Math.floor(diff / (3600 * 24 * 365))}y`;
   };
 
   if (Fetchingerror) {
@@ -84,79 +99,137 @@ export default function PoleAnalytics() {
   return (
     <Page title="Pole Analytics">
       <Container maxWidth="xl">
-        <Card sx={{ boxShadow: 0, backgroundColor: '#F9FAFB' }}>
-          <Card sx={{ boxShadow: 0, backgroundColor: '#F9FAFB' }}>
-            {/* <CardContent sx={{padding:'0'}}> */}
-            <Typography variant="h4" mt={0} ml={3}>
-              Pole Analytics
-            </Typography>
-            {/* <IconButton sx={{paddingLeft:'1.2rem'}} disableFocusRipple>
-                <ArrowBackIcon disableFocusRipple p={0}/>
-              </IconButton> */}
-            {/* </CardContent> */}
-          </Card>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4} mt={3}>
-              <Card sx={{ height: '350px', backgroundColor: '#D1E9FC' }}>
-                <CardContent>
-                  <Typography variant="h4" component="div" textAlign="center" gutterBottom>
-                    Pole Details
-                  </Typography>
-                  <Box mt={2}>
-                    <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                      Serial no. -
-                      <span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>
-                        {analytics[poleid].pole.serialno}
-                      </span>
-                    </Typography>
-                    <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                      Vehicles in past 24 hours -
-                      <span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>
-                        {analytics[poleid].v1 ? analytics[poleid].pole.vehiclesPassed : analytics[poleid].data.length}
-                      </span>
-                    </Typography>
-                    <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                      Pole added by -
-                      <span
-                        style={{
-                          fontWeight: 'normal',
-                          marginLeft: '1rem',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
+        <Stack>
+          <Typography variant="h4" mt={0} mb={3}>
+            Pole Analytics
+          </Typography>
+        </Stack>
+        <Grid container spacing={2}>
+          <Grid container spacing={2} item xs={12} sm={12} md={8}>
+            <Grid item xs={12} sm={12} md={12}>
+              <Card sx={{ p: 3 }}>
+                <Stack
+                  direction={{ xs: 'column', sm: 'row', md: 'row' }}
+                  spacing={2}
+                  justifyContent="center"
+                  alignItems="center"
+                  divider={<Divider orientation="vertical" flexItem />}
+                >
+                  <Stack>
+                    <Paper variant="outlined" sx={{ p: 1.5, textAlign: 'center', backgroundColor: '#D1E9FC' }}>
+                      <Stack divider={<Divider />} spacing={3}>
+                        <Typography variant="h4">#{analytics[poleid].pole.serialno}</Typography>
+                        <Stack direction="row" spacing={2.5} divider={<Divider orientation="vertical" flexItem />}>
+                          <Stack>
+                            <Box sx={{ mb: 0.5 }}>
+                              <Iconify icon={'tabler:world-latitude'} color="#1877F2" width={32} height={32} />
+                            </Box>
+
+                            <Typography variant="h6">{analytics[poleid].pole.latitude}</Typography>
+
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              Latitude
+                            </Typography>
+                          </Stack>
+                          <Stack>
+                            <Box sx={{ mb: 0.5 }}>
+                              <Iconify icon={'tabler:world-longitude'} color="#1877F2" width={32} height={32} />
+                            </Box>
+
+                            <Typography variant="h6">{analytics[poleid].pole.longitude}</Typography>
+
+                            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                              Longitude
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                        <Typography variant="h6" sx={{ textTransform: 'capitalize' }}>
+                          {analytics[poleid].pole.location?.name}
+                        </Typography>
+                      </Stack>
+                    </Paper>
+                  </Stack>
+                  <Stack divider={<Divider />} spacing={3}>
+                    <Stack
+                      direction="row"
+                      spacing={3}
+                      divider={<Divider orientation="vertical" flexItem />}
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Paper
+                        variant="outlined"
+                        sx={{ px: 2.5, py: 1.5, textAlign: 'center', backgroundColor: '#D1E9FC' }}
                       >
-                        {analytics[poleid].pole.addedBy.name}
-                      </span>
-                    </Typography>
-                    <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                      Pole last updated -
-                      <span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>
-                        {FormatTime(analytics[poleid].pole.lastUpdatedAt)}
-                      </span>
-                    </Typography>
-                    <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                      Pole Latitude -
-                      <span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>
-                        {analytics[poleid].pole.latitude}
-                      </span>
-                    </Typography>
-                    <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                      Pole longitude -
-                      <span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>
-                        {analytics[poleid].pole.longitude}
-                      </span>
-                    </Typography>
-                    <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                      Pole location -
-                      <span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>
-                        {analytics[poleid].pole.location?.name}
-                      </span>
-                    </Typography>
-                  </Box>
-                </CardContent>
+                        <Box sx={{ mb: 0.5 }}>
+                          <Iconify icon={'fluent:vehicle-car-24-filled'} color="#1877F2" width={32} height={32} />
+                        </Box>
+
+                        <Typography variant="h4">
+                          {fShortenNumber(
+                            analytics[poleid].v1 ? analytics[poleid].pole.vehiclesPassed : analytics[poleid].data.length
+                          )}
+                        </Typography>
+
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                          Vehicles Passed
+                        </Typography>
+                      </Paper>
+
+                      <Paper
+                        variant="outlined"
+                        sx={{ px: 2.5, py: 1.5, textAlign: 'center', backgroundColor: '#D1E9FC' }}
+                      >
+                        <Box sx={{ mb: 0.5 }}>
+                          <Iconify icon={'eos-icons:content-modified'} color="#1877F2" width={32} height={32} />
+                        </Box>
+
+                        <Typography variant="h4">{FormatTime(analytics[poleid].pole.lastUpdatedAt)}</Typography>
+
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                          Last Updated
+                        </Typography>
+                      </Paper>
+                    </Stack>
+                    <Stack justifyContent="center" alignItems="center" spacing={2}>
+                      <Avatar
+                        src={analytics[poleid].pole.addedBy.photo}
+                        alt={analytics[poleid].pole.addedBy.name}
+                        sx={{
+                          width: 90,
+                          height: 90,
+                          mt: 1,
+                          border: 2.5,
+                          borderColor: '#0043ca',
+                        }}
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => navigate(`/view-profile/${analytics[poleid].pole.addedBy._id}`)}
+                      />
+                      <Typography variant="button" component="div">
+                        <b>
+                          Added By:{' '}
+                          <span
+                            role="button"
+                            aria-hidden="true"
+                            tabIndex={0}
+                            style={{
+                              marginLeft: 3,
+                              cursor: 'pointer',
+                            }}
+                            onClick={() => navigate(`/view-profile/${analytics[poleid].pole.addedBy._id}`)}
+                          >
+                            {analytics[poleid].pole.addedBy.name}
+                          </span>
+                        </b>
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                </Stack>
               </Card>
             </Grid>
-            <Grid item xs={12} md={4} textAlign="center" mt={3}>
+            <Grid item xs={12} sm={6} md={6} textAlign="center">
               <Card sx={{ height: '350px', backgroundColor: '#FFF7CD' }}>
                 <CardContent>
                   <Typography variant="h4" component="div" gutterBottom>
@@ -165,65 +238,47 @@ export default function PoleAnalytics() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={12} md={4} textAlign="center" mt={3}>
+            <Grid item xs={12} sm={6} md={6} textAlign="center">
               <Card sx={{ height: '350px', backgroundColor: '#FFE7D9' }}>
                 <CardContent>
                   <Typography variant="h4" component="div" gutterBottom>
                     Health Status
                   </Typography>
-                  {/* <Grid item xs={12} md={6} lg={4}> */}
-                  {/* <AppCurrentVisits 
-            // sx={{padding:'0px', marginTop:'0px'}}
-              title="Health status"
-              chartData={[
-                { label: 'America', value: 4344 },
-                { label: 'Asia', value: 5435 },
-                { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 },
-              ]}
-              chartColors={[
-                theme.palette.primary.main,
-                theme.palette.chart.blue[0],
-                theme.palette.chart.violet[0],
-                theme.palette.chart.yellow[0],
-              ]}
-            /> */}
-                  {/* </Grid> */}
                 </CardContent>
               </Card>
             </Grid>
           </Grid>
-
-          <Card
-            sx={{
-              height: '40vh',
-              width: '100%',
-              marginTop: '3%',
-              borderRadius: '10px',
-            }}
-          >
-            {console.log('analytics', [
-              Number(Number(analytics[poleid].pole.latitude).toFixed(1)),
-              Number(Number(analytics[poleid].pole.longitude).toFixed(1)),
-            ])}
-            <GoogleMapReact
-              bootstrapURLKeys={{ key: 'AIzaSyAd1gCmyfr8mAbDmHj09b6bhe4lEB_qffw' }}
-              defaultCenter={[
+          <Grid item xs={12} sm={12} md={4}>
+            <Card
+              sx={{
+                height: '90vh',
+                width: '100%',
+                borderRadius: '15px',
+              }}
+            >
+              {console.log('analytics', [
                 Number(Number(analytics[poleid].pole.latitude).toFixed(1)),
                 Number(Number(analytics[poleid].pole.longitude).toFixed(1)),
-              ]}
-              defaultZoom={defaultProps.zoom}
-              yesIWantToUseGoogleMapApiInternals
-              onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-            >
-              <AnyReactComponent
-                lat={analytics[poleid].pole.latitude}
-                lng={analytics[poleid].pole.longitude}
-                text="My Marker"
-              />
-            </GoogleMapReact>
-          </Card>
-        </Card>
+              ])}
+              <GoogleMapReact
+                bootstrapURLKeys={{ key: 'AIzaSyAd1gCmyfr8mAbDmHj09b6bhe4lEB_qffw' }}
+                defaultCenter={[
+                  Number(Number(analytics[poleid].pole.latitude).toFixed(1)),
+                  Number(Number(analytics[poleid].pole.longitude).toFixed(1)),
+                ]}
+                defaultZoom={defaultProps.zoom}
+                yesIWantToUseGoogleMapApiInternals
+                onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+              >
+                <AnyReactComponent
+                  lat={analytics[poleid].pole.latitude}
+                  lng={analytics[poleid].pole.longitude}
+                  text="My Marker"
+                />
+              </GoogleMapReact>
+            </Card>
+          </Grid>
+        </Grid>
       </Container>
     </Page>
   );

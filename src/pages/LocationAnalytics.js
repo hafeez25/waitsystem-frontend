@@ -12,16 +12,15 @@ import {
   Divider,
   Avatar,
 } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
+
 import { useTheme } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 
+import LocationPieChart from '../components/LocationPieChart';
 import Iconify from '../components/Iconify';
-
-import { AppCurrentVisits, AppTrafficBySite } from '../sections/@dashboard/app';
 import Page from '../components/Page';
 import { FetchLocation, FetchLocationAnalytics, FetchPolesOfLocation } from '../redux/locationReducer';
 import Error from './Error';
@@ -57,7 +56,7 @@ export default function LocationAnalytics() {
         FetchLocation({
           payload: { id: locationid },
           callback: (msg, data, recall) => {
-            console.log(msg, data);
+            // console.log(msg, data);
             if (msg === 'error') {
               setFetchingerror(true);
               toast.error(typeof data === 'string' ? data : 'Error in fetching location analytics', {
@@ -101,9 +100,9 @@ export default function LocationAnalytics() {
             Location Analytics
           </Typography>
         </Stack>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item xs={12} sm={7} md={8} lg={8} xl={8}>
-            <Card sx={{ p: 2 }}>
+            <Card sx={{ p: 3 }}>
               <Stack
                 direction={{ xs: 'column', sm: 'column', md: 'row' }}
                 spacing={{ xs: 1.2, sm: 1.2, md: 3 }}
@@ -118,8 +117,12 @@ export default function LocationAnalytics() {
                     alignItems: 'center',
                   }}
                 >
-                  <Box sx={{ width: '95%' }}>
-                    <img style={{ width: '100%' }} src={location.photo || DEFAULT_IMAGE} alt={location.name} />
+                  <Box sx={{ width: '100%' }}>
+                    <img
+                      style={{ width: '100%', borderRadius: 10 }}
+                      src={location.photo || DEFAULT_IMAGE}
+                      alt={location.name}
+                    />
                   </Box>
                   <Typography sx={{ mt: 2, textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
                     {location.name}
@@ -131,7 +134,7 @@ export default function LocationAnalytics() {
                   <Typography sx={{ textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
                     {location.state}
                   </Typography>
-                  <Typography sx={{ mb: 2, textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
+                  <Typography sx={{ textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
                     {'PinCode: '}
                     {location.pincode}
                   </Typography>
@@ -154,11 +157,11 @@ export default function LocationAnalytics() {
                       </Box>
 
                       <Typography variant="h3">
-                        {fShortenNumber(Number.isNaN(location.poles?.length) ? '...' : location.poles?.length)}
+                        {Number.isNaN(location.poles?.length) ? '...' : fShortenNumber(location.poles?.length)}
                       </Typography>
 
-                      <Typography variant="body2" sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                        poles installed
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        Poles Installed
                       </Typography>
                     </Paper>
 
@@ -171,13 +174,13 @@ export default function LocationAnalytics() {
                       </Box>
 
                       <Typography variant="h3">
-                        {fShortenNumber(
-                          Number.isNaN(location.analytics?.totalVehicles) ? '...' : location.analytics?.totalVehicles
-                        )}
+                        {Number.isNaN(location.analytics?.totalVehicles)
+                          ? '...'
+                          : fShortenNumber(location.analytics?.totalVehicles)}
                       </Typography>
 
-                      <Typography variant="body2" sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-                        vehicles passed
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        Vehicles Passed
                       </Typography>
                     </Paper>
                   </Stack>
@@ -197,7 +200,7 @@ export default function LocationAnalytics() {
                       }}
                       onClick={() => navigate(`/view-profile/${location.addedBy._id}`)}
                     />
-                    <Typography sx={{ textTransform: 'capitalize' }} variant="caption" component="div">
+                    <Typography variant="button" component="div">
                       <b>
                         Added By:{' '}
                         <span
@@ -223,19 +226,13 @@ export default function LocationAnalytics() {
             <Card>
               <CardContent>
                 {location.poles?.length > 0 ? (
-                  <AppCurrentVisits
+                  <LocationPieChart
                     title="Vehicles Passed"
                     chartData={[
                       { label: 'America', value: 4344 },
                       { label: 'Asia', value: 5435 },
                       { label: 'Europe', value: 1443 },
                       { label: 'Africa', value: 4443 },
-                    ]}
-                    chartColors={[
-                      theme.palette.primary.main,
-                      theme.palette.chart.blue[0],
-                      theme.palette.chart.violet[0],
-                      theme.palette.chart.yellow[0],
                     ]}
                   />
                 ) : (
