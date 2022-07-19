@@ -1,16 +1,30 @@
 import GoogleMapReact from 'google-map-react';
-import { Box, Container, Grid, Typography, Card, CardContent, Stack, CircularProgress } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
+import {
+  Paper,
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Card,
+  CardContent,
+  Stack,
+  CircularProgress,
+  Divider,
+  Avatar,
+} from '@mui/material';
+
 import { useTheme } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { AppCurrentVisits } from '../sections/@dashboard/app';
+import LocationPieChart from '../components/LocationPieChart';
+import Iconify from '../components/Iconify';
 import Page from '../components/Page';
 import { FetchLocation, FetchLocationAnalytics, FetchPolesOfLocation } from '../redux/locationReducer';
 import Error from './Error';
+import { fShortenNumber } from '../utils/formatNumber';
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
@@ -42,7 +56,7 @@ export default function LocationAnalytics() {
         FetchLocation({
           payload: { id: locationid },
           callback: (msg, data, recall) => {
-            console.log(msg, data);
+            // console.log(msg, data);
             if (msg === 'error') {
               setFetchingerror(true);
               toast.error(typeof data === 'string' ? data : 'Error in fetching location analytics', {
@@ -81,145 +95,176 @@ export default function LocationAnalytics() {
   return (
     <Page title="Location Analytics">
       <Container maxWidth="xl">
-        <Card sx={{ boxShadow: 0, backgroundColor: '#F9FAFB' }}>
-          <Card sx={{ boxShadow: 0, backgroundColor: '#F9FAFB' }}>
-            <Typography variant="h4" mt={0} mb={3} ml={3}>
-              Location Analytics
-            </Typography>
-          </Card>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sx={12} md={8} lg={8} xl={8}>
-              <Card sx={{ backgroundColor: '#D1E9FC' }} className="location_details_card">
-                <Box sx={{ display: 'flex', flexDirection: 'row' }} className="location_details_cardbox">
-                  <CardContent>
-                    <Typography variant="h5" component="div" gutterBottom>
-                      Location Details
-                    </Typography>
-                    <Box mt={2}>
-                      <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                        Place Name -<span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>{location.name}</span>
+        <Stack>
+          <Typography variant="h4" mt={0} mb={3}>
+            Location Analytics
+          </Typography>
+        </Stack>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={7} md={8} lg={8} xl={8}>
+            <Card sx={{ p: 3 }}>
+              <Stack
+                direction={{ xs: 'column', sm: 'column', md: 'row' }}
+                spacing={{ xs: 1.2, sm: 1.2, md: 3 }}
+                divider={<Divider orientation="vertical" flexItem />}
+              >
+                <Stack
+                  sx={{
+                    p: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Box sx={{ width: '100%' }}>
+                    <img
+                      style={{ width: '100%', borderRadius: 10 }}
+                      src={location.photo || DEFAULT_IMAGE}
+                      alt={location.name}
+                    />
+                  </Box>
+                  <Typography sx={{ mt: 2, textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
+                    {location.name}
+                  </Typography>
+                  <Typography sx={{ textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
+                    {location.district}
+                    {', '}
+                  </Typography>
+                  <Typography sx={{ textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
+                    {location.state}
+                  </Typography>
+                  <Typography sx={{ textTransform: 'capitalize' }} variant="subtitle2" color="text.primary">
+                    {'PinCode: '}
+                    {location.pincode}
+                  </Typography>
+                </Stack>
+
+                <Stack divider={<Divider />} spacing={3}>
+                  <Stack
+                    direction="row"
+                    spacing={3}
+                    divider={<Divider orientation="vertical" flexItem />}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Paper
+                      variant="outlined"
+                      sx={{ px: 2.5, py: 1.5, textAlign: 'center', backgroundColor: '#D1E9FC' }}
+                    >
+                      <Box sx={{ mb: 0.5 }}>
+                        <Iconify icon={'emojione-monotone:barber-pole'} color="#1877F2" width={32} height={32} />
+                      </Box>
+
+                      <Typography variant="h3">
+                        {Number.isNaN(location.poles?.length) ? '...' : fShortenNumber(location.poles?.length)}
                       </Typography>
-                      <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                        State -<span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>{location.state}</span>
+
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        Poles Installed
                       </Typography>
-                      <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                        District -
-                        <span
-                          style={{
-                            fontWeight: 'normal',
-                            marginLeft: '1rem',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                          }}
-                        >
-                          {location.district}
-                        </span>
+                    </Paper>
+
+                    <Paper
+                      variant="outlined"
+                      sx={{ px: 2.5, py: 1.5, textAlign: 'center', backgroundColor: '#D1E9FC' }}
+                    >
+                      <Box sx={{ mb: 0.5 }}>
+                        <Iconify icon={'fluent:vehicle-car-24-filled'} color="#1877F2" width={32} height={32} />
+                      </Box>
+
+                      <Typography variant="h3">
+                        {Number.isNaN(location.analytics?.totalVehicles)
+                          ? '...'
+                          : fShortenNumber(location.analytics?.totalVehicles)}
                       </Typography>
-                      <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                        Pincode -<span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>{location.pincode}</span>
+
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        Vehicles Passed
                       </Typography>
-                      <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                        No of poles installed -
-                        <span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>
-                          {Number.isNaN(location.poles?.length) ? '...' : location.poles?.length}
-                        </span>
-                      </Typography>
-                      <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                        Total vehicles passed -
-                        <span style={{ fontWeight: 'normal', marginLeft: '1rem' }}>
-                          {Number.isNaN(location.analytics?.totalVehicles) ? '...' : location.analytics?.totalVehicles}
-                        </span>
-                      </Typography>
-                      <Typography component="div" variant="h6" gutterBottom className="fixFont">
-                        Place added by -
+                    </Paper>
+                  </Stack>
+                  <Stack justifyContent="center" alignItems="center" spacing={2}>
+                    <Avatar
+                      src={location.addedBy.photo}
+                      alt={location.addedBy.name}
+                      sx={{
+                        width: 90,
+                        height: 90,
+                        mt: 1,
+                        border: 2.5,
+                        borderColor: '#0043ca',
+                      }}
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => navigate(`/view-profile/${location.addedBy._id}`)}
+                    />
+                    <Typography variant="button" component="div">
+                      <b>
+                        Added By:{' '}
                         <span
                           role="button"
                           aria-hidden="true"
                           tabIndex={0}
                           style={{
-                            fontWeight: 'normal',
-                            marginLeft: '1rem',
-                            textDecoration: 'underline',
+                            marginLeft: 3,
                             cursor: 'pointer',
                           }}
                           onClick={() => navigate(`/view-profile/${location.addedBy._id}`)}
                         >
                           {location.addedBy.name}
                         </span>
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                  <Box
-                    component="img"
-                    sx={{
-                      position: 'relative',
-                      width: '40%',
-                      height: '40%',
-                      top: '0',
-                      marginTop: '10%',
-                      marginLeft: '15%',
-                      borderRadius: '3px',
-                      left: '0',
-                    }}
-                    alt="The house from the offer."
-                    onError={(e) => {
-                      e.src = DEFAULT_IMAGE;
-                    }}
-                    src={location.photo}
-                  />
-                </Box>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4} xl={4} textAlign="center">
-              <Card>
-                <CardContent>
-                  {location.poles?.length > 0 ? (
-                    <AppCurrentVisits
-                      title="Vehicles Passed"
-                      chartData={[
-                        { label: 'America', value: 4344 },
-                        { label: 'Asia', value: 5435 },
-                        { label: 'Europe', value: 1443 },
-                        { label: 'Africa', value: 4443 },
-                      ]}
-                      chartColors={[
-                        theme.palette.primary.main,
-                        theme.palette.chart.blue[0],
-                        theme.palette.chart.violet[0],
-                        theme.palette.chart.yellow[0],
-                      ]}
-                    />
-                  ) : (
-                    <Stack direction="column" spacing={6} justifyContent="space-between" alignItems="center">
-                      <Typography variant="h5" component="div">
-                        Sorry, No Data to Show!
-                      </Typography>
-                      <img alt="nodata" src="/static/illustrations/illustration_nodata.jpg" />
-                    </Stack>
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
+                      </b>
+                    </Typography>
+                  </Stack>
+                </Stack>
+              </Stack>
+            </Card>
           </Grid>
+          <Grid item xs={12} sm={5} md={4} lg={4} xl={4} textAlign="center">
+            <Card>
+              <CardContent>
+                {location.poles?.length > 0 ? (
+                  <LocationPieChart
+                    title="Vehicles Passed"
+                    chartData={[
+                      { label: 'America', value: 4344 },
+                      { label: 'Asia', value: 5435 },
+                      { label: 'Europe', value: 1443 },
+                      { label: 'Africa', value: 4443 },
+                    ]}
+                  />
+                ) : (
+                  <Stack direction="column" spacing={6} justifyContent="space-between" alignItems="center">
+                    <Typography variant="h5" component="div">
+                      Sorry, No Data to Show!
+                    </Typography>
+                    <img alt="nodata" src="/static/illustrations/illustration_nodata.jpg" />
+                  </Stack>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
 
-          <Card
-            sx={{
-              height: '40vh',
-              width: '100%',
-              marginTop: '3%',
-              borderRadius: '10px',
-            }}
+        <Card
+          sx={{
+            height: '40vh',
+            width: '100%',
+            marginTop: '3%',
+            borderRadius: '10px',
+          }}
+        >
+          <GoogleMapReact
+            bootstrapURLKeys={{ key: 'AIzaSyAd1gCmyfr8mAbDmHj09b6bhe4lEB_qffw' }}
+            defaultCenter={[56.2, 36.1]}
+            defaultZoom={defaultProps.zoom}
+            yesIWantToUseGoogleMapApiInternals
+            onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
           >
-            <GoogleMapReact
-              bootstrapURLKeys={{ key: 'AIzaSyAd1gCmyfr8mAbDmHj09b6bhe4lEB_qffw' }}
-              defaultCenter={[56.2, 36.1]}
-              defaultZoom={defaultProps.zoom}
-              yesIWantToUseGoogleMapApiInternals
-              onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-            >
-              <AnyReactComponent lat={25.2} lng={36.2} text="My Marker" />
-            </GoogleMapReact>
-          </Card>
+            <AnyReactComponent lat={25.2} lng={36.2} text="My Marker" />
+          </GoogleMapReact>
         </Card>
       </Container>
     </Page>
