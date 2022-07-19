@@ -85,11 +85,24 @@ export const FetchLocation = createAsyncThunk('Places/fetchlocation', async ({ c
   return data.resp;
 });
 
+export const FetchHighTrafficPLaces= createAsyncThunk('Places/fetchhightrafficplaces', async ({ callback }) => {
+  const data = await MakeRequest(Api.GET, { url: PlaceRoutes.highTrafficPlace, query: { text: '' } });
+
+  if (data.err) {
+    callback('error', data.err, () => {});
+    return null;
+  }
+  callback('success', data.resp, () => {});
+  return data.resp.data;
+});
+
+
 const PlaceSlice = createSlice({
   name: 'Places',
   initialState: {
     Places: [],
     analytics: {},
+    highTrafficPlaces:[],
   },
   reducers: {
     // setData(state, action) {
@@ -166,6 +179,13 @@ const PlaceSlice = createSlice({
         state.analytics[action.payload.id].poles = action.payload.data;
     }
     },
+    
+    [FetchHighTrafficPLaces.fulfilled]: (state,action) => {
+      state.highTrafficPlaces= action.payload;
+       console.log(state.highTrafficPlaces);
+    }
+
+
   },
 });
 
