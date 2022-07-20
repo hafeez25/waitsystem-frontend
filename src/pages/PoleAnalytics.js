@@ -111,7 +111,7 @@ export default function PoleAnalytics() {
                 <Stack
                   direction={{ xs: 'column', sm: 'row', md: 'row' }}
                   spacing={2}
-                  justifyContent="center"
+                  justifyContent="space-evenly"
                   alignItems="center"
                   divider={<Divider orientation="vertical" flexItem />}
                 >
