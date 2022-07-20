@@ -1,15 +1,12 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useEffect, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // material
 import {
   Card,
   Table,
   Stack,
-  Avatar,
-  Button,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -25,7 +22,6 @@ import { toast } from 'react-toastify';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
 import AddPoleDialogBox from '../components/AddPoleDialogBox';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
@@ -205,30 +201,6 @@ export default function User() {
     }
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -248,12 +220,11 @@ export default function User() {
 
   const filterPoles = (poles) => {
     if (!Array.isArray(poles)) return null;
-    return poles?.filter((pole) => {
-      return (
+    return poles?.filter(
+      (pole) =>
         pole.serialno.toLowerCase().includes(filterName.toLowerCase()) ||
         pole.location.name.toLowerCase().includes(filterName.toLowerCase())
-      );
-    });
+    );
   };
 
   const filteredPoles = filterPoles(poles);
@@ -272,7 +243,7 @@ export default function User() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -290,7 +261,6 @@ export default function User() {
                     {filteredPoles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                       const { _id, latitude, longitude, serialno, healthStatus, batteryStatus, location } = row;
                       const status = healthStatus >= 50 ? 'good' : 'bad';
-                      // const isItemSelected = selected.indexOf(name) !== -1;
 
                       return (
                         <TableRow hover key={index} tabIndex={-1} style={{ cursor: 'pointer' }}>
@@ -320,6 +290,7 @@ export default function User() {
                             {longitude}
                           </TableCell>
                           <TableCell
+                            sx={{ textTransform: 'capitalize' }}
                             align="left"
                             onClick={() => navigation(`/dashboard/pole/${_id}`, { replace: false })}
                           >
