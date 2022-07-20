@@ -43,7 +43,13 @@ export default function DashboardApp() {
           <HighTrafficLocations/>
         </Card>
         </Grid>
-          <MostTrafficPoles/>
+          <Grid container spacing={2} item xs={12} sm={12} md={12}>
+        <Card sx={{p:4,width:"100%", backgroundColor:"transparent", boxShadow:"none"} }>
+           <Typography sx={{mb:3,ml:2}} variant="h4">Top 5 Traffic Poles</Typography>
+           <MostTrafficPoles/>
+        </Card>
+        </Grid>
+        
           <PenaltyStats/>
           <HealthyUnHealthy/>
           <WeeklyVechilesPassed/>

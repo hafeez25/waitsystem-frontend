@@ -2,14 +2,17 @@
 import { Box, Card, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import  TrafficLocationsUI from './TrafficLocationsUI';
 import {FetchAllPoles } from '../redux/PolesReducer';
 import Iconify from './Iconify';
+
  
 
 export default function MostTrafficPoles() {
  
  const dispatch = useDispatch();
+ const navigate= useNavigate();
  let poles = useSelector(({ pole }) => pole.poles);
  
 
@@ -18,6 +21,17 @@ export default function MostTrafficPoles() {
  }
 
  console.log(poles);
+
+const getBgcolor= (index)=>{
+       switch (index){
+        case 1: return "#FFD700AA"
+        case 2: return "#C0C0C0AA"
+        case 3: return "#CD7F32AA"
+        case 4: return "#9194309C"
+        case 5: return "#9194309C"
+        default: return "#9194309c"
+       }
+}
 
  useEffect(() => {
     if (!poles || !poles.length) {
@@ -31,19 +45,21 @@ export default function MostTrafficPoles() {
     }
   }, []);
 
+    if(!poles || !poles.length) return null;
+
   return (
     <>
-    <Grid container  spacing={2}>
+    <Grid container  spacing={2} sx={{display:"flex" , justifyContent:"space-around"}}>
     { poles!=null &&
      poles.map( (pole,index)=>{
       return(
-      <Grid item xs={12} sm={6} md={4} key={index}>
-                      <Paper variant="outlined" sx={{ p: 1.5, textAlign: 'center', backgroundColor: '#D1E9FC' }}>
+      <Grid item style={{cursor:"pointer"}} xs={12} sm={6} md={4} key={index} onClick={()=>navigate(`/dashboard/pole/${pole._id}`)} >
+                      <Paper variant="outlined" sx={{ p: 1.5, textAlign: 'center', backgroundColor: getBgcolor(index+1) }}>
                         <Stack  justifyContent="center"
                            alignItems="center"
                             divider={<Divider orientation='horizontal' flexItem/>} 
                             spacing={3}>
-                          <Typography variant="h4">{pole.serialno}</Typography>
+                          <Typography variant="h4">#{pole.serialno}</Typography>
                           <Stack direction="row" spacing={2.5} divider={<Divider orientation="vertical" flexItem />}>
                             <Stack>
                               <Box sx={{ mb: 0.5 }}>

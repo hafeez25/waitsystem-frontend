@@ -2,8 +2,10 @@
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
 import { Avatar, Card, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 // utils
 import { fShortenNumber } from '../utils/formatNumber';
+
 // components
 
 
@@ -32,16 +34,19 @@ TrafficLocationsUI.propTypes = {
   sx: PropTypes.object,
 };
 
-export default function TrafficLocationsUI({ title,subtitle1,subtitle2, total, icon, color = 'primary', sx, ...other }) {
+export default function TrafficLocationsUI({ title,subtitle1,subtitle2, bgcolor,total,id, icon, color = 'primary', sx, ...other }) {
+   const navigate= useNavigate();
   return (
     <Card
+    onClick={()=>navigate(`/dashboard/location/${id}`)}
       sx={{
+        cursor:"pointer",
         p:3,
        minWidth:300,
         boxShadow: 0,
         textAlign: 'center',
         color: (theme) => theme.palette[color].darker,
-        bgcolor: (theme) => theme.palette[color].lighter,
+        bgcolor,
         ...sx,
       }}
       {...other}
