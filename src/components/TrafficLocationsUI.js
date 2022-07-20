@@ -36,7 +36,8 @@ export default function TrafficLocationsUI({ title,subtitle1,subtitle2, total, i
   return (
     <Card
       sx={{
-        py: 3,
+        p:3,
+       minWidth:300,
         boxShadow: 0,
         textAlign: 'center',
         color: (theme) => theme.palette[color].darker,
@@ -60,11 +61,11 @@ export default function TrafficLocationsUI({ title,subtitle1,subtitle2, total, i
       </IconWrapperStyle>
 
       <Typography variant="h3">{fShortenNumber(total)}</Typography>
-      <Typography variant="h6" sx={{ opacity: 0.72 }}>
+      <Typography variant="h6" sx={{ opacity: 0.72, textTransform:"capitalize"}}>
         {title}
       </Typography>
-      <Typography variant="subtitle1" sx={{opacity:0.7}}>{subtitle1} </Typography>
-      <Typography variant="subtitle2" sx={{opacity:0.6}}>{subtitle2} </Typography>
+      <Typography variant="subtitle1" sx={{opacity:0.7, textTransform:"capitalize"}}>{subtitle1} </Typography>
+      <Typography variant="subtitle2" sx={{opacity:0.6, textTransform:"capitalize"}}>{subtitle2} </Typography>
     
       
     </Card>
