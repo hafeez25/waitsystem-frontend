@@ -28,6 +28,7 @@ const PlaceRoutes = {
   searchPlace: '/service/searchplace',
   analytics: '/service/place/analytics',
   PolesOfLocation: '/service/place/poles',
+  highTrafficPlace: '/service/place/hightraffic',
 };
 
 const PoleRoutes = {
