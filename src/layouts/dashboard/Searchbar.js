@@ -111,7 +111,7 @@ export default function Searchbar() {
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
             />
             <Button
-              sx={{ px: 3, mr: 3 }}
+              sx={{ px: 3 }}
               variant="contained"
               startIcon={<SearchIcon />}
               onClick={() => {

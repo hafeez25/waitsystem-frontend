@@ -1,4 +1,6 @@
 import GoogleMapReact from 'google-map-react';
+import PropTypes from 'prop-types';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import {
   Box,
   Container,
@@ -17,7 +19,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useTheme } from '@mui/material/styles';
+import { useTheme, styled } from '@mui/material/styles';
 import Page from '../components/Page';
 import Iconify from '../components/Iconify';
 import { fShortenNumber } from '../utils/formatNumber';
@@ -28,6 +30,35 @@ import Error from './Error';
 const AnyReactComponent = ({ text }) => (
   <div style={{ width: '20px', height: '20px', background: 'red', borderRadius: '100%' }} />
 );
+
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  height: 25,
+  borderRadius: 10,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+  },
+}));
+
+function LinearProgressWithLabel(props) {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ width: '100%', mr: 1 }}>
+        <BorderLinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(props.value)}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
+
+LinearProgressWithLabel.propTypes = {
+  value: PropTypes.number.isRequired,
+};
 
 export default function PoleAnalytics() {
   const theme = useTheme();
@@ -230,28 +261,26 @@ export default function PoleAnalytics() {
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={6} textAlign="center">
-              <Card sx={{ height: '350px', backgroundColor: '#FFF7CD' }}>
-                <CardContent>
-                  <Typography variant="h4" component="div" gutterBottom>
-                    Battery Status
-                  </Typography>
-                </CardContent>
+              <Card sx={{ p: 3 }}>
+                <Typography variant="h4" sx={{ mb: 3 }}>
+                  Battery Status
+                </Typography>
+                <LinearProgressWithLabel sx={{ mb: 1 }} value={50} />
               </Card>
             </Grid>
             <Grid item xs={12} sm={6} md={6} textAlign="center">
-              <Card sx={{ height: '350px', backgroundColor: '#FFE7D9' }}>
-                <CardContent>
-                  <Typography variant="h4" component="div" gutterBottom>
-                    Health Status
-                  </Typography>
-                </CardContent>
+              <Card sx={{ p: 3 }}>
+                <Typography variant="h4" sx={{ mb: 3 }}>
+                  Health Status
+                </Typography>
+                <LinearProgressWithLabel sx={{ mb: 1 }} value={50} />
               </Card>
             </Grid>
           </Grid>
           <Grid item xs={12} sm={12} md={4}>
             <Card
               sx={{
-                height: '90vh',
+                height: '70vh',
                 width: '100%',
                 borderRadius: '15px',
               }}

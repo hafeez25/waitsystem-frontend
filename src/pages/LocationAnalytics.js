@@ -38,6 +38,7 @@ export default function LocationAnalytics() {
   const dispatch = useDispatch();
 
   const location = useSelector(({ location }) => location.analytics[locationid]);
+  const poles = useSelector(({ location }) => location.poles[locationid]);
 
   const defaultProps = {
     center: [59.938043, 30.337157],
@@ -225,15 +226,13 @@ export default function LocationAnalytics() {
           <Grid item xs={12} sm={5} md={4} lg={4} xl={4} textAlign="center">
             <Card>
               <CardContent>
-                {location.poles?.length > 0 ? (
+                {location.analytics?.totalVehicles > 0 ? (
                   <LocationPieChart
                     title="Vehicles Passed"
-                    chartData={[
-                      { label: 'America', value: 4344 },
-                      { label: 'Asia', value: 5435 },
-                      { label: 'Europe', value: 1443 },
-                      { label: 'Africa', value: 4443 },
-                    ]}
+                    chartData={poles?.map((pole) => ({
+                      label: `#${pole.serialno}`,
+                      value: pole.vehiclesPassed,
+                    }))}
                   />
                 ) : (
                   <Stack direction="column" spacing={6} justifyContent="space-between" alignItems="center">
