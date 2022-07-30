@@ -45,11 +45,11 @@ export default function HighTrafficLocations() {
       case 3:
         return '#CD7F32AA';
       case 4:
-        return '#9194309C';
+        return '#D1E9FC';
       case 5:
-        return '#9194309C';
+        return '#D1E9FC';
       default:
-        return '#9194309c';
+        return '#D1E9FC';
     }
   };
 

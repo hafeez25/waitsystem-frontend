@@ -1,20 +1,8 @@
 import GoogleMapReact from 'google-map-react';
 import PropTypes from 'prop-types';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-  Card,
-  CardContent,
-  Stack,
-  CircularProgress,
-  Divider,
-  Paper,
-  Avatar,
-} from '@mui/material';
-import IconButton from '@mui/material/IconButton';
+import { Box, Container, Grid, Typography, Card, Stack, CircularProgress, Divider, Paper, Avatar } from '@mui/material';
+
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
