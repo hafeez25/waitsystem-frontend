@@ -41,8 +41,8 @@ export const DeletePole = createAsyncThunk('poles/delete', async ({ payload, cal
   return payload;
 });
 
-export const FetchAllPoles = createAsyncThunk('poles/fetchall', async ({ callback }) => {
-  const data = await MakeRequest(Api.GET, { url: PoleRoutes.FetchPoles });
+export const FetchAllPoles = createAsyncThunk('poles/fetchall', async ({ callback,payload }) => {
+  const data = await MakeRequest(Api.GET, { url: PoleRoutes.FetchPoles,query:payload || {} });
 
   if (data.err) {
     callback('error', data.err, () => {});

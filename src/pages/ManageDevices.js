@@ -116,6 +116,9 @@ export default function User() {
     setPoleFetchingError(false);
     dispatch(
       FetchAllPoles({
+        payload:{
+          fetchjunctions:true
+        },
         callback: (msg, data, recall) => {
           if (msg === 'error') {
             toast.error(typeof data === 'string' ? data : 'Something went wrong', {
@@ -289,7 +292,7 @@ export default function User() {
                   <TableBody>
                     {filteredPoles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                       const { _id, latitude, longitude, serialno, healthStatus, batteryStatus, location } = row;
-                      const status = healthStatus >= 50 ? 'good' : 'bad';
+                      const status = healthStatus === "1" ? 'good' : 'bad';
                       // const isItemSelected = selected.indexOf(name) !== -1;
 
                       return (
