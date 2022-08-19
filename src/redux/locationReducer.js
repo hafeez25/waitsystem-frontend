@@ -60,7 +60,7 @@ export const FetchLocationAnalytics = createAsyncThunk('Places/fetchanalytics', 
     return null;
   }
   // callback('success', data.resp, () => {});
-  return {...data.resp,id:payload.id};
+  return { ...data.resp, id: payload.id };
 });
 
 export const FetchPolesOfLocation = createAsyncThunk('Places/fetchpoles', async ({ payload }) => {
@@ -71,7 +71,7 @@ export const FetchPolesOfLocation = createAsyncThunk('Places/fetchpoles', async 
     return null;
   }
   // callback('success', data.resp, () => {});
-  return {...data.resp,id:payload.id};
+  return { ...data.resp, id: payload.id };
 });
 
 export const FetchLocation = createAsyncThunk('Places/fetchlocation', async ({ callback, payload }) => {
@@ -85,11 +85,24 @@ export const FetchLocation = createAsyncThunk('Places/fetchlocation', async ({ c
   return data.resp;
 });
 
+export const FetchHighTrafficPlaces = createAsyncThunk('Places/fetchhightrafficplaces', async ({ callback }) => {
+  const data = await MakeRequest(Api.GET, { url: PlaceRoutes.highTrafficPlace });
+
+  if (data.err) {
+    callback('error', data.err, () => {});
+    return null;
+  }
+  callback('success', data.resp, () => {});
+  return data.resp.data;
+});
+
 const PlaceSlice = createSlice({
   name: 'Places',
   initialState: {
     Places: [],
     analytics: {},
+    highTrafficPlaces: [],
+    poles: {},
   },
   reducers: {
     // setData(state, action) {
@@ -151,20 +164,27 @@ const PlaceSlice = createSlice({
       // if(action.payload){
 
       // }
-      if(action.payload && state.analytics[action.payload.id]){
-          state.analytics[action.payload.id].analytics = action.payload.data;
+      if (action.payload && state.analytics[action.payload.id]) {
+        state.analytics[action.payload.id].analytics = action.payload.data;
       }
     },
     [FetchLocation.fulfilled]: (state, action) => {
-      if(action.payload){
-        const {data} = action.payload;
+      if (action.payload) {
+        const { data } = action.payload;
         state.analytics[data._id] = data;
       }
     },
     [FetchPolesOfLocation.fulfilled]: (state, action) => {
-      if(action.payload && state.analytics[action.payload.id]){
+      console.log(action.payload);
+      if (action.payload && state.analytics[action.payload.id]) {
+        state.poles[action.payload.id] = action.payload.data;
         state.analytics[action.payload.id].poles = action.payload.data;
-    }
+      }
+    },
+
+    [FetchHighTrafficPlaces.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      state.highTrafficPlaces = action.payload;
     },
   },
 });

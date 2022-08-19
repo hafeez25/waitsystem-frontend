@@ -12,14 +12,14 @@ const navConfig = [
     icon: getIcon('eva:pie-chart-2-fill'),
   },
   {
-    title: 'Analytics',
-    path: '/dashboard/location/1',
-    icon: getIcon('eva:people-fill'),
+    title: 'Location Analytics',
+    path: '/dashboard/location/62a1d9a2d7f4e5a9a2a26755',
+    icon: getIcon('clarity:analytics-solid-badged'),
   },
   {
-    title: 'Health Tracker',
-    path: '/404',
-    icon: getIcon('healthicons:health-worker-form'),
+    title: 'Pole Analytics',
+    path: '/dashboard/pole/62c711c92a4c755a9a91d1fc',
+    icon: getIcon('clarity:analytics-solid-alerted'),
   },
   {
     title: 'Realtime Map',

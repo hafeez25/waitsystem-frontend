@@ -2,6 +2,7 @@ import { useState } from 'react';
 // material
 import { styled, alpha } from '@mui/material/styles';
 import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 // component
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -98,7 +99,7 @@ export default function Searchbar() {
             <Input
               onChange={(e) => setSearch(e.target.value)}
               autoFocus
-              onKeyUp={(e)=>e.keyCode === 13 && FetchSearchResults(e.target.value)}
+              onKeyUp={(e) => e.keyCode === 13 && FetchSearchResults(e.target.value)}
               fullWidth
               disableUnderline
               placeholder="Search…"
@@ -110,7 +111,9 @@ export default function Searchbar() {
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
             />
             <Button
+              sx={{ px: 3 }}
               variant="contained"
+              startIcon={<SearchIcon />}
               onClick={() => {
                 FetchSearchResults(search);
               }}

@@ -1,12 +1,13 @@
 // @mui
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
-import {  Card, Typography } from '@mui/material';
+import { Avatar, Card, Paper, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 // utils
-import { fShortenNumber } from '../../../utils/formatNumber';
+import { fShortenNumber } from '../utils/formatNumber';
+
 // components
 
-import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
@@ -14,32 +15,39 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   margin: 'auto',
   display: 'flex',
   borderRadius: '50%',
+  width: theme.spacing(10),
+  height: theme.spacing(10),
   alignItems: 'center',
-  width: theme.spacing(8),
-  height: theme.spacing(8),
   justifyContent: 'center',
-  marginBottom: theme.spacing(3),
+  marginBottom: theme.spacing(2.5),
 }));
 
 // ----------------------------------------------------------------------
 
-AppWidgetSummary.propTypes = {
+TrafficLocationsUI.propTypes = {
   color: PropTypes.string,
   icon: PropTypes.string,
+  subtitle1: PropTypes.string,
+  subtitle2: PropTypes.string,
   title: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   sx: PropTypes.object,
 };
 
-export default function AppWidgetSummary({ title, total, icon, color = 'primary', sx, ...other }) {
+export default function TrafficLocationsUI({ title,subtitle1,subtitle2, bgcolor,total,id, icon, color = 'primary', sx, ...other }) {
+   const navigate= useNavigate();
   return (
-    <Card
+    <Paper
+    variant="outlined"
+    onClick={()=>navigate(`/dashboard/location/${id}`)}
       sx={{
-        py: 5,
+        width:"100%",
+        cursor:"pointer",
+        p:1.5,
         boxShadow: 0,
         textAlign: 'center',
         color: (theme) => theme.palette[color].darker,
-        bgcolor: (theme) => theme.palette[color].lighter,
+        bgcolor,
         ...sx,
       }}
       {...other}
@@ -54,14 +62,18 @@ export default function AppWidgetSummary({ title, total, icon, color = 'primary'
             )} 100%)`,
         }}
       >
-        <Iconify icon={icon} width={24} height={24} /> 
+      
+       <Avatar alt="Remy Sharp" src={icon}  sx={{ width: "100%", height: "100%" }}/>
       </IconWrapperStyle>
 
       <Typography variant="h3">{fShortenNumber(total)}</Typography>
-      
-      <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
+      <Typography variant="h6" sx={{ opacity: 0.72, textTransform:"capitalize"}}>
         {title}
       </Typography>
-    </Card>
+      <Typography variant="subtitle1" sx={{opacity:0.7, textTransform:"capitalize"}}>{subtitle1} </Typography>
+      <Typography variant="subtitle2" sx={{opacity:0.6, textTransform:"capitalize"}}>{subtitle2} </Typography>
+    
+      
+    </Paper>
   );
 }

@@ -1,10 +1,15 @@
 import { faker } from '@faker-js/faker';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography } from '@mui/material';
+import { Grid, Container, Typography,Card } from '@mui/material';
 // components
 import Page from '../components/Page';
 import Iconify from '../components/Iconify';
+import HighTrafficLocations from '../components/HighTrafficLocations';
+import PenaltyStats from '../components/PenaltyStats';
+import HealthyUnHealthy from '../components/HealthyUnHealthy';
+import WeeklyVechilesPassed from '../components/WeeklyVechilesPassed'
+import MostTrafficPoles from '../components/MostTrafficPoles';
 // sections
 import {
   AppTasks,
@@ -18,6 +23,7 @@ import {
   AppConversionRates,
 } from '../sections/@dashboard/app';
 
+
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
@@ -28,11 +34,30 @@ export default function DashboardApp() {
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
-        </Typography>
+          </Typography> 
+          
+      <Grid container spacing={2}>
+      <Grid container spacing={2} item xs={12} sm={12} md={12}>
+        <Card sx={{p:4,width:"100%", backgroundColor:"transparent", boxShadow:"none"} }>
+           <Typography sx={{mb:3,ml:2}} variant="h4">Top 5 High Traffic Locations</Typography>
+          <HighTrafficLocations/>
+        </Card>
+        </Grid>
+          <Grid container spacing={2} item xs={12} sm={12} md={12}>
+        <Card sx={{p:4,width:"100%", backgroundColor:"transparent", boxShadow:"none"} }>
+           <Typography sx={{mb:3,ml:2}} variant="h4">Top 5 Traffic Poles</Typography>
+           <MostTrafficPoles/>
+        </Card>
+        </Grid>
+        
+          <PenaltyStats/>
+          <HealthyUnHealthy/>
+          <WeeklyVechilesPassed/>
+        </Grid>
 
-        <Grid container spacing={3}>
+        {/* <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
+          <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
@@ -86,7 +111,7 @@ export default function DashboardApp() {
               ]}
             />
           </Grid>
-
+        
           <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
               title="Current Visits"
@@ -104,7 +129,7 @@ export default function DashboardApp() {
               ]}
             />
           </Grid>
-
+           
           <Grid item xs={12} md={6} lg={8}>
             <AppConversionRates
               title="Conversion Rates"
@@ -208,7 +233,8 @@ export default function DashboardApp() {
               ]}
             />
           </Grid>
-        </Grid>
+          
+        </Grid> */}
       </Container>
     </Page>
   );
