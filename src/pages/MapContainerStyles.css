@@ -28,18 +28,18 @@
 }
 
 .zoom-in-button {
-  bottom: 140px;
-  right: 16px;
+  bottom: 60px;
+  right: 10px;
 }
 
 .zoom-out-button {
-  bottom: 80px;
-  right: 16px;
+  bottom: 10px;
+  right: 10px;
 }
 
 .fullscreen-button {
-  bottom: 200px;
-  right: 16px;
+  top: 10px;
+  right: 10px;
 }
 
 .layer-popup {
@@ -64,7 +64,5 @@
 .leaflet-control-zoom,
 .leaflet-bar,
 .leaflet-control {
-  /* border-radius: 10px; */
-  /* position: absolute;
-  display: none; */
+  display: none;
 }

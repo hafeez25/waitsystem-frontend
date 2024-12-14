@@ -14,6 +14,7 @@ import { fShortenNumber } from '../utils/formatNumber';
 
 import { FetchPoleAnalytics } from '../redux/PolesReducer';
 import Error from './Error';
+import MapComponent from './MapContainer';
 
 const AnyReactComponent = ({ text }) => (
   <div style={{ width: '20px', height: '20px', background: 'red', borderRadius: '100%' }} />
@@ -277,22 +278,7 @@ export default function PoleAnalytics() {
                 Number(Number(analytics[poleid].pole.latitude).toFixed(1)),
                 Number(Number(analytics[poleid].pole.longitude).toFixed(1)),
               ])}
-              <GoogleMapReact
-                bootstrapURLKeys={{ key: 'AIzaSyAd1gCmyfr8mAbDmHj09b6bhe4lEB_qffw' }}
-                defaultCenter={[
-                  Number(Number(analytics[poleid].pole.latitude).toFixed(1)),
-                  Number(Number(analytics[poleid].pole.longitude).toFixed(1)),
-                ]}
-                defaultZoom={defaultProps.zoom}
-                yesIWantToUseGoogleMapApiInternals
-                onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-              >
-                <AnyReactComponent
-                  lat={analytics[poleid].pole.latitude}
-                  lng={analytics[poleid].pole.longitude}
-                  text="My Marker"
-                />
-              </GoogleMapReact>
+              <MapComponent />
             </Card>
           </Grid>
         </Grid>

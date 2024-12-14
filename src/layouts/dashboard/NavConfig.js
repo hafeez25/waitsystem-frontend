@@ -23,7 +23,7 @@ const navConfig = [
   },
   {
     title: 'Realtime Map',
-    path: '/dashboard/map-container',
+    path: '/dashboard/realtimemap',
     icon: getIcon('charm:map-pin'),
   },
   {
