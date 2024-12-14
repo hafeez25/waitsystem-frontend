@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 // components
+import { useColorMode } from '../../theme';
 import Iconify from '../../components/Iconify';
 //
 import Searchbar from './Searchbar';
@@ -39,6 +40,7 @@ DashboardNavbar.propTypes = {
 };
 
 export default function DashboardNavbar({ onOpenSidebar }) {
+  const { toggleColorMode, mode } = useColorMode();
   return (
     <RootStyle>
       <ToolbarStyle>
@@ -47,9 +49,13 @@ export default function DashboardNavbar({ onOpenSidebar }) {
         </IconButton>
 
         <Searchbar />
+
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack sx={{ mx: 2 }} direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+          <IconButton onClick={toggleColorMode}>
+            <Iconify icon={mode === 'light' ? 'eva:moon-fill' : 'eva:sun-fill'} />
+          </IconButton>
           <AccountPopover />
         </Stack>
       </ToolbarStyle>
