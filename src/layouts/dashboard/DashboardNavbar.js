@@ -53,7 +53,7 @@ export default function DashboardNavbar({ onOpenSidebar }) {
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack sx={{ mx: 2 }} direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          <IconButton onClick={toggleColorMode}>
+          <IconButton onClick={toggleColorMode} sx={{ backgroundColor: 'white' }}>
             <Iconify icon={mode === 'light' ? 'eva:moon-fill' : 'eva:sun-fill'} />
           </IconButton>
           <AccountPopover />
