@@ -1,15 +1,11 @@
 import PropTypes from 'prop-types';
-// material
+import { useSelector } from 'react-redux';
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
-// components
+import { Box, Stack, AppBar, Toolbar, IconButton, Typography, Avatar } from '@mui/material';
 import { useColorMode } from '../../theme';
 import Iconify from '../../components/Iconify';
-//
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-
-// ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 280;
 const APPBAR_MOBILE = 64;
@@ -18,7 +14,7 @@ const APPBAR_DESKTOP = 92;
 const RootStyle = styled(AppBar)(({ theme }) => ({
   boxShadow: 'none',
   backdropFilter: 'blur(6px)',
-  WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
+  WebkitBackdropFilter: 'blur(6px)',
   backgroundColor: alpha(theme.palette.background.default, 0.72),
   [theme.breakpoints.up('lg')]: {
     width: `calc(100% - ${DRAWER_WIDTH + 1}px)`,
@@ -31,16 +27,15 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
     minHeight: APPBAR_DESKTOP,
     padding: theme.spacing(0, 5),
   },
+  display: 'flex',
+  justifyContent: 'space-between',
 }));
-
-// ----------------------------------------------------------------------
-
-DashboardNavbar.propTypes = {
-  onOpenSidebar: PropTypes.func,
-};
 
 export default function DashboardNavbar({ onOpenSidebar }) {
   const { toggleColorMode, mode } = useColorMode();
+  const authData = useSelector(({ auth }) => auth);
+  const username = authData?.user?.name || 'Guest';
+
   return (
     <RootStyle>
       <ToolbarStyle>
@@ -50,14 +45,19 @@ export default function DashboardNavbar({ onOpenSidebar }) {
 
         <Searchbar />
 
+        <Typography variant="h6" sx={{ 
+          flexGrow: 0, 
+          ml: 2, 
+          mr: 2, 
+          color: 'text.primary' 
+        }}>
+          Hi, {username}
+        </Typography>
+
         <Box sx={{ flexGrow: 1 }} />
 
-        <Stack sx={{ mx: 2 }} direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          <IconButton
-            onClick={toggleColorMode}
-            sx={{ backgroundColor: mode === 'light' ? '#919EAB1F' : '#919EAB1F', mr: 0.5 }}
-            spacing={{ xs: 0.5, sm: 1.5 }}
-          >
+        <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+          <IconButton onClick={toggleColorMode} sx={{ backgroundColor: mode === 'light' ? '#919EAB1F' : '#919EAB1F', mr: 0.5 }}>
             <Iconify icon={mode === 'light' ? 'eva:moon-fill' : 'eva:sun-fill'} />
           </IconButton>
           <AccountPopover />

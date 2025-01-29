@@ -39,17 +39,41 @@ export default function HighTrafficLocations() {
   const getBgcolor = (index) => {
     switch (index) {
       case 1:
-        return '#FFD700AA';
+        return {
+          background: 'linear-gradient(45deg, #6D80FE 0%, #23D2FD 100%)',
+          boxShadow: '0 5px 20px rgba(35, 210, 253, 0.3)',
+          color: '#FFFFFF',
+        };
       case 2:
-        return '#C0C0C0AA';
-      case 3:
-        return '#CD7F32AA';
-      case 4:
-        return '#D1E9FC';
-      case 5:
-        return '#D1E9FC';
+        return {
+          background: 'linear-gradient(45deg,  #FF6D88 0%, #FF998B 100%)',
+          boxShadow: '0 5px 20px rgba(255, 153, 139, 0.3)',
+          color: '#FFFFFF', 
+        };
+        case 3: 
+        return {
+          background: 'linear-gradient(45deg, #09AFE8 0%, #29F499 100%)',
+          boxShadow: '0 5px 20px rgba(41, 244, 153, 0.3)',
+          color: '#FFFFFF', 
+        };
+      case 4: 
+        return {
+          background: 'linear-gradient(45deg, #707CFF 0%, #FA81E8 100%)',
+          boxShadow: '0 5px 20px rgba(250, 129, 232, 0.3)',
+          color: '#FFFFFF', 
+        };
+      case 5: 
+        return {
+          background: 'linear-gradient(45deg, #FF6F91 0%, #FFAB40 100%)', 
+          boxShadow: '0 5px 20px rgba(255, 111, 145, 0.3)', 
+          color: '#FFFFFF', 
+        };
       default:
-        return '#D1E9FC';
+        return {
+          background: '#D1E9FC',
+          boxShadow: 'none',
+          color: '#000000', 
+        };
     }
   };
 

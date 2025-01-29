@@ -32,9 +32,9 @@ export default function DashboardApp() {
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        {/* <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome back
-          </Typography> 
+          </Typography>  */}
           
       <Grid container spacing={2}>
       <Grid container spacing={2} item xs={12} sm={12} md={12}>
@@ -50,8 +50,8 @@ export default function DashboardApp() {
         </Card>
         </Grid>
         
-          <PenaltyStats/>
-          <HealthyUnHealthy/>
+          {/* <PenaltyStats/>
+          <HealthyUnHealthy/> */}
           <WeeklyVechilesPassed/>
         </Grid>
 

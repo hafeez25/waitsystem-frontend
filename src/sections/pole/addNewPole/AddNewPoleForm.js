@@ -317,7 +317,7 @@ export default function AddNewPoleForm({ handleClose, editing, data, callback })
               />
               <AddNewLocationDialogBox />
             </Stack>
-            <Stack sx={{ display: (window.innerWidth > 500 ? "flex" : "block"), flexDirection: "row", justifyContent: "space-between" }}>
+            {/* <Stack sx={{ display: (window.innerWidth > 500 ? "flex" : "block"), flexDirection: "row", justifyContent: "space-between" }}>
               <TextField
                 margin="dense"
                 id="standard-basic"
@@ -420,7 +420,7 @@ export default function AddNewPoleForm({ handleClose, editing, data, callback })
                 error={Boolean((touched.point4Y && errors.point4Y) || touched.point4Y && !isValidLongitude(values.point4Y))}
                 helperText={touched.point4Y && errors.point4Y}
               />
-            </Stack>
+            </Stack> */}
           </Stack>
           <Stack spacing={3}>
             <LoadingButton size="large" type="submit" variant="contained" loading={isSubmitting}>

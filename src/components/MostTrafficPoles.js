@@ -23,15 +23,36 @@ export default function MostTrafficPoles() {
   const getBgcolor = (index) => {
     switch (index) {
       case 1:
-        return '#FFD700AA';
+      return {
+        background: 'linear-gradient(45deg, #73AA0A 0%, #DFEC51 100%)',
+        boxShadow: '0 5px 20px rgba(0, 114, 255, 0.3)',
+        color: '#FFFFFF',
+      };
       case 2:
-        return '#C0C0C0AA';
+      return {
+        background: 'linear-gradient(45deg, #7367F0 0%, #CE9FFC 100%)', 
+        boxShadow: '0 5px 20px rgba(247, 107, 28, 0.3)',
+        color: '#FFFFFF',
+      };
       case 3:
-        return '#CD7F32AA';
+      return {
+        background: 'linear-gradient(45deg, #F38381 0%, #FCDF8A 100%)', 
+        boxShadow: '0 5px 20px rgba(233, 64, 87, 0.3)',
+        color: '#FFFFFF',
+      };
       case 4:
-        return '#D1E9FC';
+      return {
+        background: 'linear-gradient(45deg, #184E68 0%, #53c385 100%)', 
+        boxShadow: '0 5px 20px rgba(51, 8, 103, 0.3)',
+        color: '#FFFFFF',
+      };
       case 5:
-        return '#D1E9FC';
+      return {
+        background: 'linear-gradient(45deg, #1BCEDF 0%, #5B247A 100%)', 
+        boxShadow: '0 5px 20px rgba(111, 134, 214, 0.3)',
+        color: '#FFFFFF',
+      };
+
       default:
         return '#D1E9FC';
     }
@@ -73,7 +94,7 @@ export default function MostTrafficPoles() {
                     divider={<Divider orientation="horizontal" flexItem />}
                     spacing={3}
                   >
-                    <Typography variant="h4">#{pole.serialno}</Typography>
+                    <Typography variant="h5">#{pole.serialno}</Typography>
                     <Stack direction="row" spacing={2.5} divider={<Divider orientation="vertical" flexItem />}>
                       <Stack>
                         <Box sx={{ mb: 0.5 }}>

@@ -141,7 +141,7 @@ export default function LocationAnalytics() {
                   </Typography>
                 </Stack>
 
-                <Stack divider={<Divider />} spacing={3}>
+                <Stack  spacing={3}>
                   <Stack
                     direction="row"
                     spacing={3}
@@ -186,7 +186,7 @@ export default function LocationAnalytics() {
                     </Paper>
                   </Stack>
                   <Stack justifyContent="center" alignItems="center" spacing={2}>
-                    <Avatar
+                    {/* <Avatar
                       src={location.addedBy.photo}
                       alt={location.addedBy.name}
                       sx={{
@@ -217,7 +217,7 @@ export default function LocationAnalytics() {
                           {location.addedBy.name}
                         </span>
                       </b>
-                    </Typography>
+                    </Typography> */}
                   </Stack>
                 </Stack>
               </Stack>

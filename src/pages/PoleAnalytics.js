@@ -212,7 +212,7 @@ export default function PoleAnalytics() {
                       </Paper>
                     </Stack>
                     <Stack justifyContent="center" alignItems="center" spacing={2}>
-                      <Avatar
+                      {/* <Avatar
                         src={analytics[poleid].pole.addedBy.photo}
                         alt={analytics[poleid].pole.addedBy.name}
                         sx={{
@@ -243,13 +243,13 @@ export default function PoleAnalytics() {
                             {analytics[poleid].pole.addedBy.name}
                           </span>
                         </b>
-                      </Typography>
+                      </Typography> */}
                     </Stack>
                   </Stack>
                 </Stack>
               </Card>
             </Grid>
-            <Grid item xs={12} sm={6} md={6} textAlign="center">
+            {/* <Grid item xs={12} sm={6} md={6} textAlign="center">
               <Card sx={{ p: 3 }}>
                 <Typography variant="h4" sx={{ mb: 3 }}>
                   Battery Status
@@ -264,7 +264,7 @@ export default function PoleAnalytics() {
                 </Typography>
                 <LinearProgressWithLabel sx={{ mb: 1 }} value={50} />
               </Card>
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid item xs={12} sm={12} md={4}>
             <Card
