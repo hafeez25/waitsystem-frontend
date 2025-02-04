@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { Icon } from 'leaflet';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import 'leaflet/dist/leaflet.css';
 import './MapContainerStyles.css'; // External CSS file
+import markerIconPng from 'leaflet/dist/images/marker-icon.png';
 import Iconify from '../components/Iconify';
 
-const MapComponent = () => {
+const MapComponent = ({ markerLocations }) => {
   const mapRef = useRef(null); // Ref for the map container
   const [isFullscreen, setIsFullscreen] = useState(false); // Fullscreen state
   const [zoom, setZoom] = useState(localStorage.getItem('mzoom') || 13);
@@ -80,6 +82,22 @@ const MapComponent = () => {
         attributionControl={false}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {markerLocations &&
+          markerLocations.map((val, idx) => {
+            return (
+              <Marker
+                key={idx}
+                position={val}
+                icon={
+                  new Icon({
+                    iconUrl: markerIconPng,
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                  })
+                }
+              />
+            );
+          })}
       </MapContainer>
 
       <IconButton className="map-button layers-button" onClick={toggleFullscreen}>

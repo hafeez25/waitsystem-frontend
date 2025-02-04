@@ -25,8 +25,7 @@ import Page from '../components/Page';
 import { FetchLocation, FetchLocationAnalytics, FetchPolesOfLocation } from '../redux/locationReducer';
 import Error from './Error';
 import { fShortenNumber } from '../utils/formatNumber';
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+import MapComponent from './MapContainer';
 
 export default function LocationAnalytics() {
   const theme = useTheme();
@@ -40,16 +39,23 @@ export default function LocationAnalytics() {
   const location = useSelector(({ location }) => location.analytics[locationid]);
   const poles = useSelector(({ location }) => location.poles[locationid]);
 
-  const defaultProps = {
-    center: [59.938043, 30.337157],
-    zoom: 9,
-  };
-
-  const handleApiLoaded = (map, maps) => {
-    // use map and maps objects
-  };
-
   const [Fetchingerror, setFetchingerror] = useState(false);
+
+  const [poleLocations, setPoleLocations] = useState([]);
+
+  useEffect(() => {
+    if (poles && poles.length > 0) {
+      const locations = poles.map((pole) => ({
+        serialNo: pole.serialno,
+        latitude: pole.latitude,
+        longitude: pole.longitude,
+        healthStatus: pole.healthStatus === '1' ? 'good' : 'bad',
+        location: pole.location.name,
+      }));
+      console.log('--->', locations);
+      setPoleLocations(locations);
+    }
+  }, [poles]);
 
   useEffect(() => {
     if (locationid && locationid.length === 24) {
@@ -92,6 +98,8 @@ export default function LocationAnalytics() {
         <CircularProgress size={20} />
       </center>
     );
+
+  const markerLocations = [...(poles?.map((pole) => [pole.latitude, pole.longitude]) || [])];
 
   return (
     <Page title="Location Analytics">
@@ -141,7 +149,7 @@ export default function LocationAnalytics() {
                   </Typography>
                 </Stack>
 
-                <Stack  spacing={3}>
+                <Stack spacing={3}>
                   <Stack
                     direction="row"
                     spacing={3}
@@ -186,7 +194,7 @@ export default function LocationAnalytics() {
                     </Paper>
                   </Stack>
                   <Stack justifyContent="center" alignItems="center" spacing={2}>
-                    {/* <Avatar
+                    <Avatar
                       src={location.addedBy.photo}
                       alt={location.addedBy.name}
                       sx={{
@@ -217,7 +225,7 @@ export default function LocationAnalytics() {
                           {location.addedBy.name}
                         </span>
                       </b>
-                    </Typography> */}
+                    </Typography>
                   </Stack>
                 </Stack>
               </Stack>
@@ -255,15 +263,7 @@ export default function LocationAnalytics() {
             borderRadius: '10px',
           }}
         >
-          <GoogleMapReact
-            bootstrapURLKeys={{ key: 'AIzaSyAd1gCmyfr8mAbDmHj09b6bhe4lEB_qffw' }}
-            defaultCenter={[56.2, 36.1]}
-            defaultZoom={defaultProps.zoom}
-            yesIWantToUseGoogleMapApiInternals
-            onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
-          >
-            <AnyReactComponent lat={25.2} lng={36.2} text="My Marker" />
-          </GoogleMapReact>
+          <MapComponent markerLocations={markerLocations} />
         </Card>
       </Container>
     </Page>

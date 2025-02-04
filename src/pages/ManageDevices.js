@@ -112,8 +112,8 @@ function ManageDevices() {
     setPoleFetchingError(false);
     dispatch(
       FetchAllPoles({
-        payload:{
-          fetchjunctions:true
+        payload: {
+          fetchjunctions: true,
         },
         callback: (msg, data, recall) => {
           if (msg === 'error') {
@@ -263,7 +263,7 @@ function ManageDevices() {
                   <TableBody>
                     {filteredPoles.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                       const { _id, latitude, longitude, serialno, healthStatus, batteryStatus, location } = row;
-                      const status = healthStatus === "1" ? 'good' : 'bad';
+                      const status = healthStatus === '1' ? 'good' : 'bad';
                       return (
                         <TableRow hover key={index} tabIndex={-1} style={{ cursor: 'pointer' }}>
                           <TableCell
@@ -272,8 +272,8 @@ function ManageDevices() {
                             padding="none"
                             onClick={() => navigation(`/dashboard/pole/${_id}`, { replace: false })}
                           >
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Typography sx={{ ml: 3 }} variant="subtitle2" noWrap>
+                            <Stack direction="row" sx={{ ml: 3 }} alignItems="center" spacing={2}>
+                              <Typography  variant="subtitle2" noWrap>
                                 {'#'}
                                 {serialno}
                               </Typography>

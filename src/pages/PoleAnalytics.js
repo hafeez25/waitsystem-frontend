@@ -1,13 +1,12 @@
-import GoogleMapReact from 'google-map-react';
 import PropTypes from 'prop-types';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import { Box, Container, Grid, Typography, Card, Stack, CircularProgress, Divider, Paper, Avatar } from '@mui/material';
+import { Box, Container, Grid, Typography, Card, Stack, CircularProgress, Divider, Paper } from '@mui/material';
 
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useTheme, styled } from '@mui/material/styles';
+import { useParams } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 import Page from '../components/Page';
 import Iconify from '../components/Iconify';
 import { fShortenNumber } from '../utils/formatNumber';
@@ -16,9 +15,9 @@ import { FetchPoleAnalytics } from '../redux/PolesReducer';
 import Error from './Error';
 import MapComponent from './MapContainer';
 
-const AnyReactComponent = ({ text }) => (
-  <div style={{ width: '20px', height: '20px', background: 'red', borderRadius: '100%' }} />
-);
+// const AnyReactComponent = ({ text }) => (
+//   <div style={{ width: '20px', height: '20px', background: 'red', borderRadius: '100%' }} />
+// );
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 25,
@@ -50,21 +49,21 @@ LinearProgressWithLabel.propTypes = {
 };
 
 export default function PoleAnalytics() {
-  const theme = useTheme();
-  const navigate = useNavigate();
+  // const theme = useTheme();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const { poleid } = useParams();
   const analytics = useSelector(({ pole }) => pole.analytics);
 
-  const defaultProps = {
-    center: [59.938043, 30.337157],
-    zoom: 9,
-  };
+  // const defaultProps = {
+  //   center: [59.938043, 30.337157],
+  //   zoom: 9,
+  // };
   const [Fetchingerror, setError] = useState(false);
 
-  const handleApiLoaded = (map, maps) => {
-    // use map and maps objects
-  };
+  // const handleApiLoaded = (map, maps) => {
+  //   // use map and maps objects
+  // };
 
   useEffect(() => {
     if (poleid && poleid.length === 24) {
@@ -115,6 +114,9 @@ export default function PoleAnalytics() {
         <CircularProgress size={20} />
       </center>
     );
+  const markerLocations = [
+    [analytics[poleid].pole.latitude, analytics[poleid].pole.longitude],
+  ];
 
   return (
     <Page title="Pole Analytics">
@@ -249,7 +251,7 @@ export default function PoleAnalytics() {
                 </Stack>
               </Card>
             </Grid>
-            {/* <Grid item xs={12} sm={6} md={6} textAlign="center">
+            <Grid item xs={12} sm={6} md={6} textAlign="center">
               <Card sx={{ p: 3 }}>
                 <Typography variant="h4" sx={{ mb: 3 }}>
                   Battery Status
@@ -264,7 +266,7 @@ export default function PoleAnalytics() {
                 </Typography>
                 <LinearProgressWithLabel sx={{ mb: 1 }} value={50} />
               </Card>
-            </Grid> */}
+            </Grid>
           </Grid>
           <Grid item xs={12} sm={12} md={4}>
             <Card
@@ -278,7 +280,7 @@ export default function PoleAnalytics() {
                 Number(Number(analytics[poleid].pole.latitude).toFixed(1)),
                 Number(Number(analytics[poleid].pole.longitude).toFixed(1)),
               ])}
-              <MapComponent />
+              <MapComponent markerLocations={markerLocations} />
             </Card>
           </Grid>
         </Grid>
